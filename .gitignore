@@ -7,6 +7,9 @@
 node_modules/
 dist/
 
+# Random Graphs
+RandomGraphs/
+
 # Compiled Java class files
 *.class
 
