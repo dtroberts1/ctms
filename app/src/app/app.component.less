@@ -2,14 +2,14 @@
     height:50px;
     top:0;
     left:0;
-    padding-left:60px;
+    /*padding-left:60px;*/
     background-color: #282e33;
     display:flex;
     flex-direction: row;
     align-items: center;
 }
+
 .navbar-item{
-    background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_gray_24dp.png);
     background-size: 20px 20px;
     background-repeat: no-repeat;
     background-position: 50% 8px;
@@ -23,16 +23,177 @@
     color:#ccc;
     font-size:12px;
 }
-.navbar-item:hover{
+.dashboard-tab{
+    background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_gray_24dp.png);
+}
+.dashboard-tab:hover{
     color:#f6f7f8;
     background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_white_24dp.png);
+}
+.dashboard-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_white_24dp.png);
+    background-color: #42b7ff;
+}
+.menu-tab{
+    background-image: url(../assets/icons/FoodMenuIcon/2x/outline_menu_book_gray_24dp.png);
+}
+.menu-tab:hover{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/FoodMenuIcon/2x/outline_menu_book_white_24dp.png);
+}
+.menu-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/FoodMenuIcon/2x/outline_menu_book_white_24dp.png);
+    background-color: #42b7ff;
+}
+.inventory-tab{
+    background-image: url(../assets/icons/InventoryIcon/2x/outline_inventory_gray_24dp.png);
+}
+.inventory-tab:hover{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/InventoryIcon/2x/outline_inventory_white_24dp.png);
+}
+.inventory-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/InventoryIcon/2x/outline_inventory_white_24dp.png);
+    background-color: #42b7ff;
+}
+.sales-tab{
+    background-image: url(../assets/icons/SalesIcon/2x/outline_attach_money_gray_24dp.png);
+}
+.sales-tab:hover{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/SalesIcon/2x/outline_attach_money_white_24dp.png);
+}
+.sales-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/SalesIcon/2x/outline_attach_money_white_24dp.png);
+    background-color: #42b7ff;
+}
+.events-tab{
+    background-image: url(../assets/icons/EventIcon/2x/outline_event_gray_24dp.png);
+}
+.events-tab:hover{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/EventIcon/2x/outline_event_white_24dp.png);
+}
+.events-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/EventIcon/2x/outline_event_white_24dp.png);
+    background-color: #42b7ff;
+}
+.partners-tab{
+    background-image: url(../assets/icons/PartnerIcon/2x/outline_groups_gray_24dp.png);
+}
+.partners-tab:hover{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/PartnerIcon/2x/outline_groups_white_24dp.png);
+}
+.partners-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/PartnerIcon/2x/outline_groups_white_24dp.png);
+    background-color: #42b7ff;
+}
+.reports-tab{
+    background-image: url(../assets/icons/ReportIcon/2x/outline_bar_chart_gray_24dp.png);
+}
+.reports-tab:hover{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/ReportIcon/2x/outline_bar_chart_white_24dp.png);
+}
+.reports-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/ReportIcon/2x/outline_bar_chart_white_24dp.png);
+    background-color: #42b7ff;
+}
+.locations-tab{
+    background-image: url(../assets/icons/LocationIcon/2x/outline_map_gray_24dp.png);
+}
+.locations-tab:hover{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/LocationIcon/2x/outline_map_white_24dp.png);
+}
+.locations-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/LocationIcon/2x/outline_map_white_24dp.png);
+    background-color: #42b7ff;
+}
+.notifications-tab{
+    background-image: url(../assets/icons/NotificationIcon/2x/outline_notifications_gray_24dp.png);
+}
+.notifications-tab:hover{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/NotificationIcon/2x/outline_notifications_white_24dp.png);
+}
+.notifications-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/NotificationIcon/2x/outline_notifications_white_24dp.png);
+}
+.settings-tab{
+    background-image: url(../assets/icons/SettingsIcon/2x/outline_settings_gray_24dp.png);
+}
+.settings-tab:hover{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/SettingsIcon/2x/outline_settings_white_24dp.png);
+}
+.settings-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/SettingsIcon/2x/outline_settings_white_24dp.png);
+}
+.search-tab{
+    background-image: url(../assets/icons/SearchIcon/2x/outline_search_gray_24dp.png);
+}
+.search-tab:hover{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/SearchIcon/2x/outline_search_white_24dp.png);
+}
+.search-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/SearchIcon/2x/outline_search_white_24dp.png);
+}
+.coffee-icon{
+    background-image: url(../assets/icons/CoffeeIcon/2x/outline_coffee_white_24dp.png);
+    cursor:auto;
+}
+.navbar-item:hover{
+    color:#f6f7f8;
+    /*background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_white_24dp.png);*/
 }
 .navbar-item-selected{
     color:#f6f7f8;
     background-color: #42b7ff;
-    background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_white_24dp.png);
 }
 .toolbar-item-selected{
     color:#f6f7f8;
     background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_white_24dp.png);
+}
+.footer{
+    bottom:0;
+    left:0;
+    position:fixed;
+    height:30px;
+    background-color: #282e33;
+    text-transform: uppercase;
+    right:281px;
+    /*text-align: right;*/
+}
+.footer-content{
+    display:block;
+    background-repeat: no-repeat;
+}
+.footer-item{
+    line-height: 28px;
+    border-radius: 3px;
+    display: block;
+    font-size: 12px;
+    padding: 0 15px;
+    height: auto;
+    color:#ccc;
+    cursor:pointer;
+
+}
+.footer-item:hover{
+    color:white;
+    text-decoration: underline;
 }
