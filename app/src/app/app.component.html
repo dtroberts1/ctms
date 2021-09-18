@@ -1,0 +1,93 @@
+<div class="navbar">
+  <table style="width:100%;">
+    <tbody>
+      <tr>
+        <td>
+          <div style="white-space: nowrap;">
+            <div style="display:inline-block" (click)="navigateNavBar('dashboard');">
+              <div>
+                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'dashboard'}" class="navbar-item">
+                  Dashboard
+                </a>
+              </div>
+            </div>
+            <div style="display:inline-block" (click)="navigateNavBar('menu');">
+              <div>
+                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'menu'}" class="navbar-item">
+                  Menu
+                </a>
+              </div>
+            </div>
+            <div style="display:inline-block" (click)="navigateNavBar('inventory');">
+              <div>
+                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'inventory'}" class="navbar-item">
+                  Inventory
+                </a>
+              </div>
+            </div>
+            <div style="display:inline-block" (click)="navigateNavBar('events');">
+              <div>
+                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'events'}" class="navbar-item">
+                  Events
+                </a>
+              </div>
+            </div>
+            <div style="display:inline-block" (click)="navigateNavBar('partners');">
+              <div>
+                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'partners'}" class="navbar-item">
+                  Partners
+                </a>
+              </div>
+            </div>
+            <div style="display:inline-block" (click)="navigateNavBar('reports');">
+              <div>
+                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'reports'}" class="navbar-item">
+                  Reports
+                </a>
+              </div>
+            </div>
+            <div style="display:inline-block" (click)="navigateNavBar('vehicleManagement');">
+              <div>
+                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'vehicleManagement'}" class="navbar-item">
+                  Vehicle Mgmt
+                </a>
+              </div>
+            </div>
+            <div style="display:inline-block" (click)="navigateNavBar('locations');">
+              <div>
+                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'locations'}" class="navbar-item">
+                  Locations
+                </a>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div style="white-space: nowrap;">
+            <div style="display:inline-block" (click)="navigateToolBar('notification');">
+              <div>
+                <a [ngClass]="{'toolbar-item-selected': selectedToolbarItem == 'notification'}" class="navbar-item">
+                  Notifications
+                </a>
+              </div>
+            </div>
+            <div style="display:inline-block" (click)="navigateToolBar('settings');">
+              <div>
+                <a [ngClass]="{'toolbar-item-selected': selectedToolbarItem == 'settings'}" class="navbar-item">
+                  Settings
+                </a>
+              </div>
+            </div>
+            <div style="display:inline-block" (click)="navigateToolBar('profile');">
+              <div>
+                <a [ngClass]="{'toolbar-item-selected': selectedToolbarItem == 'profile'}" class="navbar-item">
+                  Profile
+                </a>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
