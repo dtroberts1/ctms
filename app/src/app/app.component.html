@@ -99,15 +99,42 @@
 </div>
 <div class="footer">
   <div class="footer-content">
-    <div style="float: left;">
+    <div id="whats-new" style="float: left;">
       <a class="footer-item">What's New</a>
     </div>
     <div style="float:right; display:flex;">
-      <a class="footer-item">Help</a>
-      <a class="footer-item">Download</a>
-      <a class="footer-item">Upload</a>
-      <a class="footer-item">Profile</a>
-
+      <div [ngClass]="{'help-footer-btn-selected': selectedFooterItem == 'help'}" class="footer-item help-footer-btn" style="display:flex;" (click)="footerBtnClicked('help')">
+        <div style="margin-top:3px">
+          <img style="max-height:20px; vertical-align:center"/>
+        </div>
+        <div style="margin-left:4px;">
+          <a>Help</a>
+        </div>
+      </div>
+      <div [ngClass]="{'download-footer-btn-selected': selectedFooterItem == 'download'}" class="footer-item download-footer-btn" style="display:flex;" (click)="footerBtnClicked('download')">
+        <div style="margin-top:3px">
+          <img style="max-height:20px; vertical-align:center"/>
+        </div>
+        <div style="margin-left:4px;">
+          <a>Download</a>
+        </div>
+      </div>    
+      <div [ngClass]="{'upload-footer-btn-selected': selectedFooterItem == 'upload'}" class="footer-item upload-footer-btn" style="display:flex;" (click)="footerBtnClicked('upload')">
+        <div style="margin-top:3px">
+          <img style="max-height:20px; vertical-align:center"/>
+        </div>
+        <div style="margin-left:4px;">
+          <a>Upload</a>
+        </div>
+      </div>    
+      <div [ngClass]="{'profile-footer-btn-selected': selectedFooterItem == 'profile'}" class="footer-item profile-footer-btn" style="display:flex;" (click)="footerBtnClicked('profile')">
+        <div style="margin-top:3px">
+          <img style="max-height:20px; vertical-align:center"/>
+        </div>
+        <div style="margin-left:4px;">
+          <a>Profile</a>
+        </div>
+      </div>    
     </div>
   </div>
 </div>
