@@ -2,101 +2,39 @@
     <div class="sidebar-data-container">
       <div class="sidebar-header">
         <div class="sidebar-header-text">
-          Profit Summary
+          {{selectedMenuItem}} Summary
         </div>
       </div>
     </div>
-    <div></div>
     <div class="sidebar-container">
-      <div class="sidebar-container-header" style="text-align: center; text-transform: uppercase">
-        Annual 
-      </div>
-      <div class="sidebar-container-item">
-        <div class="sidebar-container-item-lf">
-          Profits
-        </div>
-        <div style="color:green;" class="sidebar-container-item-rf">        
-          + 50000.00
-        </div> 
-      </div>
-      <div class="sidebar-container-item">
-        <div class="sidebar-container-item-lf">
-          Revenue
-        </div>
-        <div style="color:green;" class="sidebar-container-item-rf">        
-          + 60000.00
-        </div> 
-      </div>
-      <div class="sidebar-container-item">
-        <div class="sidebar-container-item-lf">
-          Expenses
-        </div>
-        <div style="color:#e64b30;" class="sidebar-container-item-rf">        
-          - 10000.00
-        </div> 
-      </div>
-    </div>
-    <div class="sidebar-container">
-      <div class="sidebar-container-header" style="text-align: center; text-transform: uppercase">
-        Monthly 
-      </div>
-      <div class="sidebar-container-item">
-        <div class="sidebar-container-item-lf">
-          Profits
-        </div>
-        <div style="color:green;" class="sidebar-container-item-rf">        
-          + 50000.00
-        </div> 
-      </div>
-      <div class="sidebar-container-item">
-        <div class="sidebar-container-item-lf">
-          Revenue
-        </div>
-        <div style="color:green;" class="sidebar-container-item-rf">        
-          + 60000.00
-        </div> 
-      </div>
-      <div class="sidebar-container-item">
-        <div class="sidebar-container-item-lf">
-          Expenses
-        </div>
-        <div style="color:#e64b30;" class="sidebar-container-item-rf">        
-          - 10000.00
-        </div> 
-      </div>
-    </div>
-    <div class="sidebar-container">
-      <div class="sidebar-container-header" style="text-align: center; text-transform: uppercase">
-        Weekly 
-      </div>
-      <div class="sidebar-container-item">
-        <div class="sidebar-container-item-lf">
-          Profits
-        </div>
-        <div style="color:green;" class="sidebar-container-item-rf">        
-          + 50000.00
-        </div> 
-      </div>
-      <div class="sidebar-container-item">
-        <div class="sidebar-container-item-lf">
-          Revenue
-        </div>
-        <div style="color:green;" class="sidebar-container-item-rf">        
-          + 60000.00
-        </div> 
-      </div>
-      <div class="sidebar-container-item">
-        <div class="sidebar-container-item-lf">
-          Expenses
-        </div>
-        <div style="color:#e64b30;" class="sidebar-container-item-rf">        
-          - 10000.00
-        </div> 
-      </div>
+        <app-sidebar-profits-summary *ngIf="selectedMenuItem == 'profits'"></app-sidebar-profits-summary>
     </div>
   </div>
   <div class="sidebar-menu">
-    My Area
+    <table style="width:100%;">
+        <tbody>
+          <tr>
+            <td>
+              <div style="white-space: nowrap;">
+                <div style="display:inline-block" (click)="selectItem('profits')">
+                  <div>
+                    <a [ngClass]="{'profits-tab-selected': selectedMenuItem == 'profits'}" class="menu-item profits-tab">
+                      Profits
+                    </a>
+                  </div>
+                </div>
+                <div style="display:inline-block" (click)="selectItem('service')">
+                    <div>
+                      <a [ngClass]="{'service-tab-selected': selectedMenuItem == 'service'}" class="menu-item service-tab">
+                        Service
+                      </a>
+                    </div>
+                  </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
   </div>
   
   

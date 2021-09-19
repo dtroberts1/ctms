@@ -6,10 +6,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sidebar.component.less']
 })
 export class SidebarComponent implements OnInit {
+  selectedMenuItem = 'profits';
+  constructor() { 
 
-  constructor() { }
-
-  ngOnInit(): void {
   }
 
+  ngOnInit(): void {
+
+  }
+  selectItem(item: string){
+    this.selectedMenuItem = item;
+    console.log("selected item is " + item)
+}
 }
