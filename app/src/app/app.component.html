@@ -1,93 +1,140 @@
 <div class="navbar">
-  <table style="width:100%;">
-    <tbody>
-      <tr>
-        <td>
-          <div style="white-space: nowrap;">
-            <div style="display:inline-block" (click)="navigateNavBar('dashboard');">
-              <div>
-                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'dashboard'}" class="navbar-item">
-                  Dashboard
-                </a>
+    <div style="display:inline-block">
+      <div>
+        <a class="navbar-item coffee-icon">
+        </a>
+      </div>
+    </div>
+    <table style="width:100%;">
+      <tbody>
+        <tr>
+          <td>
+            <div style="white-space: nowrap;">
+              <div style="display:inline-block" (click)="navigateNavBar('dashboard');">
+                <div>
+                  <a [ngClass]="{'dashboard-tab-selected': selectedNavItem == 'dashboard'}" class="navbar-item dashboard-tab">
+                    Dashboard
+                  </a>
+                </div>
+              </div>
+              <div style="display:inline-block" (click)="navigateNavBar('menu');">
+                <div>
+                  <a [ngClass]="{'menu-tab-selected': selectedNavItem == 'menu'}" class="navbar-item menu-tab">
+                    Menu
+                  </a>
+                </div>
+              </div>
+              <div style="display:inline-block" (click)="navigateNavBar('inventory');">
+                <div>
+                  <a [ngClass]="{'inventory-tab-selected': selectedNavItem == 'inventory'}" class="navbar-item inventory-tab">
+                    Inventory
+                  </a>
+                </div>
+              </div>
+              <div style="display:inline-block" (click)="navigateNavBar('sales');">
+                <div>
+                  <a [ngClass]="{'sales-tab-selected': selectedNavItem == 'sales'}" class="navbar-item sales-tab">
+                    Sales
+                  </a>
+                </div>
+              </div>
+              <div style="display:inline-block" (click)="navigateNavBar('events');">
+                <div>
+                  <a [ngClass]="{'events-tab-selected': selectedNavItem == 'events'}" class="navbar-item events-tab">
+                    Events
+                  </a>
+                </div>
+              </div>
+              <div style="display:inline-block" (click)="navigateNavBar('partners');">
+                <div>
+                  <a [ngClass]="{'partners-tab-selected': selectedNavItem == 'partners'}" class="navbar-item partners-tab">
+                    Partners
+                  </a>
+                </div>
+              </div>
+              <div style="display:inline-block" (click)="navigateNavBar('reports');">
+                <div>
+                  <a [ngClass]="{'reports-tab-selected': selectedNavItem == 'reports'}" class="navbar-item reports-tab">
+                    Reports
+                  </a>
+                </div>
+              </div>
+              <div style="display:inline-block" (click)="navigateNavBar('locations');">
+                <div>
+                  <a [ngClass]="{'locations-tab-selected': selectedNavItem == 'locations'}" class="navbar-item locations-tab">
+                    Locations
+                  </a>
+                </div>
               </div>
             </div>
-            <div style="display:inline-block" (click)="navigateNavBar('menu');">
-              <div>
-                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'menu'}" class="navbar-item">
-                  Menu
-                </a>
+          </td>
+          <td>
+            <div style="white-space: nowrap;">
+              <div style="display:inline-block" (click)="navigateToolBar('notification');">
+                <div>
+                  <a [ngClass]="{'notifications-tab-selected': selectedToolbarItem == 'notification'}" class="navbar-item notifications-tab">
+                    Notifications
+                  </a>
+                </div>
+              </div>
+              <div style="display:inline-block" (click)="navigateToolBar('settings');">
+                <div>
+                  <a [ngClass]="{'settings-tab-selected': selectedToolbarItem == 'settings'}" class="navbar-item settings-tab">
+                    Settings
+                  </a>
+                </div>
+              </div>
+              <div style="display:inline-block" (click)="navigateToolBar('search');">
+                <div>
+                  <a [ngClass]="{'search-tab-selected': selectedToolbarItem == 'search'}" class="navbar-item search-tab">
+                    Search
+                  </a>
+                </div>
               </div>
             </div>
-            <div style="display:inline-block" (click)="navigateNavBar('inventory');">
-              <div>
-                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'inventory'}" class="navbar-item">
-                  Inventory
-                </a>
-              </div>
-            </div>
-            <div style="display:inline-block" (click)="navigateNavBar('sales');">
-              <div>
-                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'sales'}" class="navbar-item">
-                  Sales
-                </a>
-              </div>
-            </div>
-            <div style="display:inline-block" (click)="navigateNavBar('events');">
-              <div>
-                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'events'}" class="navbar-item">
-                  Events
-                </a>
-              </div>
-            </div>
-            <div style="display:inline-block" (click)="navigateNavBar('partners');">
-              <div>
-                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'partners'}" class="navbar-item">
-                  Partners
-                </a>
-              </div>
-            </div>
-            <div style="display:inline-block" (click)="navigateNavBar('reports');">
-              <div>
-                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'reports'}" class="navbar-item">
-                  Reports
-                </a>
-              </div>
-            </div>
-            <div style="display:inline-block" (click)="navigateNavBar('locations');">
-              <div>
-                <a [ngClass]="{'navbar-item-selected': selectedNavItem == 'locations'}" class="navbar-item">
-                  Locations
-                </a>
-              </div>
-            </div>
-          </div>
-        </td>
-        <td>
-          <div style="white-space: nowrap;">
-            <div style="display:inline-block" (click)="navigateToolBar('notification');">
-              <div>
-                <a [ngClass]="{'toolbar-item-selected': selectedToolbarItem == 'notification'}" class="navbar-item">
-                  Notifications
-                </a>
-              </div>
-            </div>
-            <div style="display:inline-block" (click)="navigateToolBar('settings');">
-              <div>
-                <a [ngClass]="{'toolbar-item-selected': selectedToolbarItem == 'settings'}" class="navbar-item">
-                  Settings
-                </a>
-              </div>
-            </div>
-            <div style="display:inline-block" (click)="navigateToolBar('profile');">
-              <div>
-                <a [ngClass]="{'toolbar-item-selected': selectedToolbarItem == 'profile'}" class="navbar-item">
-                  Profile
-                </a>
-              </div>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+<div class="footer">
+  <div class="footer-content">
+    <div id="whats-new" style="float: left;">
+      <a class="footer-item">What's New</a>
+    </div>
+    <div style="float:right; display:flex;">
+      <div [ngClass]="{'help-footer-btn-selected': selectedFooterItem == 'help'}" class="footer-item help-footer-btn" style="display:flex;" (click)="footerBtnClicked('help')">
+        <div style="margin-top:3px">
+          <img style="max-height:20px; vertical-align:center"/>
+        </div>
+        <div style="margin-left:4px;">
+          <a>Help</a>
+        </div>
+      </div>
+      <div [ngClass]="{'download-footer-btn-selected': selectedFooterItem == 'download'}" class="footer-item download-footer-btn" style="display:flex;" (click)="footerBtnClicked('download')">
+        <div style="margin-top:3px">
+          <img style="max-height:20px; vertical-align:center"/>
+        </div>
+        <div style="margin-left:4px;">
+          <a>Download</a>
+        </div>
+      </div>    
+      <div [ngClass]="{'upload-footer-btn-selected': selectedFooterItem == 'upload'}" class="footer-item upload-footer-btn" style="display:flex;" (click)="footerBtnClicked('upload')">
+        <div style="margin-top:3px">
+          <img style="max-height:20px; vertical-align:center"/>
+        </div>
+        <div style="margin-left:4px;">
+          <a>Upload</a>
+        </div>
+      </div>    
+      <div [ngClass]="{'profile-footer-btn-selected': selectedFooterItem == 'profile'}" class="footer-item profile-footer-btn" style="display:flex;" (click)="footerBtnClicked('profile')">
+        <div style="margin-top:3px">
+          <img style="max-height:20px; vertical-align:center"/>
+        </div>
+        <div style="margin-left:4px;">
+          <a>Profile</a>
+        </div>
+      </div>    
+    </div>
+  </div>
 </div>

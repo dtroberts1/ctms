@@ -2,14 +2,14 @@
     height:50px;
     top:0;
     left:0;
-    padding-left:60px;
+    /*padding-left:60px;*/
     background-color: #282e33;
     display:flex;
     flex-direction: row;
     align-items: center;
 }
+
 .navbar-item{
-    background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_gray_24dp.png);
     background-size: 20px 20px;
     background-repeat: no-repeat;
     background-position: 50% 8px;
@@ -23,16 +23,259 @@
     color:#ccc;
     font-size:12px;
 }
-.navbar-item:hover{
+.dashboard-tab{
+    background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_gray_24dp.png);
+}
+.dashboard-tab:hover:not(.dashboard-tab-selected){
     color:#f6f7f8;
     background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_white_24dp.png);
+    background-color: #495055;
+}
+.dashboard-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_white_24dp.png);
+    background-color: #42b7ff;
+}
+.menu-tab{
+    background-image: url(../assets/icons/FoodMenuIcon/2x/outline_menu_book_gray_24dp.png);
+}
+.menu-tab:hover:not(.menu-tab-selected){
+    color:#f6f7f8;
+    background-image: url(../assets/icons/FoodMenuIcon/2x/outline_menu_book_white_24dp.png);
+    background-color: #495055;
+}
+.menu-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/FoodMenuIcon/2x/outline_menu_book_white_24dp.png);
+    background-color: #42b7ff;
+}
+.inventory-tab{
+    background-image: url(../assets/icons/InventoryIcon/2x/outline_inventory_gray_24dp.png);
+}
+.inventory-tab:hover:not(.inventory-tab-selected){
+    color:#f6f7f8;
+    background-image: url(../assets/icons/InventoryIcon/2x/outline_inventory_white_24dp.png);
+    background-color: #495055;
+}
+.inventory-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/InventoryIcon/2x/outline_inventory_white_24dp.png);
+    background-color: #42b7ff;
+}
+.sales-tab{
+    background-image: url(../assets/icons/SalesIcon/2x/outline_attach_money_gray_24dp.png);
+}
+.sales-tab:hover:not(.sales-tab-selected){
+    color:#f6f7f8;
+    background-image: url(../assets/icons/SalesIcon/2x/outline_attach_money_white_24dp.png);
+    background-color: #495055;
+}
+.sales-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/SalesIcon/2x/outline_attach_money_white_24dp.png);
+    background-color: #42b7ff;
+}
+.events-tab{
+    background-image: url(../assets/icons/EventIcon/2x/outline_event_gray_24dp.png);
+}
+.events-tab:hover:not(.events-tab-selected){
+    color:#f6f7f8;
+    background-image: url(../assets/icons/EventIcon/2x/outline_event_white_24dp.png);
+    background-color: #495055;
+}
+.events-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/EventIcon/2x/outline_event_white_24dp.png);
+    background-color: #42b7ff;
+}
+.partners-tab{
+    background-image: url(../assets/icons/PartnerIcon/2x/outline_groups_gray_24dp.png);
+}
+.partners-tab:hover:not(.partners-tab-selected){
+    color:#f6f7f8;
+    background-image: url(../assets/icons/PartnerIcon/2x/outline_groups_white_24dp.png);
+    background-color: #495055;
+}
+.partners-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/PartnerIcon/2x/outline_groups_white_24dp.png);
+    background-color: #42b7ff;
+}
+.reports-tab{
+    background-image: url(../assets/icons/ReportIcon/2x/outline_bar_chart_gray_24dp.png);
+}
+.reports-tab:hover:not(.reports-tab-selected){
+    color:#f6f7f8;
+    background-image: url(../assets/icons/ReportIcon/2x/outline_bar_chart_white_24dp.png);
+    background-color: #495055;
+}
+.reports-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/ReportIcon/2x/outline_bar_chart_white_24dp.png);
+    background-color: #42b7ff;
+}
+.locations-tab{
+    background-image: url(../assets/icons/LocationIcon/2x/outline_map_gray_24dp.png);
+}
+.locations-tab:hover:not(.locations-tab-selected){
+    color:#f6f7f8;
+    background-image: url(../assets/icons/LocationIcon/2x/outline_map_white_24dp.png);
+    background-color: #495055;
+}
+.locations-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/LocationIcon/2x/outline_map_white_24dp.png);
+    background-color: #42b7ff;
+}
+.notifications-tab{
+    background-image: url(../assets/icons/NotificationIcon/2x/outline_notifications_gray_24dp.png);
+}
+.notifications-tab:hover{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/NotificationIcon/2x/outline_notifications_white_24dp.png);
+    background-color: #495055;
+}
+.notifications-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/NotificationIcon/2x/outline_notifications_white_24dp.png);
+}
+.settings-tab{
+    background-image: url(../assets/icons/SettingsIcon/2x/outline_settings_gray_24dp.png);
+}
+.settings-tab:hover{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/SettingsIcon/2x/outline_settings_white_24dp.png);
+    background-color: #495055;
+}
+.settings-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/SettingsIcon/2x/outline_settings_white_24dp.png);
+}
+.search-tab{
+    background-image: url(../assets/icons/SearchIcon/2x/outline_search_gray_24dp.png);
+}
+.search-tab:hover{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/SearchIcon/2x/outline_search_white_24dp.png);
+    background-color: #495055;
+}
+.search-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../assets/icons/SearchIcon/2x/outline_search_white_24dp.png);
+}
+.coffee-icon{
+    background-image: url(../assets/icons/CoffeeIcon/2x/outline_coffee_white_24dp.png);
+    cursor:auto;
+}
+/*
+.help-icon{
+    background-image: url(../assets/icons/HelpIcon/2x/outline_help_outline_gray_24dp.png);
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: 50% 8px;
+}
+*/
+.navbar-item:hover{
+    color:#f6f7f8;
+    /*background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_white_24dp.png);*/
 }
 .navbar-item-selected{
     color:#f6f7f8;
-    background-color: #42b7ff;
-    background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_white_24dp.png);
+    background-color: #42b7ff !important;
 }
 .toolbar-item-selected{
     color:#f6f7f8;
     background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_white_24dp.png);
+}
+.help-footer-btn{
+    img{
+        content:url("../assets/icons/HelpIcon/2x/outline_help_outline_gray_24dp.png")
+    }
+}
+
+.help-footer-btn-selected, .help-footer-btn:hover {
+    background-color: #495055;
+    img{
+        content:url("../assets/icons/HelpIcon/2x/outline_help_outline_white_24dp.png")
+    }
+    a{
+        color:white;
+    }
+}
+
+.download-footer-btn{
+    img{
+        content:url("../assets/icons/DownloadIcon/2x/outline_download_gray_24dp.png")
+    }
+}
+.download-footer-btn-selected, .download-footer-btn:hover {
+    background-color: #495055;
+    img{
+        content:url("../assets/icons/DownloadIcon/2x/outline_download_white_24dp.png")
+    }
+    a{
+        color:white;
+    }
+}
+
+.upload-footer-btn{
+    img{
+        content:url("../assets/icons/UploadIcon/2x/outline_upload_gray_24dp.png")
+    }
+}
+.upload-footer-btn-selected, .upload-footer-btn:hover {
+    background-color: #495055;
+    img{
+        content:url("../assets/icons/UploadIcon/2x/outline_upload_white_24dp.png")
+    }
+    a{
+        color:white;
+    }
+}
+
+.profile-footer-btn{
+    img{
+        content:url("../assets/icons/ProfileIcon/2x/outline_person_outline_gray_24dp.png")
+    }
+}
+.profile-footer-btn-selected, .profile-footer-btn:hover {
+    background-color: #495055;
+    img{
+        content:url("../assets/icons/ProfileIcon/2x/outline_person_outline_white_24dp.png")
+    }
+    a{
+        color:white;
+    }
+}
+
+.footer{
+    bottom:0;
+    left:0;
+    position:fixed;
+    height:30px;
+    background-color: #282e33;
+    text-transform: uppercase;
+    right:281px;
+    /*text-align: right;*/
+}
+.footer-content{
+    display:block;
+    background-repeat: no-repeat;
+}
+.footer-item{
+    line-height: 28px;
+    border-radius: 3px;
+    display: block;
+    font-size: 12px;
+    padding: 0 15px;
+    height: auto;
+    color:#ccc;
+    cursor:pointer;
+}
+.footer-item:hover{
+    color:white;
+}
+
+#whats-new:hover{
+    text-decoration:underline;
 }
