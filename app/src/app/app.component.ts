@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,11 +12,21 @@ export class AppComponent {
   selectedToolbarItem = '';
   selectedFooterItem = '';
 
+  constructor(private router: Router){
+
+  }
+
+  ngOnInit(){
+    this.router.navigate(['/dashboard']);
+  }
+
   navigateNavBar(item: string){
     this.selectedNavItem = item;
+    this.router.navigate([`/${item}`]);
   }
   navigateToolBar(item: string){
     this.selectedToolbarItem = item;
+    
   }
   footerBtnClicked(item: string){
     this.selectedFooterItem = item;
