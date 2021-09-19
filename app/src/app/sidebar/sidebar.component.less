@@ -1,0 +1,82 @@
+.sidebar{
+    overflow: visible;
+    padding: 0;
+    position: fixed;
+    width:281px;
+    color: #aaa;
+    background-color: #282e33;
+    z-index: 60;
+    bottom:50px;
+    top:0;
+    right:0;
+    display: block;
+    border-style: solid;
+    border-color: rgb(28, 32, 35);
+    border-width: thin;
+}
+.sidebar-header{
+    height:50px;
+    text-align: center;
+    border-bottom-width: thin;
+    border-bottom-style: solid;
+    border-color: rgb(28, 32, 3);
+}
+.sidebar-header-text{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 16px;
+}
+.sidebar-container{
+    height: 110px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(28, 32, 35);
+    border-bottom-width: thin;
+}
+
+.sidebar-menu{
+    bottom:0;
+    right:0;
+    width:281px;
+    position: fixed;
+    height:50px;
+    background-color: #282e33;
+    border-style: solid;
+    border-color: rgb(28, 32, 35);
+    border-width: thin;
+}
+
+.menu-item{
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: 50% 8px;
+    min-width: 80px;
+    padding:29px 5px 0;
+    text-align: center;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    display: block;
+    cursor:pointer;
+    color:#ccc;
+    font-size:12px;
+}
+.profits-tab{
+    background-image: url(../../assets/icons/TrendUpIcon/2x/outline_show_chart_gray_24dp.png);
+}
+.profits-tab:hover, .profits-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../../assets/icons/TrendUpIcon/2x/outline_show_chart_white_24dp.png);
+    background-color: #495055;
+}
+
+.service-tab{
+    background-image: url(../../assets/icons/StarIcon/2x/outline_star_gray_24dp.png);
+}
+.service-tab:hover, .service-tab-selected{
+    color:#f6f7f8;
+    background-image: url(../../assets/icons/StarIcon/2x/outline_star_white_24dp.png);
+    background-color: #495055;
+}

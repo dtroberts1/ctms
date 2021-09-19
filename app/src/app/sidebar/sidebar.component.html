@@ -1,0 +1,40 @@
+<div class="sidebar">
+    <div class="sidebar-data-container">
+      <div class="sidebar-header">
+        <div class="sidebar-header-text">
+          {{selectedMenuItem}} Summary
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-container">
+        <app-sidebar-profits-summary *ngIf="selectedMenuItem == 'profits'"></app-sidebar-profits-summary>
+    </div>
+  </div>
+  <div class="sidebar-menu">
+    <table style="width:100%;">
+        <tbody>
+          <tr>
+            <td>
+              <div style="white-space: nowrap;">
+                <div style="display:inline-block" (click)="selectItem('profits')">
+                  <div>
+                    <a [ngClass]="{'profits-tab-selected': selectedMenuItem == 'profits'}" class="menu-item profits-tab">
+                      Profits
+                    </a>
+                  </div>
+                </div>
+                <div style="display:inline-block" (click)="selectItem('service')">
+                    <div>
+                      <a [ngClass]="{'service-tab-selected': selectedMenuItem == 'service'}" class="menu-item service-tab">
+                        Service
+                      </a>
+                    </div>
+                  </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  </div>
+  
+  
