@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -13,6 +13,8 @@ import { PartnersComponent } from './partners/partners.component';
 import { ReportsComponent } from './reports/reports.component';
 import { LocationsComponent } from './locations/locations.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import {Chart} from "chart.js";
+import { PieChartComponent } from './pie-chart/pie-chart.component';
 
 @NgModule({
   declarations: [
@@ -26,11 +28,13 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     PartnersComponent,
     ReportsComponent,
     LocationsComponent,
-    DashboardComponent
+    DashboardComponent,
+    PieChartComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
