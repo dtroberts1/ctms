@@ -14,6 +14,7 @@ import { PartnersComponent } from './partners/partners.component';
 import { ReportsComponent } from './reports/reports.component';
 import { LocationsComponent } from './locations/locations.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { BusinessMenuTableComponent } from './business-menu/business-menu-table/business-menu-table.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     PartnersComponent,
     ReportsComponent,
     LocationsComponent,
-    DashboardComponent
+    DashboardComponent,
+    BusinessMenuTableComponent
   ],
   imports: [
     CommonModule,
