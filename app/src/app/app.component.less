@@ -8,6 +8,7 @@
     flex-direction: row;
     align-items: center;
     width: calc(100% - 283px);
+    position: fixed;
 }
 
 .navbar-item{
@@ -282,10 +283,12 @@
 }
 #router-outlet-container{
     width:calc(100% - 283px);
+    margin-top:50px;
 }
 
 :host /deep/ router-outlet + *:not(nav) {
     width:calc(100% - 283px);
+    margin-top:50px;
     left: 0;
     height:100%;
  }
