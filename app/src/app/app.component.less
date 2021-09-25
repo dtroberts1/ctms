@@ -280,3 +280,12 @@
 #whats-new:hover{
     text-decoration:underline;
 }
+#router-outlet-container{
+    width:calc(100% - 283px);
+}
+
+:host /deep/ router-outlet + *:not(nav) {
+    width:calc(100% - 283px);
+    left: 0;
+    height:100%;
+ }
