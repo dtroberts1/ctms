@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SidebarProfitsSummaryComponent } from './sidebar-profits-summary/sidebar-profits-summary.component';
 import { BusinessMenuComponent } from './business-menu/business-menu.component';
+import { BusinessMenuOverviewComponent } from './business-menu/business-menu-overview/business-menu-overview.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { SalesComponent } from './sales/sales.component';
 import { EventsComponent } from './events/events.component';
@@ -13,8 +14,6 @@ import { PartnersComponent } from './partners/partners.component';
 import { ReportsComponent } from './reports/reports.component';
 import { LocationsComponent } from './locations/locations.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import {Chart} from "chart.js";
-import { PieChartComponent } from './pie-chart/pie-chart.component';
 
 @NgModule({
   declarations: [
@@ -22,14 +21,14 @@ import { PieChartComponent } from './pie-chart/pie-chart.component';
     SidebarComponent,
     SidebarProfitsSummaryComponent,
     BusinessMenuComponent,
+    BusinessMenuOverviewComponent,
     InventoryComponent,
     SalesComponent,
     EventsComponent,
     PartnersComponent,
     ReportsComponent,
     LocationsComponent,
-    DashboardComponent,
-    PieChartComponent
+    DashboardComponent
   ],
   imports: [
     CommonModule,

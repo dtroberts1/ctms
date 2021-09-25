@@ -8,11 +8,11 @@ Chart.register(Legend);
 
 
 @Component({
-  selector: 'app-pie-chart',
-  templateUrl: './pie-chart.component.html',
-  styleUrls: ['./pie-chart.component.less']
+  selector: 'app-business-menu-overview',
+  templateUrl: './business-menu-overview.component.html',
+  styleUrls: ['./business-menu-overview.component.less']
 })
-export class PieChartComponent implements AfterViewInit {
+export class BusinessMenuOverviewComponent implements AfterViewInit {
   @ViewChild('popularityChartCanvas') 
   private popularityChartCanvas!: ElementRef;
   @ViewChild('tasteTestChartCanvas') 
@@ -47,7 +47,6 @@ export class PieChartComponent implements AfterViewInit {
         datasets: [{
           backgroundColor: this.getColors(4, pal),
           data: [12, 19, 3, 17],
-          label: 'Popularity',
           hoverBorderWidth: 5,
           hoverBorderColor: '#42b7ff',
           hoverOffset: 15,
@@ -59,16 +58,15 @@ export class PieChartComponent implements AfterViewInit {
           padding: {
             left: 30,
             right: 30,
-            top: 30,
             bottom: 30,
-          }
+          },
         },
         plugins: {
           legend:{
             display: true,
             position: 'right',
             title: {
-              text: 'Popularity',
+              text: 'Menu Items',
               display: true,
               font: {
                 size: 22,
@@ -89,7 +87,6 @@ export class PieChartComponent implements AfterViewInit {
         datasets: [{
           backgroundColor: this.getColors(4, pal),
           data: [12, 19, 3, 17],
-          label: 'Rankings',
           hoverBorderWidth: 5,
           hoverBorderColor: '#42b7ff',
           hoverOffset: 15,
@@ -101,7 +98,6 @@ export class PieChartComponent implements AfterViewInit {
           padding: {
             left: 30,
             right: 30,
-            top: 30,
             bottom: 30,
           }
         },
@@ -110,7 +106,7 @@ export class PieChartComponent implements AfterViewInit {
             display: true,
             position: 'right',
             title: {
-              text: 'Popularity',
+              text: 'Menu Items',
               display: true,
               font: {
                 size: 22,
