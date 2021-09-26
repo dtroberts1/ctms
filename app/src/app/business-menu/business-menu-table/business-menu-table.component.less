@@ -1,9 +1,106 @@
 .business-menu-table{
-    height: 300px;
+    height: 900px;
     border: 1px solid #dcdce2;
     padding: 20px;
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 0 10px #dcdce2;
     margin: 10px;
+
+    table {
+      width: 100%;
+      .column{
+        color: #26377B;
+        font-family: 'Lato', Arial, sans-serif;
+        font-weight: normal;
+        font-style: normal;
+        font-size: 16px;
+        text-transform: uppercase;
+      }
+      .mat-header-row{
+        position: sticky;
+        top: 104px;
+      }
+
+      .cell-data{
+        color: #26377B;
+        font-family: 'Lato', Arial, sans-serif;
+        font-weight: normal;
+        font-style: normal;
+        font-size: 15px;
+      }
+    }
+    
+    tr.example-detail-row {
+      height: 0;
+    }
+    
+    tr.example-element-row:not(.example-expanded-row):hover {
+      background: whitesmoke;
+    }
+    
+    tr.example-element-row:not(.example-expanded-row):active {
+      background: #efefef;
+    }
+    
+    .example-element-row td {
+      border-bottom-width: 0;
+    }
+    
+    .example-element-detail {
+      overflow: hidden;
+      display: flex;
+    }
+    
+    .sub-row-grid{
+      height: 150px;
+      display: grid;
+      grid-template-columns: repeat(3, 300px);
+      grid-template-rows: 110px 40px;
+      margin-bottom: 10px;
+      color: #26377B;
+      font-family: 'Lato', Arial, sans-serif;
+      font-weight: normal;
+      font-style: normal;
+      font-size: 15px;
+      .inline-badge{
+        position: relative;
+        top: 9px;
+        left: 8px;
+        display: inline-block;
+      }
+      .grid-item-1{
+        grid-row-start: 1;
+        grid-row-end: 2;
+        div{
+          margin: 9px 0 9px 0;
+        }
+      }
+      .grid-item-2{
+        grid-row-start: 1;
+        grid-row-end: 2;
+        div{
+          margin: 9px 0 9px 0;
+        }
+      }
+      .grid-item-4{
+        grid-row-start: 2;
+        grid-row-end: 3;
+        grid-column: span 3;
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+
+        button{
+          font-family: 'Lato', Arial, sans-serif;
+          font-weight: bold;
+          font-style: normal;
+          font-size: 15px;
+          padding: 0;
+        }
+        button:hover{
+          background-color: #42b7ff;
+        }
+      }
+    }
 }

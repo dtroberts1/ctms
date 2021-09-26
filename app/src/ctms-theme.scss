@@ -1,0 +1,105 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ctms-primary: (
+  50: #e5e7ef,
+  100: #bec3d7,
+  200: #939bbd,
+  300: #6773a3,
+  400: #47558f,
+  500: #26377b,
+  600: #223173,
+  700: #1c2a68,
+  800: #17235e,
+  900: #0d164b,
+  A100: #8391ff,
+  A200: #5063ff,
+  A400: #1d36ff,
+  A700: #031fff,
+    contrast: (
+      50: white,
+      100: white,
+      200: white,
+      300: white,
+      400: white,
+      500: white,
+      600: white,
+      700: white,
+      800: white,
+      900: white,
+      A100: white,
+      A200: white,
+      A400: white,
+      A700: white,
+    ),
+    'contrastDefaultColor': 'light',
+    'contrastDarkColors': (
+      50: #e5e7ef,
+      100: #bec3d7,
+      200: #939bbd,
+      A100: #8391ff,
+    )
+);
+
+$ctms-secondary: (
+  50: #e7f7ff,
+  100: #c3ecff,
+  200: #9be0ff,
+  300: #72d3ff,
+  400: #54c9ff,
+  500: #36c0ff,
+  600: #30baff,
+  700: #29b2ff,
+  800: #22aaff,
+  900: #169cff,
+  A100: #ffffff,
+  A200: #fcfdff,
+  A400: #c9e6ff,
+  A700: #afdbff,
+    contrast: (
+        50: white,
+        100: white,
+        200: white,
+        300: white,
+        400: white,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: white,
+        A200: white,
+        A400: white,
+        A700: white,
+    )
+);
+
+
+
+$app-primary: mat-palette($ctms-primary);
+$app-accent:  mat-palette($ctms-secondary);
+$app-warn:    mat-palette($mat-deep-orange);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$CTMS-actual-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
+//$CTMS-actual-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($CTMS-actual-theme);
+

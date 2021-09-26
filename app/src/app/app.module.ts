@@ -15,6 +15,11 @@ import { ReportsComponent } from './reports/reports.component';
 import { LocationsComponent } from './locations/locations.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { BusinessMenuTableComponent } from './business-menu/business-menu-table/business-menu-table.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatButtonModule} from '@angular/material/button';
+import{MatBadgeModule} from '@angular/material/badge';
 
 @NgModule({
   declarations: [
@@ -34,8 +39,13 @@ import { BusinessMenuTableComponent } from './business-menu/business-menu-table/
   ],
   imports: [
     CommonModule,
+    BrowserAnimationsModule,
     BrowserModule,
     AppRoutingModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatButtonModule,
+    MatBadgeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

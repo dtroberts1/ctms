@@ -1,3 +1,50 @@
 <div class="business-menu-table">
-    Table goes here
+    <table mat-table
+            [dataSource]="dataSource" multiTemplateDataRows
+            class="mat-elevation-z8">
+        <ng-container matColumnDef="{{column}}" *ngFor="let column of columns">
+        <th mat-header-cell *matHeaderCellDef class="column"> {{column}} </th>
+        <td mat-cell *matCellDef="let element" class="cell-data"> {{element[column]}} </td>
+        </ng-container>
+
+        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+        <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columns.length">
+        <div class="example-element-detail"
+            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <div class="sub-row-grid">
+                <div class="grid-item-1">
+                    <div>
+                        Popularity Rank <span matBadge="11" class="inline-badge">&nbsp;</span>
+                    </div>
+                    <div>
+                        Review Rank <span matBadge="18" class="inline-badge">&nbsp;</span>
+                    </div>
+                </div>
+                <div class="grid-item-2">
+                    <div>
+                        Ingredient Count <span matBadge="20" class="inline-badge">&nbsp;</span>
+                    </div>
+                </div>
+                <div class="grid-item-4">
+                    <button mat-raised-button color="primary">Edit</button>
+                    <button mat-raised-button color="primary">Copy</button>
+                    <button mat-raised-button color="primary">Upload</button>
+                    <button mat-raised-button color="primary">Print</button>
+                    <button mat-raised-button color="primary">Delete</button>
+                    <button mat-raised-button color="primary">Events</button>
+                </div>
+            </div>
+        </div>
+        </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let element; columns: columns;"
+        class="example-element-row"
+        [class.example-expanded-row]="expandedElement === element"
+        (click)="expandedElement = expandedElement === element ? null : element">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+        </table>
 </div>

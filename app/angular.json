@@ -31,6 +31,7 @@
               "src/assets"
             ],
             "styles": [
+              "src/ctms-theme.scss",
               "src/styles.less"
             ],
             "scripts": [
