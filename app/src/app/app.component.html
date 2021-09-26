@@ -10,7 +10,7 @@
       <tbody>
         <tr>
           <td>
-            <div style="white-space: nowrap;">
+            <div style="white-space: nowrap; text-align:left;">
               <div style="display:inline-block" (click)="navigateNavBar('dashboard');">
                 <div>
                   <a [ngClass]="{'dashboard-tab-selected': selectedNavItem == 'dashboard'}" class="navbar-item dashboard-tab">
@@ -70,7 +70,7 @@
             </div>
           </td>
           <td>
-            <div style="white-space: nowrap;">
+            <div style="white-space: nowrap; text-align:right;">
               <div style="display:inline-block" (click)="navigateToolBar('notification');">
                 <div>
                   <a [ngClass]="{'notifications-tab-selected': selectedToolbarItem == 'notification'}" class="navbar-item notifications-tab">
@@ -141,5 +141,7 @@
   </div>
 </div>
 <app-sidebar>
-
 </app-sidebar>
+<div id="router-outlet-container">
+  <router-outlet></router-outlet>
+</div>

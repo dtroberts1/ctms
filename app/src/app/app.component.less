@@ -7,7 +7,8 @@
     display:flex;
     flex-direction: row;
     align-items: center;
-    padding-right: 55px;
+    width: calc(100% - 283px);
+    position: fixed;
 }
 
 .navbar-item{
@@ -280,3 +281,13 @@
 #whats-new:hover{
     text-decoration:underline;
 }
+#router-outlet-container{
+    width:calc(100% - 283px);
+    margin-top:50px;
+}
+
+:host /deep/ router-outlet + *:not(nav) {
+    width:calc(100% - 283px);
+    margin-top:50px;
+    left: 0;
+ }
