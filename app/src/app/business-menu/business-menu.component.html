@@ -10,5 +10,5 @@
     <div style="display: flex; justify-content: center;">
         <app-business-menu-overview></app-business-menu-overview>
     </div>
-    <app-business-menu-table></app-business-menu-table>
+    <app-business-menu-table [(menuItems)]="menuItems" (notifyParent)="tableMenuItemsChanged($event)"></app-business-menu-table>
 </div>

@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MenuItem } from '../../menu-item';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { MenuService } from '../menu-service.service';
 
-const menuItems : MenuItem[] = [
+
+/*const menuItems : MenuItem[] = [
   {
     type: 'coffee',
     name: 'House Coffee',
@@ -114,6 +116,7 @@ const menuItems : MenuItem[] = [
     ranking: 1,
   },
 ]
+*/
 
 @Component({
   selector: 'app-business-menu-table',
@@ -133,12 +136,49 @@ export class BusinessMenuTableComponent implements OnInit {
   expandedElement!: MenuItem | null;
   tableBtnColor!: string;
   columns: string[] = ['type', 'name', 'description', 'price', 'cost'];
-  dataSource = menuItems;
+  @Input() menuItems!: MenuItem[];
+  @Output() menuItemsChange = new EventEmitter();
+  @Output() notifyParent = new EventEmitter();
+  dataSource!: MenuItem[];
 
-  constructor() { }
+  constructor(private menuService: MenuService) { }
 
   ngOnInit(): void {
     this.tableBtnColor = 'primary';
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        let change = changes[propName];
+
+        switch (propName) {
+          case 'menuItems': {
+            console.log({"menuItems":change.currentValue})
+            this.dataSource = <MenuItem[]>change.currentValue; 
+
+          }
+        }
+      }
+    }
+  }
+
+  deleteMenuItem(menuId: number){
+    this.menuService.deleteMenuItem(menuId)
+    .subscribe({
+      next: data => {
+        this.menuService.getMenuItems()
+          .subscribe((menuItems: MenuItem[]) => {
+            this.dataSource = this.menuItems = menuItems
+            this.menuItemsChange.emit(this.menuItems);
+            this.notifyParent.emit("menu items changed")
+            console.log({"updatedMenuItems":this.menuItems})
+          })
+      },
+      error: error => {
+          console.error('There was an error!', error);
+      }
+  });
   }
   
 }

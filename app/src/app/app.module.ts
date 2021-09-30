@@ -20,6 +20,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatButtonModule} from '@angular/material/button';
 import{MatBadgeModule} from '@angular/material/badge';
+import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -46,8 +47,11 @@ import{MatBadgeModule} from '@angular/material/badge';
     MatPaginatorModule,
     MatButtonModule,
     MatBadgeModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

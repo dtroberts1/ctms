@@ -24,12 +24,13 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
     .then((result) => {
       res.send(result)
     })
-      .catch(next);
-  
+    .catch ((err) =>{
+      next(err)
+    });  
   }));
   
   router.get('/getMenuItems', ((req, res, next) => {
-    
+    console.log("testing")
     let queryStr = 'SELECT * FROM menu_item';
   
     new Promise((resolve, reject) => {
@@ -41,10 +42,13 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
       }));
     })
     .then((result) => {
+      console.log({"result":result})
       res.send(result)
     })
-    .catch(next)
-  
+    .catch ((err) =>{
+      console.log({"err":err})
+      next(err)
+    });
   }));
   
   router.post('/addMenuItem/', ((req, res, next) => {
@@ -68,9 +72,9 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
     .then(()=>{
       res.send("Data added")
     })
-    .catch((err) =>{
-      console.log({"err":err})
-    });  
+     .catch ((err) =>{
+      next(err)
+    });
   }))
   
   router.put('/updateMenuItem', ((req, res, next) => {
@@ -96,19 +100,22 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
     .then(() => {
       res.send("Success")
     })
-    .catch(next)
-  
+    .catch ((err) =>{
+      next(err)
+    });
   }))
   
   router.delete('/deleteMenuItem/:id?', ((req, res, next) => {
-  
+    console.log({"req.params":req.params})
     if (!req.params.id){
       throw new BadRequestError('Missing req.params.id')
     }
+
+    let id = JSON.parse(req.params.id)
   
     let query = 'delete from menu_item where id = ?'
     new Promise((resolve, reject) => {
-      req.service.database().query(query, [req.params.id], function (err, results) {
+      req.service.database().query(query, [id], function (err, results) {
         if (err){
           reject(err);
         }
@@ -118,8 +125,9 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
     .then(()=>{
       res.send("Success")
     })
-    .catch(next)
-  
+    .catch ((err) =>{
+      next(err)
+    });  
   }));
   
   module.exports = router;
