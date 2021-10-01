@@ -8,7 +8,7 @@
 </div>
 <div style="background-color: #F5F6F7; height:1200px;">
     <div style="display: flex; justify-content: center;">
-        <app-business-menu-overview></app-business-menu-overview>
+        <app-business-menu-overview [menuItems]="menuItems"></app-business-menu-overview>
     </div>
     <app-business-menu-table [(menuItems)]="menuItems" (notifyParent)="tableMenuItemsChanged($event)"></app-business-menu-table>
 </div>

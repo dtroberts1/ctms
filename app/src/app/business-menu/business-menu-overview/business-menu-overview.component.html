@@ -3,7 +3,7 @@
         <div class="card-two-charts-container">
             <div>
                 <div class="chart-label">
-                    Popularity
+                    Quantity Sold
                 </div>
                 <div class="chart-container">
                     <canvas #popularityChartCanvas></canvas>
@@ -11,7 +11,7 @@
             </div>
             <div>
                 <div class="chart-label">
-                    Taste Test Rankings
+                    Average Rating
                 </div>
                 <div class="chart-container">
                     <canvas #tasteTestChartCanvas></canvas>
@@ -22,18 +22,10 @@
     <div class="menu-overview-details">
         <div>
             <label>
-                Total Items sold (all-time)
-            </label>
-            <div>
-                19,724
-            </div>
-        </div>
-        <div>
-            <label>
                 Most Popular Item
             </label>
             <div>
-                Mexican Mocha
+                {{mostPopularItem}}
             </div>
         </div>
         <div>
@@ -41,7 +33,7 @@
                 Least Popular Item
             </label>
             <div>
-                Cafe' Americano
+                {{leastPopularItem}}
             </div>
         </div>
         <div>
@@ -49,7 +41,7 @@
                 Best Reviewed Item
             </label>
             <div>
-                Fighting Latte'
+                {{bestReviewedItem}}
             </div>
         </div>
         <div>
@@ -57,15 +49,23 @@
                 Worst Reviewed Item
             </label>
             <div>
-                Iced Coffee
+                {{worstReviewedItem}}
             </div>
         </div>
         <div>
             <label>
-                Items sold this month
+                Sales {{currYear}}
             </label>
             <div>
-                1,240
+                {{highLvlSales.salesForCurrYear}}
+            </div>
+        </div>
+        <div>
+            <label>
+                Sales {{monthName}}
+            </label>
+            <div>
+                {{highLvlSales.salesForCurrMonth}}
             </div>
         </div>
     </div>

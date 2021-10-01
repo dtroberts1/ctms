@@ -6,6 +6,8 @@ const express = require('express');
 const cors = require('cors');
 
 var menuItemRouter = require('./routes/menuItem');
+var saleRouter = require('./routes/sale');
+
 let mysql = require('mysql');
 
 const db = mysql.createConnection({
@@ -40,6 +42,7 @@ app.use(cors());
 const port = 3000
 // login page
 app.use('/api/menuItems/', exposeService, menuItemRouter);
+app.use('/api/sales/', exposeService, saleRouter);
 
 app.use(function (err, req, res, next) {
   if (err instanceof BadRequestError) {

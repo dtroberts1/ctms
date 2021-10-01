@@ -8,4 +8,8 @@ export interface MenuItem {
     price: number,
     cost: number,
     ranking: number,  
+    averageReviewRating: number,
+    qtySold: number,
+    popularity: number,
+    reviewRank: number,
 }
