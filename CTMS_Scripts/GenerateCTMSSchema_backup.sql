@@ -24,7 +24,7 @@ USE `ctms` ;
 DROP TABLE IF EXISTS `ctms`.`campaign_event` ;
 
 CREATE TABLE IF NOT EXISTS `ctms`.`campaign_event` (
-  `campaignId` INT NOT NULL AUTO_INCREMENT,
+  `campaignId` INT NOT NULL,
   `campaignDate` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`campaignId`))
 ENGINE = InnoDB
@@ -38,7 +38,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 DROP TABLE IF EXISTS `ctms`.`ingredient` ;
 
 CREATE TABLE IF NOT EXISTS `ctms`.`ingredient` (
-  `ingredientId` INT NOT NULL AUTO_INCREMENT,
+  `ingredientId` INT NOT NULL,
   `ingredientName` VARCHAR(200) NULL DEFAULT NULL,
   PRIMARY KEY (`ingredientId`))
 ENGINE = InnoDB
@@ -52,7 +52,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 DROP TABLE IF EXISTS `ctms`.`partner` ;
 
 CREATE TABLE IF NOT EXISTS `ctms`.`partner` (
-  `partnerId` INT NOT NULL AUTO_INCREMENT,
+  `partnerId` INT NOT NULL,
   `partnerName` VARCHAR(200) NULL DEFAULT NULL,
   PRIMARY KEY (`partnerId`))
 ENGINE = InnoDB
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`menu_item` (
   `type` VARCHAR(50) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 32
+AUTO_INCREMENT = 29
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -129,7 +129,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 DROP TABLE IF EXISTS `ctms`.`review` ;
 
 CREATE TABLE IF NOT EXISTS `ctms`.`review` (
-  `reviewId` INT NOT NULL AUTO_INCREMENT,
+  `reviewId` INT NOT NULL,
   `reviewDate` DATETIME NULL DEFAULT NULL,
   `campaignEventId` INT NULL DEFAULT NULL,
   `menuItemId` INT NULL DEFAULT NULL,
@@ -137,14 +137,13 @@ CREATE TABLE IF NOT EXISTS `ctms`.`review` (
   PRIMARY KEY (`reviewId`),
   INDEX `campaignEventId` (`campaignEventId` ASC) VISIBLE,
   INDEX `menuItemId` (`menuItemId` ASC) VISIBLE,
+  CONSTRAINT `review_ibfk_1`
+    FOREIGN KEY (`campaignEventId`)
+    REFERENCES `ctms`.`campaign_event` (`campaignId`),
   CONSTRAINT `review_ibfk_2`
     FOREIGN KEY (`menuItemId`)
-    REFERENCES `ctms`.`menu_item` (`id`),
-  CONSTRAINT `review_ibfk_3`
-    FOREIGN KEY (`campaignEventId`)
-    REFERENCES `ctms`.`campaign_event` (`campaignId`))
+    REFERENCES `ctms`.`menu_item` (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 13
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -170,7 +169,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 DROP TABLE IF EXISTS `ctms`.`sale` ;
 
 CREATE TABLE IF NOT EXISTS `ctms`.`sale` (
-  `saleId` INT NOT NULL AUTO_INCREMENT,
+  `saleId` INT NOT NULL,
   `saleDate` DATETIME NULL DEFAULT NULL,
   `menuItemId` INT NULL DEFAULT NULL,
   `storeId` INT NULL DEFAULT NULL,
@@ -186,168 +185,9 @@ CREATE TABLE IF NOT EXISTS `ctms`.`sale` (
     FOREIGN KEY (`menuItemId`)
     REFERENCES `ctms`.`menu_item` (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 36
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
-USE `ctms` ;
-
--- -----------------------------------------------------
--- procedure debug_msg
--- -----------------------------------------------------
-
-USE `ctms`;
-DROP procedure IF EXISTS `ctms`.`debug_msg`;
-
-DELIMITER $$
-USE `ctms`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `debug_msg`(enabled INTEGER, msg VARCHAR(255))
-BEGIN
-  IF enabled THEN
-    select concat('** ', msg) AS '** DEBUG:';
-  END IF;
-END$$
-
-DELIMITER ;
-
--- -----------------------------------------------------
--- procedure update_popularity_on_new_sale
--- -----------------------------------------------------
-
-USE `ctms`;
-DROP procedure IF EXISTS `ctms`.`update_popularity_on_new_sale`;
-
-DELIMITER $$
-USE `ctms`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_popularity_on_new_sale`()
-BEGIN
-	DECLARE finished INTEGER DEFAULT 0;
-	DECLARE row_popularity_percent double DEFAULT 0;
-    DECLARE row_menu_id int DEFAULT 0;
-    DECLARE counter int;
-
-	DECLARE menu_sale_mapping_cursor CURSOR FOR (
-	SELECT sale.menuItemId, (COUNT(*)/ (select COUNT(*) from sale)) Popularity from sale
-    inner join menu_item
-    ON sale.menuItemId = menu_item.id
-    group by sale.menuItemId
-    order by Popularity DESC
-    );
-	DECLARE CONTINUE HANDLER 
-        FOR NOT FOUND SET finished = 1;
-     
-    SET SQL_SAFE_UPDATES = 0;
-    update menu_item set popularity = null;
-    
-    
-    SET counter = 1;
-    OPEN menu_sale_mapping_cursor;
-	menu_sale_mapping_loop: LOOP
-		FETCH menu_sale_mapping_cursor INTO row_menu_id, row_popularity_percent;
-		IF finished = 1 THEN 
-			LEAVE menu_sale_mapping_loop;
-		END IF;
-		-- build email list
-          
-		  ### call debug_msg(TRUE, row_menu_id);
-		  ### call debug_msg(TRUE, row_popularity_percent);
-		
-        update menu_item set popularity = counter where id = row_menu_id;
-        
-		SET counter = counter + 1;
-	END LOOP menu_sale_mapping_loop;
-	CLOSE menu_sale_mapping_cursor;
-    
-    SET SQL_SAFE_UPDATES = 1;
-END$$
-
-DELIMITER ;
-
--- -----------------------------------------------------
--- procedure update_reviewRank_on_new_review
--- -----------------------------------------------------
-
-USE `ctms`;
-DROP procedure IF EXISTS `ctms`.`update_reviewRank_on_new_review`;
-
-DELIMITER $$
-USE `ctms`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_reviewRank_on_new_review`()
-BEGIN
-	DECLARE finished INTEGER DEFAULT 0;
-	DECLARE row_review_percent double DEFAULT 0;
-    DECLARE row_menu_id int DEFAULT 0;
-    DECLARE counter int;
-
-	DECLARE menu_review_mapping_cursor CURSOR FOR (
-	SELECT  menuItemId, Avg(rating) Average from review
-    inner join menu_item
-    ON review.menuItemId = menu_item.id
-    group by menuItemId
-    order by Average DESC
-    );
-	DECLARE CONTINUE HANDLER 
-        FOR NOT FOUND SET finished = 1;
-     
-    SET SQL_SAFE_UPDATES = 0;
-    update menu_item set reviewRank = null;
-    
-    
-    SET counter = 1;
-    OPEN menu_review_mapping_cursor;
-	menu_review_mapping_loop: LOOP
-		FETCH menu_review_mapping_cursor INTO row_menu_id, row_review_percent;
-		IF finished = 1 THEN 
-			LEAVE menu_review_mapping_loop;
-		END IF;
-		-- build email list
-          
-		  ### call debug_msg(TRUE, row_menu_id);
-		  ### call debug_msg(TRUE, row_review_percent);
-		
-        update menu_item set reviewRank = counter where id = row_menu_id;
-        
-		SET counter = counter + 1;
-	END LOOP menu_review_mapping_loop;
-	CLOSE menu_review_mapping_cursor;
-    
-    SET SQL_SAFE_UPDATES = 1;
-END$$
-
-DELIMITER ;
-USE `ctms`;
-
-DELIMITER $$
-
-USE `ctms`$$
-DROP TRIGGER IF EXISTS `ctms`.`review_added` $$
-USE `ctms`$$
-CREATE
-DEFINER=`root`@`localhost`
-TRIGGER `ctms`.`review_added`
-AFTER INSERT ON `ctms`.`review`
-FOR EACH ROW
-BEGIN
-       CALL update_reviewRank_on_new_review;
-       
-       END$$
-
-
-USE `ctms`$$
-DROP TRIGGER IF EXISTS `ctms`.`sale_added` $$
-USE `ctms`$$
-CREATE
-DEFINER=`root`@`localhost`
-TRIGGER `ctms`.`sale_added`
-AFTER INSERT ON `ctms`.`sale`
-FOR EACH ROW
-BEGIN
-       CALL update_popularity_on_new_sale;
-       
-       END$$
-
-
-DELIMITER ;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
