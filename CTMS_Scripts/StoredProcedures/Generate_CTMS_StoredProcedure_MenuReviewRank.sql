@@ -37,7 +37,8 @@ BEGIN
 		  ### call debug_msg(TRUE, row_review_percent);
 		
         update menu_item set reviewRank = counter where id = row_menu_id;
-        
+        update menu_item set averageReviewRating = row_review_percent where id = row_menu_id;
+
 		SET counter = counter + 1;
 	END LOOP menu_review_mapping_loop;
 	CLOSE menu_review_mapping_cursor;
