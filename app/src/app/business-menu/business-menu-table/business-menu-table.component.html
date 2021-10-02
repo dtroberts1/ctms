@@ -7,12 +7,13 @@
         <td  #text_input mat-cell *matCellDef="let element" class="cell-data">
             <div class="cell-data-div">
                 <div class="cell-data-div-first-div" (click)="editIconClicked($event, element, column)" tabindex="1">
-                    <input style="border-color: #42b7ff; text-overflow: ellipsis" 
-                    (blur)="disableEditMode(element, column)" 
-                    [readonly]="element.isReadOnly || element.editableColumn != column" 
-                    value="{{element[column]}}" 
-                    [maxLength]="columnSizeMap[column]"
-                    
+                    <input 
+                        style="border-color: #42b7ff; text-overflow: ellipsis" 
+                        (blur)="disableEditMode(element, column, element[column])" 
+                        [readonly]="element.isReadOnly || element.editableColumn != column" 
+                        value="{{element[column]}}" 
+                        [maxLength]="columnSizeMap[column]"
+                        [(ngModel)]="element[column]"
                 />
                     
                 </div>
@@ -28,7 +29,7 @@
                     </div>
                 </div>
             </div>
-            <mat-icon *ngIf="column === 'cost'"  [@openClose]=" expandedElement !==element ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
+            <mat-icon class="expand-icon" *ngIf="column === 'cost'"  [@openClose]=" expandedElement !==element ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
 
         </td>
         </ng-container>

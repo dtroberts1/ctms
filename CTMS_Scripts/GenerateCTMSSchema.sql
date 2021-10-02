@@ -72,10 +72,12 @@ CREATE TABLE IF NOT EXISTS `ctms`.`ingredient_partner` (
   INDEX `ingredientId` (`ingredientId` ASC) VISIBLE,
   CONSTRAINT `ingredient_partner_ibfk_1`
     FOREIGN KEY (`partnerId`)
-    REFERENCES `ctms`.`partner` (`partnerId`),
+    REFERENCES `ctms`.`partner` (`partnerId`)
+	ON DELETE CASCADE,
   CONSTRAINT `ingredient_partner_ibfk_2`
     FOREIGN KEY (`ingredientId`)
-    REFERENCES `ctms`.`ingredient` (`ingredientId`))
+    REFERENCES `ctms`.`ingredient` (`ingredientId`)
+    ON DELETE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -99,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`menu_item` (
   `qtySold` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 35
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -116,10 +118,12 @@ CREATE TABLE IF NOT EXISTS `ctms`.`menu_item_ingredient` (
   INDEX `ingredientId` (`ingredientId` ASC) VISIBLE,
   CONSTRAINT `menu_item_ingredient_ibfk_1`
     FOREIGN KEY (`menuItemId`)
-    REFERENCES `ctms`.`menu_item` (`id`),
+    REFERENCES `ctms`.`menu_item` (`id`)
+	ON DELETE CASCADE,
   CONSTRAINT `menu_item_ingredient_ibfk_2`
     FOREIGN KEY (`ingredientId`)
-    REFERENCES `ctms`.`ingredient` (`ingredientId`))
+    REFERENCES `ctms`.`ingredient` (`ingredientId`)
+    ON DELETE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -141,10 +145,12 @@ CREATE TABLE IF NOT EXISTS `ctms`.`review` (
   INDEX `menuItemId` (`menuItemId` ASC) VISIBLE,
   CONSTRAINT `review_ibfk_2`
     FOREIGN KEY (`menuItemId`)
-    REFERENCES `ctms`.`menu_item` (`id`),
+    REFERENCES `ctms`.`menu_item` (`id`)
+	ON DELETE CASCADE,
   CONSTRAINT `review_ibfk_3`
     FOREIGN KEY (`campaignEventId`)
-    REFERENCES `ctms`.`campaign_event` (`campaignId`))
+    REFERENCES `ctms`.`campaign_event` (`campaignId`)
+    ON DELETE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 64
 DEFAULT CHARACTER SET = utf8mb4
@@ -183,10 +189,12 @@ CREATE TABLE IF NOT EXISTS `ctms`.`sale` (
   INDEX `menuItemId` (`menuItemId` ASC) VISIBLE,
   CONSTRAINT `sale_ibfk_1`
     FOREIGN KEY (`storeId`)
-    REFERENCES `ctms`.`store` (`storeId`),
+    REFERENCES `ctms`.`store` (`storeId`)
+	ON DELETE CASCADE,
   CONSTRAINT `sale_ibfk_2`
     FOREIGN KEY (`menuItemId`)
-    REFERENCES `ctms`.`menu_item` (`id`))
+    REFERENCES `ctms`.`menu_item` (`id`)
+    ON DELETE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 45
 DEFAULT CHARACTER SET = utf8mb4

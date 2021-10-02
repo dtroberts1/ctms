@@ -3,13 +3,14 @@ const bodyParser = require('body-parser')
 
 var router = express.Router();
 router.use(bodyParser.json());
+router.use(bodyParser.text());
+
 router.use(bodyParser.urlencoded({
   extended: true
 }));
 
   
   router.get('/getHighLvlSalesData', ((req, res, next) => {
-    console.log("testing")
 
     let highLvlSales = {
       salesForCurrMonth: null,
@@ -46,7 +47,6 @@ router.use(bodyParser.urlencoded({
       res.send(result)
     })
     .catch ((err) =>{
-      console.log({"err":err})
       next(err)
     });
   }));

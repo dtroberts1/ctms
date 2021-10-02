@@ -3,9 +3,19 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MenuItem } from '../../interfaces/menu-item';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MenuService } from '../menu-service.service';
+import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { map } from 'rxjs/operators';
 
 interface IDictionary {
   [index: string]: number;
+}
+
+type MenuItemKeys = keyof 'type' | 'name' | 'description' | 'price' | 'cost'
+
+
+interface IDictionaryMenuItem {
+  [index: string]: MenuItem;
 }
 
 @Component({
@@ -41,7 +51,7 @@ export class BusinessMenuTableComponent implements OnInit {
   expandedElement!: MenuItem | null;
   tableBtnColor!: string;
   panelOpenState = false;
-
+  myVal!: any;
   columnSizeMap: IDictionary = {
     'type': 50,
     'name': 40,
@@ -58,7 +68,7 @@ export class BusinessMenuTableComponent implements OnInit {
 
   dataSource!: MenuItem[];
 
-  constructor(private menuService: MenuService) { }
+  constructor(private menuService: MenuService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.tableBtnColor = 'primary';
@@ -84,11 +94,25 @@ export class BusinessMenuTableComponent implements OnInit {
     }
   }
 
-  disableEditMode(element : any, column : any){
+  setProp<T, K extends keyof T>(obj: T, key: K, val: any) {
+    obj[key] = val;
+  }
+
+  disableEditMode(element : any, column : string, val: any){
     element.isReadOnly = true;
     element.editableColumn = null;
 
     // Save Row
+    this.menuService.updateMenuItem(<MenuItem>element)
+      .pipe(
+        map((str: string) => {
+          return {data: 'heres data'}
+        })
+      )
+      .subscribe(
+        val => {
+        }
+      )
   }
 
   editIconClicked(event : any, row: any, col: any){

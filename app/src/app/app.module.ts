@@ -20,8 +20,10 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {FormsModule} from '@angular/forms';
 import{MatBadgeModule} from '@angular/material/badge';
 import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,11 @@ import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http'
     MatBadgeModule,
     HttpClientModule,
     MatIconModule,
+    FormsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
   ],
   providers: [
 

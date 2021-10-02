@@ -3,6 +3,8 @@ const bodyParser = require('body-parser')
 
 var router = express.Router();
 router.use(bodyParser.json());
+router.use(bodyParser.text());
+
 router.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -30,7 +32,6 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
   }));
   
   router.get('/getMenuItems', ((req, res, next) => {
-    console.log("testing")
     let queryStr = 'SELECT * FROM menu_item';
   
     new Promise((resolve, reject) => {
@@ -42,24 +43,18 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
       }));
     })
     .then((result) => {
-      console.log({"result":result})
       res.send(result)
     })
     .catch ((err) =>{
-      console.log({"err":err})
       next(err)
     });
   }));
   
   router.post('/addMenuItem/', ((req, res, next) => {
-    console.log("at 1")
-    console.log({"req.body":req.body})
     if (!Object.keys(req.body).length){
-      console.log("at a")
       throw new BadRequestError('Missing Fields')
     }
     let queryStr = 'insert into ctms.menu_item SET ?';
-    console.log("at test")
   
     new Promise((resolve, reject) => {
       req.service.database().query(queryStr, req.body, ((err, result) => {
@@ -82,13 +77,13 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
     if (!Object.keys(req.body).length){
       throw new BadRequestError('Missing Fields')
     }
-  
+
     new Promise((resolve, reject) => {
-      req.service.database().query('select * from menu_item where id = 7', ((err, result) => {
+      req.service.database().query('select * from menu_item where id = ?', [req.body.id], ((err, result) => {
         if (err){
           reject(err);
         }
-        let command = 'update ctms.menu_item SET name = ?, description = ?, price = 2.44, cost = ?, popularity = ?, reviewRank = ? where id = ?';
+        let command = 'update ctms.menu_item SET name = ?, description = ?, price = ?, cost = ?, popularity = ?, reviewRank = ? where id = ?';
         req.service.database().query(command, [req.body.name, req.body.description, req.body.price, req.body.cost, req.body.popularity, req.body.reviewRank, req.body.id], ((err, result) => {
           if (err){
             reject(err);
@@ -97,8 +92,8 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
         }))
       }))
     })
-    .then(() => {
-      res.send("Success")
+    .then((result) => {
+      res.send(JSON.stringify({}));
     })
     .catch ((err) =>{
       next(err)
@@ -106,11 +101,9 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
   }))
   
   router.delete('/deleteMenuItem/:id?', ((req, res, next) => {
-    console.log({"req.params":req.params})
     if (!req.params.id){
       throw new BadRequestError('Missing req.params.id')
     }
-
     let id = JSON.parse(req.params.id)
   
     let query = 'delete from menu_item where id = ?'
@@ -123,7 +116,7 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
       });
     })
     .then(()=>{
-      res.send("Success")
+      res.send(JSON.stringify({}))
     })
     .catch ((err) =>{
       next(err)
