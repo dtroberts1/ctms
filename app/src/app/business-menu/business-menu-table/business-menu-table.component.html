@@ -7,21 +7,24 @@
         <td  #text_input mat-cell *matCellDef="let element" class="cell-data">
             <div class="cell-data-div">
                 <div class="cell-data-div-first-div" (click)="editIconClicked($event, element, column)" tabindex="1">
-                    <input style="border-color: #42b7ff" (blur)="disableEditMode(element, column)" 
+                    <input style="border-color: #42b7ff; text-overflow: ellipsis" 
+                    (blur)="disableEditMode(element, column)" 
                     [readonly]="element.isReadOnly || element.editableColumn != column" 
                     value="{{element[column]}}" 
+                    [maxLength]="columnSizeMap[column]"
                 />
-                                    
                     
                 </div>
-                <div [ngClass]="{'visibility-hidden': element.isReadOnly || element.editableColumn != column}" *ngIf="element.isReadOnly || element.editableColumn != column" class="cell-data-div-img-edit" style="display: inline-flex;">
-                    <img (click)="editIconClicked($event, element, column)" width="23" height="23">
-                </div>
-                <div *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-check" style="display: inline-flex;">
-                    <img (click)="editIconClicked($event, element, column)" width="23" height="23">
-                </div>
-                <div *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-close" style="display: inline-flex;">
-                    <img (click)="editIconClicked($event, element, column)" width="23" height="23">
+                <div style="display: flex; flex-direction: row; justify-content: space-around">
+                    <div [ngClass]="{'visibility-hidden': element.isReadOnly || element.editableColumn != column}" *ngIf="element.isReadOnly || element.editableColumn != column" class="cell-data-div-img-edit" style="display: inline-flex;">
+                        <img (click)="editIconClicked($event, element, column)" width="23" height="23">
+                    </div>
+                    <div *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-check" style="display: inline-flex;">
+                        <img (click)="editIconClicked($event, element, column)" width="23" height="23">
+                    </div>
+                    <div *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-close" style="display: inline-flex;">
+                        <img (click)="editIconClicked($event, element, column)" width="23" height="23">
+                    </div>
                 </div>
             </div>
         </td>
