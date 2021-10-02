@@ -3,6 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MenuItem } from '../../interfaces/menu-item';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MenuService } from '../menu-service.service';
+
 interface IDictionary {
   [index: string]: number;
 }
@@ -17,6 +18,21 @@ interface IDictionary {
       state('expanded', style({height: '*'})),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
+    trigger('openClose', [
+      // ...
+      state('open', style({
+        transform: 'rotate(0deg)'
+      })),
+      state('closed', style({
+        transform: 'rotate(-180deg)'
+      })),
+      transition('open => closed', [
+        animate('1s')
+      ]),
+      transition('closed => open', [
+        animate('1s')
+      ]),
+    ]),
   ],
 })
 export class BusinessMenuTableComponent implements OnInit {
@@ -24,6 +40,8 @@ export class BusinessMenuTableComponent implements OnInit {
   paginator!: MatPaginator;
   expandedElement!: MenuItem | null;
   tableBtnColor!: string;
+  panelOpenState = false;
+
   columnSizeMap: IDictionary = {
     'type': 50,
     'name': 40,

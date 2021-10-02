@@ -12,6 +12,7 @@
                     [readonly]="element.isReadOnly || element.editableColumn != column" 
                     value="{{element[column]}}" 
                     [maxLength]="columnSizeMap[column]"
+                    
                 />
                     
                 </div>
@@ -27,6 +28,8 @@
                     </div>
                 </div>
             </div>
+            <mat-icon *ngIf="column === 'cost'"  [@openClose]=" expandedElement !==element ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
+
         </td>
         </ng-container>
 
@@ -64,9 +67,10 @@
 
         <tr mat-header-row *matHeaderRowDef="columns"></tr>
         <tr mat-row *matRowDef="let element; columns: columns;"
-        class="example-element-row"
-        [class.example-expanded-row]="expandedElement === element"
-        (click)="expandedElement = expandedElement === element ? null : element">
+            class="example-element-row"
+            [class.example-expanded-row]="expandedElement === element"
+            (click)="expandedElement = expandedElement === element ? null : element"
+        >
         </tr>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
         </table>

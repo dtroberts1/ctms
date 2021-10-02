@@ -18,6 +18,7 @@ import { BusinessMenuTableComponent } from './business-menu/business-menu-table/
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import{MatBadgeModule} from '@angular/material/badge';
 import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
@@ -48,6 +49,7 @@ import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http'
     MatButtonModule,
     MatBadgeModule,
     HttpClientModule,
+    MatIconModule,
   ],
   providers: [
 
