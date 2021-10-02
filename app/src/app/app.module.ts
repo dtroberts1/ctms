@@ -18,8 +18,12 @@ import { BusinessMenuTableComponent } from './business-menu/business-menu-table/
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {FormsModule} from '@angular/forms';
 import{MatBadgeModule} from '@angular/material/badge';
+import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -46,8 +50,17 @@ import{MatBadgeModule} from '@angular/material/badge';
     MatPaginatorModule,
     MatButtonModule,
     MatBadgeModule,
+    HttpClientModule,
+    MatIconModule,
+    FormsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
   ],
-  providers: [],
+  providers: [
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

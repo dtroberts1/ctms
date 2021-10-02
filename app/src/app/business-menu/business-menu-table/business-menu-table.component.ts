@@ -1,119 +1,22 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, SimpleChange, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MenuItem } from '../../menu-item';
+import { MenuItem } from '../../interfaces/menu-item';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { MenuService } from '../menu-service.service';
+import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { map } from 'rxjs/operators';
 
-const menuItems : MenuItem[] = [
-  {
-    type: 'coffee',
-    name: 'House Coffee',
-    description: 'House Coffee Description',
-    ingredients: [],
-    price: 3.48,
-    cost: 0.48,
-    ranking: 11,
-  },
-  {
-    type: 'coffee',
-    name: 'Americano',
-    description: 'Americano Description',
-    ingredients: [],
-    price: 4.13,
-    cost: 0.18,
-    ranking: 10,
-  },
-  {
-    type: 'espresso',
-    name: 'Latte',
-    description: 'Latte Description',
-    ingredients: [],
-    price: 3.93,
-    cost: 0.58,
-    ranking: 14,
-  },
-  {
-    type: 'espresso',
-    name: 'Mocha',
-    description: 'Mocha Description',
-    ingredients: [],
-    price: 2.93,
-    cost: 0.88,
-    ranking: 4,
-  },
-  {
-    type: 'espresso',
-    name: 'White Mocha',
-    description: 'White Mocha Description',
-    ingredients: [],
-    price: 2.93,
-    cost: 0.88,
-    ranking: 5,
-  },
-  {
-    type: 'beverage',
-    name: 'Hot Chocolate',
-    description: 'Hot Chocolate Description',
-    ingredients: [],
-    price: 3.03,
-    cost: 1.48,
-    ranking: 2,
-  },
-  {
-    type: 'beverage',
-    name: 'Hot Tea',
-    description: 'Hot Tea Description',
-    ingredients: [],
-    price: 1.33,
-    cost: .30,
-    ranking: 16,
-  },
-  {
-    type: 'tea',
-    name: 'Chai Tea',
-    description: 'Chai Tea Description',
-    ingredients: [],
-    price: 1.33,
-    cost: .30,
-    ranking: 15,
-  },
-  {
-    type: 'beverage',
-    name: 'Italian Soda',
-    description: 'Italian Soda Description',
-    ingredients: [],
-    price: 1.33,
-    cost: .30,
-    ranking: 15,
-  },
-  {
-    type: 'espresso',
-    name: 'Fighting Latte',
-    description: 'Fighting Latte Description',
-    ingredients: [],
-    price: 5.33,
-    cost: .70,
-    ranking: 1,
-  },
-  {
-    type: 'espresso',
-    name: 'Fighting Latte',
-    description: 'Fighting Latte Description',
-    ingredients: [],
-    price: 5.33,
-    cost: .70,
-    ranking: 1,
-  },
-  {
-    type: 'food',
-    name: 'Biscotti',
-    description: 'Biscotti Description',
-    ingredients: [],
-    price: 4.33,
-    cost: .10,
-    ranking: 1,
-  },
-]
+interface IDictionary {
+  [index: string]: number;
+}
+
+type MenuItemKeys = keyof 'type' | 'name' | 'description' | 'price' | 'cost'
+
+
+interface IDictionaryMenuItem {
+  [index: string]: MenuItem;
+}
 
 @Component({
   selector: 'app-business-menu-table',
@@ -125,6 +28,21 @@ const menuItems : MenuItem[] = [
       state('expanded', style({height: '*'})),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
+    trigger('openClose', [
+      // ...
+      state('open', style({
+        transform: 'rotate(0deg)'
+      })),
+      state('closed', style({
+        transform: 'rotate(-180deg)'
+      })),
+      transition('open => closed', [
+        animate('1s')
+      ]),
+      transition('closed => open', [
+        animate('1s')
+      ]),
+    ]),
   ],
 })
 export class BusinessMenuTableComponent implements OnInit {
@@ -132,13 +50,100 @@ export class BusinessMenuTableComponent implements OnInit {
   paginator!: MatPaginator;
   expandedElement!: MenuItem | null;
   tableBtnColor!: string;
+  panelOpenState = false;
+  myVal!: any;
+  columnSizeMap: IDictionary = {
+    'type': 50,
+    'name': 40,
+    'description': 260,
+    'price': 7,
+    'cost': 7,
+  }
   columns: string[] = ['type', 'name', 'description', 'price', 'cost'];
-  dataSource = menuItems;
+  @Input() menuItems!: MenuItem[];
+  @Output() menuItemsChange = new EventEmitter();
+  @Output() notifyParent = new EventEmitter();
+  @ViewChildren('text_input')
+  menuItemTextInput!: QueryList<any>;
 
-  constructor() { }
+  dataSource!: MenuItem[];
+
+  constructor(private menuService: MenuService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.tableBtnColor = 'primary';
+    let str = 'title';
+
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        let change = changes[propName];
+
+        switch (propName) {
+          case 'menuItems': {
+            let menuItems = change.currentValue;
+            if (Array.isArray(menuItems) && menuItems.length){
+              menuItems.forEach((item) => {item.isReadOnly = true;})
+              this.dataSource = <MenuItem[]>menuItems; 
+            }
+          }
+        }
+      }
+    }
+  }
+
+  setProp<T, K extends keyof T>(obj: T, key: K, val: any) {
+    obj[key] = val;
+  }
+
+  disableEditMode(element : any, column : string, val: any){
+    element.isReadOnly = true;
+    element.editableColumn = null;
+
+    // Save Row
+    this.menuService.updateMenuItem(<MenuItem>element)
+      .pipe(
+        map((str: string) => {
+          return {data: 'heres data'}
+        })
+      )
+      .subscribe(
+        val => {
+        }
+      )
+  }
+
+  editIconClicked(event : any, row: any, col: any){
+    event.stopPropagation()
+    let evt = JSON.parse(JSON.stringify(event))
+    row.isReadOnly = false;
+    row.editableColumn = col;
+    let colIndex = this.columns.findIndex(column => column === col);
+    let rowIndex = this.menuItems.findIndex(rowItem => rowItem.id == row.id);
+    const arr = this.menuItemTextInput.toArray();
+    let index = (colIndex * (this.menuItems.length)) + rowIndex;
+    arr[index].nativeElement.children[0].children[0].children[0].focus();
+
+    
+  }
+
+  deleteMenuItem(menuId: number){
+    this.menuService.deleteMenuItem(menuId)
+    .subscribe({
+      next: data => {
+        this.menuService.getMenuItems()
+          .subscribe((menuItems: MenuItem[]) => {
+            this.dataSource = this.menuItems = menuItems
+            this.menuItemsChange.emit(this.menuItems);
+            this.notifyParent.emit("menu items changed")
+          })
+      },
+      error: error => {
+          console.error('There was an error!', error);
+      }
+  });
   }
   
 }

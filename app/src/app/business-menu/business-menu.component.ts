@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuItem } from '../interfaces/menu-item';
+import { MenuService } from './menu-service.service';
 
 @Component({
   selector: 'app-business-menu',
@@ -7,13 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class BusinessMenuComponent implements OnInit {
+  menuItems!: MenuItem[];
 
+  constructor(private menuService: MenuService) {
+  }
 
-  constructor() {
+  tableMenuItemsChanged(message: string){
+    console.log({"message":message})
+
+    // Update Charts - since menu items have changed in child (table) component
   }
 
   ngOnInit(): void {
-
+    this.menuService.getMenuItems()
+      .subscribe((menuItems: MenuItem[]) => {
+        this.menuItems = menuItems
+      })
   }
 
 }
