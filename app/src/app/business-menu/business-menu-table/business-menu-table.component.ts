@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChange, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Directive, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, SimpleChange, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MenuItem } from '../../interfaces/menu-item';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MenuService } from '../menu-service.service';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 
 /*const menuItems : MenuItem[] = [
@@ -117,6 +118,25 @@ import { MenuService } from '../menu-service.service';
   },
 ]
 */
+/*
+@Directive({
+  selector: '[readonly],[readOnly]',
+  host: {
+    '[attr.readonly]': '_isReadonly ? true : null'
+  }
+})
+export class ReadonlyDirective {
+  _isReadonly = true;
+
+  @Input() set readonly (v: any) {
+     this._isReadonly = coerceBooleanProperty(v);
+  };
+
+  ngOnChanges(changes: any) {
+    console.log(changes);
+  }
+}
+*/
 
 @Component({
   selector: 'app-business-menu-table',
@@ -139,6 +159,9 @@ export class BusinessMenuTableComponent implements OnInit {
   @Input() menuItems!: MenuItem[];
   @Output() menuItemsChange = new EventEmitter();
   @Output() notifyParent = new EventEmitter();
+  @ViewChildren('text_input')
+  menuItemTextInput!: QueryList<any>;
+
   dataSource!: MenuItem[];
 
   constructor(private menuService: MenuService) { }
@@ -155,12 +178,37 @@ export class BusinessMenuTableComponent implements OnInit {
         switch (propName) {
           case 'menuItems': {
             console.log({"menuItems":change.currentValue})
-            this.dataSource = <MenuItem[]>change.currentValue; 
-
+            let menuItems = change.currentValue;
+            if (Array.isArray(menuItems) && menuItems.length){
+              menuItems.forEach((item) => {item.isReadOnly = true;})
+              this.dataSource = <MenuItem[]>menuItems; 
+              console.log({"this.dataSource":this.dataSource})
+            }
           }
         }
       }
     }
+  }
+
+  disableEditMode(element : any, column : any){
+    element.isReadOnly = true;
+    element.editableColumn = null;
+
+    // Save Row
+  }
+
+  editIconClicked(event : any, row: any, col: any){
+    event.stopPropagation()
+    let evt = JSON.parse(JSON.stringify(event))
+    row.isReadOnly = false;
+    row.editableColumn = col;
+    let colIndex = this.columns.findIndex(column => column === col);
+    let rowIndex = this.menuItems.findIndex(rowItem => rowItem.id == row.id);
+    const arr = this.menuItemTextInput.toArray();
+    let index = (colIndex * (this.menuItems.length)) + rowIndex;
+    arr[index].nativeElement.children[0].children[0].children[0].focus();
+
+    
   }
 
   deleteMenuItem(menuId: number){

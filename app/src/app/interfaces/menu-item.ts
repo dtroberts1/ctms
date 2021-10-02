@@ -12,4 +12,5 @@ export interface MenuItem {
     qtySold: number,
     popularity: number,
     reviewRank: number,
+    id: number,
 }
