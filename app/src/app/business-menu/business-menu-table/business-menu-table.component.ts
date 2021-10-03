@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, QueryList, SimpleChange, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, QueryList, SimpleChange, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MenuItem } from '../../interfaces/menu-item';
 import {animate, state, style, transition, trigger} from '@angular/animations';
@@ -6,6 +6,8 @@ import { MenuService } from '../menu-service.service';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { map } from 'rxjs/operators';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MenuItemModalComponent } from '../menu-item-modal/menu-item-modal.component';
 
 interface IDictionary {
   [index: string]: number;
@@ -17,6 +19,7 @@ type MenuItemKeys = keyof 'type' | 'name' | 'description' | 'price' | 'cost'
 interface IDictionaryMenuItem {
   [index: string]: MenuItem;
 }
+
 
 @Component({
   selector: 'app-business-menu-table',
@@ -68,7 +71,7 @@ export class BusinessMenuTableComponent implements OnInit {
 
   dataSource!: MenuItem[];
 
-  constructor(private menuService: MenuService, private toastr: ToastrService) { }
+  constructor(private menuService: MenuService, private toastr: ToastrService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.tableBtnColor = 'primary';
@@ -92,6 +95,21 @@ export class BusinessMenuTableComponent implements OnInit {
         }
       }
     }
+  }
+
+  openDialog(menuItem: MenuItem): void {
+    const dialogRef = this.dialog.open(MenuItemModalComponent, {
+      width: '550px',
+      height: '520px',
+      data: {
+        title: `Edit: ${menuItem.name}`,
+        menuItem: menuItem,
+      },
+      panelClass: 'modal-class'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
   }
 
   setProp<T, K extends keyof T>(obj: T, key: K, val: any) {
