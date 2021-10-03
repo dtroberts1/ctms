@@ -7,7 +7,60 @@
     </div>
 </div>
 <div class="modal-body" style="height: 400px;">
-    Body area
+    <div class="ingredients">
+        <div class="ingredients-header">
+            Ingredients
+        </div>
+        <div class="ingredient-container">
+            <div class="ingredient-list-container">
+                <div class="ingredient-list">
+                    <div *ngFor="let ingredient of ingredients">
+                        {{ingredient.ingredientName}} -
+                        {{ingredient.ingredientQty}}
+                        {{ingredient.measurementType}}{{(ingredient.ingredientQty > 1) ? 's' : ''}}
+                    </div>                
+                </div>
+            </div>
+            <div class="new-modify-ingredient">
+                <div class="new-modify-ingredient-header">
+                    <button *ngIf="!ingredientEditMode" (click)="enableIngredientEditMode()" mat-raised-button color="accent">Add Ingredient</button>
+                </div>
+                <div class="new-modify-ingredient-select" *ngIf="ingredientEditMode">
+                    <mat-form-field style="width:120px;" appearance="fill">
+                        <mat-label>Ingredient</mat-label>
+                        <!--
+                                                    <mat-select>
+                          <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+                        </mat-select>
+                        -->
+                        <mat-select>
+                          <mat-option> Options 1</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-form-field style="width:120px;" appearance="fill">
+                        <mat-label>Unit</mat-label>
+                        <mat-select>
+                          <mat-option> Options 1</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
+                <div *ngIf="ingredientEditMode" class="new-modify-ingredient-buttons">
+                    <div (click)="plusMinusClicked(true)" tabindex="1" class="plus-minus-btn">
+                        <img width="25" height="25" src="../../../assets/icons/PlusIcon/outline_add_blue_white_48dp.png" />
+                    </div>
+                    <div tabindex="2" class="ingredient-qty">
+                        <input width="5"
+                        />
+                        
+                    </div>
+                    <div (click)="plusMinusClicked(false)" tabindex="3" class="plus-minus-btn">
+                        <img width="25" height="25" src="../../../assets/icons/MinusIcon/outline_remove_blue_white_48dp.png" />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="footer-border">
     <hr>

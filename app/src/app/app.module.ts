@@ -24,6 +24,7 @@ import {FormsModule} from '@angular/forms';
 import{MatBadgeModule} from '@angular/material/badge';
 import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
+import {MatSelectModule} from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-item-modal.component';
 
@@ -56,6 +57,7 @@ import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-ite
     HttpClientModule,
     MatIconModule,
     FormsModule,
+    MatSelectModule,
     MatDialogModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',

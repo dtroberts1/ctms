@@ -97,12 +97,16 @@ export class BusinessMenuTableComponent implements OnInit {
     }
   }
 
+  deleteIconClicked(event : any, menuItem: MenuItem, col: any){
+    event.stopPropagation();
+  }
+
   openDialog(menuItem: MenuItem): void {
     const dialogRef = this.dialog.open(MenuItemModalComponent, {
       width: '550px',
-      height: '520px',
+      height: '540px',
       data: {
-        title: `Edit: ${menuItem.name}`,
+        title: `Recipe: ${menuItem.name}`,
         menuItem: menuItem,
       },
       panelClass: 'modal-class'
@@ -116,7 +120,9 @@ export class BusinessMenuTableComponent implements OnInit {
     obj[key] = val;
   }
 
-  disableEditMode(element : any, column : string, val: any){
+  disableEditMode(event : Event, element : any, column : string, val: any){
+    console.log("blurring")
+    console.log({"event.target":event.target})
     element.isReadOnly = true;
     element.editableColumn = null;
 
