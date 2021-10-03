@@ -20,7 +20,8 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
       SELECT ingredient.ingredientId, 
         ingredient.ingredientName, 
         menu_item_ingredient.menuItemId, 
-        (SELECT name from measurement_unit where measurementUnitId = menu_item_ingredient.measurementUnitId) AS measurementType, 
+        (SELECT name from measurement_unit where measurementUnitId = menu_item_ingredient.measurementUnitId) AS measurementType,
+        menu_item_ingredient.measurementUnitId,
         menu_item_ingredient.ingredientQty  
       from ingredient
       INNER JOIN menu_item_ingredient
@@ -29,6 +30,74 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
   `;
     new Promise((resolve, reject) => {
       req.service.database().query(queryStr, [req.params.id], ((err, results) => {
+        if (err) {
+          reject(err);
+        }
+    
+        resolve(results);
+      }))
+    })
+    .then((result) => {
+      res.send(JSON.stringify(result))
+    })
+    .catch ((err) =>{
+      next(err)
+    });  
+  }));
+
+  router.post('/postMenuItemIngredient/', ((req, res, next) => {
+    console.log({"req.body":req.body})
+    if (!Object.keys(req.body).length){
+      throw new BadRequestError('Missing Fields')
+    }
+    let queryStr = `insert into menu_item_ingredient(menuItemId, ingredientId, measurementUnitId, ingredientQty)
+    values(?, ?, ?, ?)`;
+  
+    new Promise((resolve, reject) => {
+      req.service.database().query(queryStr, [req.body.menuItemId, req.body.ingredientId, 
+        req.body.measurementUnitId, req.body.ingredientQty], ((err, result) => {
+        if (err){
+          console.log({"err":err})
+          reject(err);
+        }
+        resolve();
+      }));
+    })
+    .then(()=>{
+      res.send({"successResult":'DataAdded'})
+    })
+     .catch ((err) =>{
+      console.log({"err":err})
+
+      next(err)
+    });
+  }))
+
+  router.get('/getIngredients', ((req, res, next) => {
+
+    let queryStr = `SELECT * from ingredient`;
+    new Promise((resolve, reject) => {
+      req.service.database().query(queryStr, ((err, results) => {
+        if (err) {
+          reject(err);
+        }
+    
+        resolve(results);
+      }))
+    })
+    .then((result) => {
+      res.send(JSON.stringify(result))
+    })
+    .catch ((err) =>{
+      next(err)
+    });  
+  }));
+
+  router.get('/getMeasurementUnits', ((req, res, next) => {
+
+    let queryStr = `SELECT * from measurement_unit`;
+    new Promise((resolve, reject) => {
+      req.service.database().query(queryStr, ((err, results) => {
         if (err) {
           reject(err);
         }

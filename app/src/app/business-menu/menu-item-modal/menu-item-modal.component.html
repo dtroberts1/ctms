@@ -14,7 +14,7 @@
         <div class="ingredient-container">
             <div class="ingredient-list-container">
                 <div class="ingredient-list">
-                    <div *ngFor="let ingredient of ingredients">
+                    <div *ngFor="let ingredient of menuItemIngredients">
                         {{ingredient.ingredientName}} -
                         {{ingredient.ingredientQty}}
                         {{ingredient.measurementType}}{{(ingredient.ingredientQty > 1) ? 's' : ''}}
@@ -28,34 +28,57 @@
                 <div class="new-modify-ingredient-select" *ngIf="ingredientEditMode">
                     <mat-form-field style="width:120px;" appearance="fill">
                         <mat-label>Ingredient</mat-label>
-                        <!--
-                                                    <mat-select>
-                          <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
-                        </mat-select>
-                        -->
-                        <mat-select>
-                          <mat-option> Options 1</mat-option>
+                        <mat-select [(ngModel)]="selectedIngredientType">
+                            <mat-option *ngFor="let ingredient of ingredients" [value]="ingredient">{{ingredient.ingredientName}}</mat-option>
                         </mat-select>
                       </mat-form-field>
                       <mat-form-field style="width:120px;" appearance="fill">
                         <mat-label>Unit</mat-label>
-                        <mat-select>
-                          <mat-option> Options 1</mat-option>
+                        <mat-select [(ngModel)]="selectedMU">
+                            <mat-option *ngFor="let unit of measurementUnits" [value]="unit">{{unit.name}}</mat-option>
                         </mat-select>
                       </mat-form-field>
                 </div>
                 <div *ngIf="ingredientEditMode" class="new-modify-ingredient-buttons">
-                    <div (click)="plusMinusClicked(true)" tabindex="1" class="plus-minus-btn">
-                        <img width="25" height="25" src="../../../assets/icons/PlusIcon/outline_add_blue_white_48dp.png" />
+                    <div class="incremente-area" >
+                        <div (click)="plusMinusClicked(true)" tabindex="1" class="plus-minus-btn"
+                            matTooltip="Increment Quantity"
+                            aria-label="Increment Quantity"
+                            [matTooltipShowDelay]="500"
+                        >
+                            <img width="25" height="25" src="../../../assets/icons/PlusIcon/outline_add_blue_white_48dp.png" />
+                        </div>
+                        <div tabindex="2" class="ingredient-qty">
+                            <input type="number" [(ngModel)]="selectedIngredientQty" value="0" width="5"
+                            />
+                            
+                        </div>
+                        <div (click)="plusMinusClicked(false)" tabindex="3" class="plus-minus-btn"
+                            matTooltip="Decrement Quantity"
+                            aria-label="Decrement Quantity"
+                            [matTooltipShowDelay]="500"
+                        >
+                            <img width="25" height="25" src="../../../assets/icons/MinusIcon/outline_remove_blue_white_48dp.png" />
+                        </div>
                     </div>
-                    <div tabindex="2" class="ingredient-qty">
-                        <input width="5"
-                        />
-                        
-                    </div>
-                    <div (click)="plusMinusClicked(false)" tabindex="3" class="plus-minus-btn">
-                        <img width="25" height="25" src="../../../assets/icons/MinusIcon/outline_remove_blue_white_48dp.png" />
-
+                    <div class="save-cancel-area">
+                        <div id="saveIngredBtn" tabindex="4"
+                            (click)="createIngredient()"
+                            matTooltip="Add Ingredient"
+                            aria-label="Add Ingredient"
+                            [matTooltipShowDelay]="500"
+                        >
+                            <img width="28" height="28" src="../../../assets/icons/CheckIcon/outline_done_blue_white_48dp.png" />
+                        </div>
+                        <div
+                            (click)="closeIngredientModifyMenu()"
+                            id="cancelIngredBtn" tabindex="5"
+                            matTooltip="Cancel Changes"
+                            aria-label="Cancel Changes"
+                            [matTooltipShowDelay]="500"
+                        >
+                            <img width="28" height="28" src="../../../assets/icons/XIcon/outline_close_red_48dp.png" />
+                        </div>
                     </div>
                 </div>
             </div>

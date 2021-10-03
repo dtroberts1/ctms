@@ -26,6 +26,7 @@ import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http'
 import { ToastrModule } from 'ngx-toastr';
 import {MatSelectModule} from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-item-modal.component';
 
 @NgModule({
@@ -59,6 +60,7 @@ import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-ite
     FormsModule,
     MatSelectModule,
     MatDialogModule,
+    MatTooltipModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,

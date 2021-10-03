@@ -1,9 +1,11 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Ingredient } from '../interfaces/ingredient';
+import { ToastrService } from 'ngx-toastr';
+import { Observable, of } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
+import { Ingredient, MeasurementUnit, MenuItemIngredient } from '../interfaces/ingredient';
 import { HighLvlSaleData } from '../interfaces/sale';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,23 +16,49 @@ export class IngredientService {
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private toastr : ToastrService
+    
+    ) { }
 
-  getMenuItemIngredients(menuItemId: number) : Observable<Ingredient[]>{
-    console.log("menu id is " + menuItemId)
-    /*
-    let options = {
-      params: new HttpParams({fromObject: {'id': menuItemId}, })
-     };
-     */
-     // Another way:
-     /*
-    const params = new HttpParams()
-      .set('id', menuItemId)
-    */   
-    return this.http.get<Ingredient[]>(`${this.serviceUrl}/getMenuItemIngredients/${menuItemId}`)
+  getMenuItemIngredients(menuItemId: number) : Observable<MenuItemIngredient[]>{
+    return this.http.get<MenuItemIngredient[]>(`${this.serviceUrl}/getMenuItemIngredients/${menuItemId}`)
+      .pipe(map((menuItemIngredients: MenuItemIngredient[]) => {
+        return menuItemIngredients
+      }))
+  }
+
+  getIngredients() : Observable<Ingredient[]>{
+    return this.http.get<Ingredient[]>(`${this.serviceUrl}/getIngredients`)
       .pipe(map((ingredients: Ingredient[]) => {
         return ingredients
       }))
+  }
+
+  getMeasurementUnits() : Observable<MeasurementUnit[]>{
+    return this.http.get<MeasurementUnit[]>(`${this.serviceUrl}/getMeasurementUnits`)
+      .pipe(map((measurementUnits: MeasurementUnit[]) => {
+        return measurementUnits
+      }))
+  }
+  postMenuItemIngredient(menuIngredient: MenuItemIngredient) : Observable<Object>{
+    console.log({"inputIngredient":menuIngredient})
+    let failed = false
+
+    const headers = { 'content-type': 'application/json'}  
+    return this.http.post(`${this.serviceUrl}/postMenuItemIngredient`, JSON.stringify(menuIngredient), {'headers': headers})
+    .pipe(
+    map((item: Object) => {
+      return item;
+    }),
+    catchError((err, caught) => {
+      failed = true;
+      this.toastr.warning("Unable to save");
+      return of(`i caught error`);
+    }),
+    finalize(() => {if(!failed){
+      this.toastr.success("Ingredient Added");
+    }}));  
+
   }
 }

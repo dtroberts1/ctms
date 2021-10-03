@@ -44,7 +44,7 @@
             max-height: 220px;
     
             .ingredient-list-container{
-                flex: 1.5;
+                flex: 2;
                 outline: 1px dotted #26377b;
                 outline-offset: -20px;
 
@@ -77,6 +77,12 @@
                         font-weight: normal;
                         font-style: normal;
                       }
+                    div:hover{
+                        border-color: rgba(229, 103, 23, 0.8);
+                        box-shadow: 0 2px 2px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+                        outline: 0 none;
+                        cursor: pointer;
+                    }
                 }
             }
             .new-modify-ingredient{
@@ -86,9 +92,9 @@
                     padding-top: 30px;
 
                     button:hover{
-                        outline: none !important;
-                        border-color: orange;
-                        box-shadow: 0 0 10px orange;
+                        border-color: rgba(229, 103, 23, 0.8);
+                        box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+                        outline: 0 none;
                     }
                 }
                 .new-modify-ingredient-select{
@@ -97,38 +103,99 @@
                 }
 
                 .new-modify-ingredient-buttons{
-                    height: 30px;
-                    width: 100%;
                     display: flex;
                     flex-direction: row;
-                    gap: 6px;
+                    gap: 30px;
+                    justify-content: space-around;
+                    width: 250px;
 
-                    .ingredient-qty{
-                        display: flex;
-                        align-items: center;
-                        height: 100%;
-
-                        input{
-                            height: 20px;
-                            width: 30px;
-                        }
-                    }
-
-                    .plus-minus-btn{
-                        height: 28px;
-                        width: 28px;
-                        background-color: #42B7FF;
-                        border-radius: 8px;
+                    .save-cancel-area{
                         display: flex;
                         justify-content: center;
                         align-items: center;
+                        gap: 6px;
+
+                        #saveIngredBtn{
+                            border-radius: 8px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        #cancelIngredBtn{
+                            border-radius: 8px;  
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;  
+                        }
+
+                        #cancelIngredBtn:hover{
+                            border-color: rgba(229, 103, 23, 0.8);
+                            box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+                            outline: 0 none;
+                            cursor: pointer;
+                        }
+
+                        #saveIngredBtn:hover{
+                            border-color: rgba(229, 103, 23, 0.8);
+                            box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+                            outline: 0 none;
+                            cursor: pointer;
+                        }
                     }
 
-                    .plus-minus-btn:hover{
-                        outline: none !important;
-                        border-color: orange;
-                        box-shadow: 0 0 10px orange;
-                        cursor: pointer;
+                    .incremente-area{
+                        height: 30px;
+                        display: flex;
+                        flex-direction: row;
+                        gap: 6px;
+    
+                        .ingredient-qty{
+                            display: flex;
+                            align-items: center;
+                            height: 100%;
+    
+                            input{
+                                height: 20px;
+                                width: 30px;
+                                outline-color: #42B7FF !important;
+                            }
+
+                            input:hover{
+                                border-color: rgba(229, 103, 23, 0.8);
+                                box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+                                outline: 0 none;
+                            }
+
+                            /* Chrome, Safari, Edge, Opera */
+                            input::-webkit-outer-spin-button,
+                            input::-webkit-inner-spin-button {
+                            -webkit-appearance: none;
+                            margin: 0;
+                            }
+
+                            /* Firefox */
+                            input[type=number] {
+                            -moz-appearance: textfield;
+                            }
+                        }
+    
+                        .plus-minus-btn{
+                            height: 28px;
+                            width: 28px;
+                            background-color: #42B7FF;
+                            border-radius: 8px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+    
+                        .plus-minus-btn:hover{
+                            border-color: rgba(229, 103, 23, 0.8);
+                            box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+                            outline: 0 none;;
+                            cursor: pointer;
+                        }
                     }
                 }
             }
@@ -151,8 +218,8 @@
     justify-content: center;
 
     button:hover{
-        outline: none !important;
-        border-color: orange;
-        box-shadow: 0 0 10px orange;
+        border-color: rgba(229, 103, 23, 0.8);
+        box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+        outline: 0 none;
     }
 }
