@@ -73,6 +73,33 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
     });
   }))
 
+  router.put('/putMenuItemIngredient/', ((req, res, next) => {
+    console.log({"req.body":req.body})
+    if (!Object.keys(req.body).length){
+      throw new BadRequestError('Missing Fields')
+    }
+    let queryStr = `update menu_item_ingredient set measurementUnitId = ?, ingredientQty = ? where menuItemId = ? AND ingredientId = ?`;
+  
+    new Promise((resolve, reject) => {
+      req.service.database().query(queryStr, [req.body.measurementUnitId, req.body.ingredientQty, 
+        req.body.menuItemId, req.body.ingredientId], ((err, result) => {
+        if (err){
+          console.log({"err":err})
+          reject(err);
+        }
+        resolve();
+      }));
+    })
+    .then(()=>{
+      res.send({"successResult":'DataSaved'})
+    })
+     .catch ((err) =>{
+      console.log({"err":err})
+
+      next(err)
+    });
+  }))
+
   router.get('/getIngredients', ((req, res, next) => {
 
     let queryStr = `SELECT * from ingredient`;

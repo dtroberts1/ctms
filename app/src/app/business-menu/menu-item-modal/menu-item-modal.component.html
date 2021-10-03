@@ -14,7 +14,10 @@
         <div class="ingredient-container">
             <div class="ingredient-list-container">
                 <div class="ingredient-list">
-                    <div *ngFor="let ingredient of menuItemIngredients">
+                    <div (click)="selectMenuItemIngredient(ingredient)" 
+                        tabindex="4" 
+                        [ngClass]="{'selected-ingredient':ingredient.selected}"
+                        *ngFor="let ingredient of menuItemIngredients">
                         {{ingredient.ingredientName}} -
                         {{ingredient.ingredientQty}}
                         {{ingredient.measurementType}}{{(ingredient.ingredientQty > 1) ? 's' : ''}}
@@ -23,7 +26,9 @@
             </div>
             <div class="new-modify-ingredient">
                 <div class="new-modify-ingredient-header">
-                    <button *ngIf="!ingredientEditMode" (click)="enableIngredientEditMode()" mat-raised-button color="accent">Add Ingredient</button>
+                    <button *ngIf="!ingredientEditMode" (click)="enableIngredientEditMode()" mat-raised-button color="accent">
+                        {{this.isUpdateMode ? 'Update' : 'Add'}} Ingredient
+                    </button>
                 </div>
                 <div class="new-modify-ingredient-select" *ngIf="ingredientEditMode">
                     <mat-form-field style="width:120px;" appearance="fill">
@@ -64,14 +69,14 @@
                     <div class="save-cancel-area">
                         <div id="saveIngredBtn" tabindex="4"
                             (click)="createIngredient()"
-                            matTooltip="Add Ingredient"
+                            matTooltip="{{!this.isUpdateMode ? 'Add Ingredient' : 'Update Ingredient'}}"
                             aria-label="Add Ingredient"
                             [matTooltipShowDelay]="500"
                         >
                             <img width="28" height="28" src="../../../assets/icons/CheckIcon/outline_done_blue_white_48dp.png" />
                         </div>
                         <div
-                            (click)="closeIngredientModifyMenu()"
+                            (click)="closeIngredientModifyMenu(true)"
                             id="cancelIngredBtn" tabindex="5"
                             matTooltip="Cancel Changes"
                             aria-label="Cancel Changes"

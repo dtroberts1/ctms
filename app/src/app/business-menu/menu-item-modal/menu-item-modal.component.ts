@@ -4,6 +4,13 @@ import { Ingredient, MeasurementUnit, MenuItemIngredient } from "src/app/interfa
 import { MenuItem } from "src/app/interfaces/menu-item";
 import { IngredientService } from "src/app/services/ingredient-service.service";
 
+
+type Selectable = {
+    selected: boolean,
+}
+
+type SelectableMenuItemIngredient = MenuItemIngredient & Selectable;
+
 type ModalInput = {title: string; menuItem: MenuItem} 
 
 @Component({
@@ -12,13 +19,14 @@ type ModalInput = {title: string; menuItem: MenuItem}
     styleUrls: ['menu-item-modal.component.less'],
   })
   export class MenuItemModalComponent {
-    menuItemIngredients!: MenuItemIngredient[];
+    menuItemIngredients!: SelectableMenuItemIngredient[];
     ingredients!: Ingredient[];
     measurementUnits!: MeasurementUnit[];
 
     selectedIngredientType !: Ingredient;
     selectedMU !: MeasurementUnit;
     selectedIngredientQty : number = 0;
+    isUpdateMode: boolean = false;
 
     ingredientEditMode: boolean = false;
     constructor(
@@ -31,72 +39,115 @@ type ModalInput = {title: string; menuItem: MenuItem}
         this.ingredientsService.getMeasurementUnits()
         .subscribe(
             result => {
-                console.log({"measurementUnits":result})
                 this.measurementUnits = result;
             },
             err => {
-                console.log({"err":err})
             }
         )
 
         this.ingredientsService.getIngredients()
         .subscribe(
             result => {
-                console.log({"ingred":result})
                 this.ingredients = result;
             },
             err => {
-                console.log({"err":err})
             }
         )
 
         this.ingredientsService.getMenuItemIngredients(this.data.menuItem.id)
             .subscribe(
                 result => {
-                    console.log({"result":result})
-                    this.menuItemIngredients = result;
+                    this.menuItemIngredients = result as SelectableMenuItemIngredient[];
                 },
                 err => {
-                    console.log({"err":err})
                 }
             )
     }
 
     enableIngredientEditMode(){
         this.ingredientEditMode = true;
+        let selectedIngredient = this.menuItemIngredients.find(item => item.selected) as MenuItemIngredient;
+        if (this.isUpdateMode && selectedIngredient){
+            // Fill Fields with the selected ingredient's defaults
+            let existingIngredient = this.ingredients.find(ingred => ingred.ingredientId == selectedIngredient.ingredientId);
+            let existingMU = this.measurementUnits.find(mu => mu.measurementUnitId == selectedIngredient.measurementUnitId);
+            if (existingIngredient){
+                this.selectedIngredientType = existingIngredient as Ingredient;
+            }
+            if (existingMU){
+                this.selectedMU = existingMU as MeasurementUnit;
+            }
+            this.selectedIngredientQty = selectedIngredient.ingredientQty;
+        }
     }
 
-    closeIngredientModifyMenu(){
+    closeIngredientModifyMenu(canClearAllSelected: boolean){
         this.selectedIngredientType = null as any;
         this.selectedMU = null as any;
         this.selectedIngredientQty = 0;
         this.ingredientEditMode = false;
+
+        if (canClearAllSelected){
+            this.menuItemIngredients.forEach(ingred => ingred.selected = false);
+            this.isUpdateMode = false;
+        }
+    }
+
+    selectMenuItemIngredient(menuItemIngred: SelectableMenuItemIngredient){
+        let isSelected = menuItemIngred.selected;
+        this.menuItemIngredients.forEach(ingred => ingred.selected = false);
+        
+        if (!isSelected){
+            this.isUpdateMode = true;
+            menuItemIngred.selected = true;
+        }
+        else{
+            this.isUpdateMode = false;
+        }
+        this.closeIngredientModifyMenu(false);
     }
 
     createIngredient(){
         // Save, then call cancel changes
-        this.ingredientsService.postMenuItemIngredient({
-            menuItemId: this.data.menuItem.id,
-            ingredientId: this.selectedIngredientType.ingredientId,
-            ingredientName: this.selectedIngredientType.ingredientName,
-            measurementUnitId: this.selectedMU.measurementUnitId,
-            measurementType: this.selectedMU.name,
-            ingredientQty: this.selectedIngredientQty,
-        })
-            .subscribe(
-                result => {
-                    console.log({"saveResult":result})
-                    this.closeIngredientModifyMenu();
-                },
-                err => {
-                    console.log({"saveError":err})
-                    this.closeIngredientModifyMenu();
-                }
-            )
+        if (!this.isUpdateMode){
+            this.ingredientsService.postMenuItemIngredient({
+                menuItemId: this.data.menuItem.id,
+                ingredientId: this.selectedIngredientType.ingredientId,
+                ingredientName: this.selectedIngredientType.ingredientName,
+                measurementUnitId: this.selectedMU.measurementUnitId,
+                measurementType: this.selectedMU.name,
+                ingredientQty: this.selectedIngredientQty,
+            })
+                .subscribe(
+                    result => {
+                        this.closeIngredientModifyMenu(true);
+                    },
+                    err => {
+                        this.closeIngredientModifyMenu(true);
+                    }
+                )
+        }
+        else{
+            this.ingredientsService.putMenuItemIngredient({
+                menuItemId: this.data.menuItem.id,
+                ingredientId: this.selectedIngredientType.ingredientId,
+                ingredientName: this.selectedIngredientType.ingredientName,
+                measurementUnitId: this.selectedMU.measurementUnitId,
+                measurementType: this.selectedMU.name,
+                ingredientQty: this.selectedIngredientQty,
+            })
+                .subscribe(
+                    result => {
+                        this.closeIngredientModifyMenu(true);
+                    },
+                    err => {
+                        this.closeIngredientModifyMenu(true);
+                    }
+                )
+        }
     }
 
     plusMinusClicked(isPlus: boolean){
-        console.log("plus or minus clicked")
 
         if (isNaN(this.selectedIngredientQty) || this.selectedIngredientQty < 0){
             this.selectedIngredientQty = 0;

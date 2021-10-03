@@ -42,11 +42,30 @@ export class IngredientService {
       }))
   }
   postMenuItemIngredient(menuIngredient: MenuItemIngredient) : Observable<Object>{
-    console.log({"inputIngredient":menuIngredient})
     let failed = false
 
     const headers = { 'content-type': 'application/json'}  
     return this.http.post(`${this.serviceUrl}/postMenuItemIngredient`, JSON.stringify(menuIngredient), {'headers': headers})
+    .pipe(
+    map((item: Object) => {
+      return item;
+    }),
+    catchError((err, caught) => {
+      failed = true;
+      this.toastr.warning("Unable to save");
+      return of(`i caught error`);
+    }),
+    finalize(() => {if(!failed){
+      this.toastr.success("Ingredient Added");
+    }}));  
+
+  }
+
+  putMenuItemIngredient(menuIngredient: MenuItemIngredient) : Observable<Object>{
+    let failed = false
+
+    const headers = { 'content-type': 'application/json'}  
+    return this.http.put(`${this.serviceUrl}/putMenuItemIngredient`, JSON.stringify(menuIngredient), {'headers': headers})
     .pipe(
     map((item: Object) => {
       return item;
