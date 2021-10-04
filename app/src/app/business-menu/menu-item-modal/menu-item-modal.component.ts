@@ -51,9 +51,9 @@ type ModalInput = {title: string; menuItem: MenuItem}
         .subscribe(
             result => {
                 this.ingredients = result;              
-                this.displayableIngredients = this.ingredients.filter(ingredType => !this.menuItemIngredients
+                this.displayableIngredients = this.ingredients.filter(ingredType => !(this.menuItemIngredients && this.menuItemIngredients
                     .map(ingred => ingred.ingredientId)
-                    .some(ingredId => ingredId == ingredType.ingredientId));
+                    .some(ingredId => ingredId == ingredType.ingredientId)));
             },
             err => {
             }
@@ -125,7 +125,6 @@ type ModalInput = {title: string; menuItem: MenuItem}
     }
 
     deleteMenuItemIngredient(){
-        console.log("deleting")
         this.ingredientsService.deleteMenuItemIngredient(
             this.data.menuItem.id,
             this.selectedIngredientType.ingredientId)

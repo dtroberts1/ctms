@@ -19,7 +19,6 @@ export class MenuService {
   getMenuItems() : Observable<MenuItem[]>{
     return this.http.get<MenuItem[]>(`${this.serviceUrl}/getMenuItems`)
       .pipe(map((menuItems: MenuItem[]) => {
-        console.log({"menuItems":menuItems})
         return menuItems;
       }));
   }
