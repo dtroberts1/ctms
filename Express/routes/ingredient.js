@@ -73,8 +73,36 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
     });
   }))
 
-  router.put('/putMenuItemIngredient/', ((req, res, next) => {
+  router.delete('/deleteMenuItemIngredient/:menuItemId/:ingredientId', ((req, res, next) => {
+    console.log({"req.params":req.params})
     console.log({"req.body":req.body})
+
+    if (!req.params.menuItemId || !req.params.ingredientId){
+      throw new BadRequestError('Missing menuItemId or ingredientId')
+    }
+    let queryStr = `DELETE FROM menu_item_ingredient WHERE menuItemId = ? AND ingredientId = ?`;
+  
+    new Promise((resolve, reject) => {
+      req.service.database().query(queryStr, [req.params.menuItemId, req.params.ingredientId], ((err, result) => {
+        if (err){
+          console.log({"err":err})
+          reject(err);
+        }
+        resolve();
+      }));
+    })
+    .then(()=>{
+      res.send({"successResult":'DataSaved'})
+    })
+     .catch ((err) =>{
+      console.log({"err":err})
+
+      next(err)
+    });
+  }))
+
+  router.put('/putMenuItemIngredient/', ((req, res, next) => {
+
     if (!Object.keys(req.body).length){
       throw new BadRequestError('Missing Fields')
     }

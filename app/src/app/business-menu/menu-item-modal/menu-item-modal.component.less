@@ -41,10 +41,11 @@
         .ingredient-container{
             display: flex;
             flex-direction: row;
+            justify-content: space-around;
             max-height: 220px;
     
             .ingredient-list-container{
-                flex: 2;
+                flex: 2.5;
                 outline: 1px dotted #26377b;
                 outline-offset: -20px;
 
@@ -89,8 +90,18 @@
                     }
                 }
             }
+
+
+            .new-modify-ingredient-select.justify-center{
+                justify-content: center;
+            }
+            .new-modify-ingredient-select:not(.justify-center){
+                justify-content: flex-start;
+            }
             .new-modify-ingredient{
                 flex: 2;
+                padding-right: 8px;
+
                 .new-modify-ingredient-header{
                     text-align: center;
                     padding-top: 30px;
@@ -104,6 +115,69 @@
                 .new-modify-ingredient-select{
                     display: flex;
                     gap: 10px;
+
+                    .incremente-area{
+                        height: 30px;
+                        display: flex;
+                        flex-direction: row;
+                        gap: 6px;
+    
+                        .ingredient-qty{
+                            display: flex;
+                            align-items: center;
+                            height: 100%;
+    
+                            input{
+                                height: 20px;
+                                width: 30px;
+                                outline-color: #42B7FF !important;
+                            }
+
+                            input:hover{
+                                border-color: rgba(229, 103, 23, 0.8);
+                                box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+                                outline: 0 none;
+                            }
+
+                            /* Chrome, Safari, Edge, Opera */
+                            input::-webkit-outer-spin-button,
+                            input::-webkit-inner-spin-button {
+                            -webkit-appearance: none;
+                            margin: 0;
+                            }
+
+                            /* Firefox */
+                            input[type=number] {
+                            -moz-appearance: textfield;
+                            }
+                        }
+    
+                        .plus-minus-btn{
+                            height: 28px;
+                            width: 28px;
+                            background-color: #42B7FF;
+                            border-radius: 8px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+    
+                        .plus-minus-btn:hover{
+                            border-color: rgba(229, 103, 23, 0.8);
+                            box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+                            outline: 0 none;;
+                            cursor: pointer;
+                        }
+                    }
+                }
+
+                .new-modify-ingredient-buttons.justify-center{
+                    justify-content: center;
+                    width:100%;
+                }
+                .new-modify-ingredient-buttons:not(.justify-center){
+                    justify-content: flex-start;
+                    width: 250px;
                 }
 
                 .new-modify-ingredient-buttons{

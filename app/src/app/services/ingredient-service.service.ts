@@ -61,6 +61,33 @@ export class IngredientService {
 
   }
 
+  deleteMenuItemIngredient(menuItemId: number, ingredientId: number){
+    console.log("in service. deleting")
+
+    let failed = false
+    const headers = { 'content-type': 'application/json'}  
+    let params = new HttpParams().set('params', menuItemId)
+      .set('ingredientId', ingredientId)
+    let options = {
+      headers: headers,
+    }
+    console.log({"params":params})
+
+    return this.http.delete(`${this.serviceUrl}/deleteMenuItemIngredient/${menuItemId}/${ingredientId}`, options)
+    .pipe(
+    map((item: Object) => {
+      return item;
+    }),
+    catchError((err, caught) => {
+      failed = true;
+      this.toastr.warning("Unable to save");
+      return of(`i caught error`);
+    }),
+    finalize(() => {if(!failed){
+      this.toastr.success("Ingredient Removed");
+    }}));  
+  }
+
   putMenuItemIngredient(menuIngredient: MenuItemIngredient) : Observable<Object>{
     let failed = false
 
@@ -76,7 +103,7 @@ export class IngredientService {
       return of(`i caught error`);
     }),
     finalize(() => {if(!failed){
-      this.toastr.success("Ingredient Added");
+      this.toastr.success("Ingredient Saved");
     }}));  
 
   }

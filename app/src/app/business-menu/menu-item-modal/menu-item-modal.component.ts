@@ -21,6 +21,8 @@ type ModalInput = {title: string; menuItem: MenuItem}
   export class MenuItemModalComponent {
     menuItemIngredients!: SelectableMenuItemIngredient[];
     ingredients!: Ingredient[];
+    displayableIngredients!: Ingredient[];
+
     measurementUnits!: MeasurementUnit[];
 
     selectedIngredientType !: Ingredient;
@@ -48,20 +50,27 @@ type ModalInput = {title: string; menuItem: MenuItem}
         this.ingredientsService.getIngredients()
         .subscribe(
             result => {
-                this.ingredients = result;
+                this.ingredients = result;              
+                this.displayableIngredients = this.ingredients.filter(ingredType => !this.menuItemIngredients
+                    .map(ingred => ingred.ingredientId)
+                    .some(ingredId => ingredId == ingredType.ingredientId));
             },
             err => {
             }
         )
 
+        this.getMenuItemIngredients();
+    }
+
+    getMenuItemIngredients(){
         this.ingredientsService.getMenuItemIngredients(this.data.menuItem.id)
-            .subscribe(
-                result => {
-                    this.menuItemIngredients = result as SelectableMenuItemIngredient[];
-                },
-                err => {
-                }
-            )
+        .subscribe(
+            result => {
+                this.menuItemIngredients = result as SelectableMenuItemIngredient[];
+            },
+            err => {
+            }
+        )
     }
 
     enableIngredientEditMode(){
@@ -78,6 +87,14 @@ type ModalInput = {title: string; menuItem: MenuItem}
                 this.selectedMU = existingMU as MeasurementUnit;
             }
             this.selectedIngredientQty = selectedIngredient.ingredientQty;
+        }
+        else{
+            // If 'add ingredient' button was clicked
+            // Clear the ingredient (types) that already exist
+
+            this.displayableIngredients = this.ingredients.filter(ingredType => !this.menuItemIngredients
+                .map(ingred => ingred.ingredientId)
+                .some(ingredId => ingredId == ingredType.ingredientId));
         }
     }
 
@@ -107,6 +124,22 @@ type ModalInput = {title: string; menuItem: MenuItem}
         this.closeIngredientModifyMenu(false);
     }
 
+    deleteMenuItemIngredient(){
+        console.log("deleting")
+        this.ingredientsService.deleteMenuItemIngredient(
+            this.data.menuItem.id,
+            this.selectedIngredientType.ingredientId)
+            .subscribe(
+                result => {
+                    this.closeIngredientModifyMenu(true);
+                    this.getMenuItemIngredients();
+                },
+                err => {
+                    this.closeIngredientModifyMenu(true);
+                }
+            )
+    }
+
     createIngredient(){
         // Save, then call cancel changes
         if (!this.isUpdateMode){
@@ -121,9 +154,12 @@ type ModalInput = {title: string; menuItem: MenuItem}
                 .subscribe(
                     result => {
                         this.closeIngredientModifyMenu(true);
+                        this.getMenuItemIngredients();
+
                     },
                     err => {
                         this.closeIngredientModifyMenu(true);
+                        this.getMenuItemIngredients();
                     }
                 )
         }
@@ -139,10 +175,12 @@ type ModalInput = {title: string; menuItem: MenuItem}
                 .subscribe(
                     result => {
                         this.closeIngredientModifyMenu(true);
+                        this.getMenuItemIngredients();
                     },
                     err => {
                         this.closeIngredientModifyMenu(true);
-                    }
+                        this.getMenuItemIngredients();
+                    },
                 )
         }
     }

@@ -9,10 +9,10 @@
 <div class="modal-body" style="height: 400px;">
     <div class="ingredients">
         <div class="ingredients-header">
-            Ingredients
+            {{menuItemIngredients && menuItemIngredients.length ? 'Ingredients' : 'No Ingredients'}}
         </div>
         <div class="ingredient-container">
-            <div class="ingredient-list-container">
+            <div *ngIf="menuItemIngredients && menuItemIngredients.length" class="ingredient-list-container">
                 <div class="ingredient-list">
                     <div (click)="selectMenuItemIngredient(ingredient)" 
                         tabindex="4" 
@@ -27,25 +27,51 @@
             <div class="new-modify-ingredient">
                 <div class="new-modify-ingredient-header">
                     <button *ngIf="!ingredientEditMode" (click)="enableIngredientEditMode()" mat-raised-button color="accent">
-                        {{this.isUpdateMode ? 'Update' : 'Add'}} Ingredient
+                        {{isUpdateMode ? 'Update' : 'Add'}} Ingredient
                     </button>
                 </div>
-                <div class="new-modify-ingredient-select" *ngIf="ingredientEditMode">
-                    <mat-form-field style="width:120px;" appearance="fill">
+                <div class="new-modify-ingredient-select" 
+                    [ngClass]="{'justify-center':!menuItemIngredients || !menuItemIngredients.length}" 
+                    *ngIf="ingredientEditMode">
+                    <mat-form-field *ngIf="!isUpdateMode"  style="width:120px;" appearance="fill">
                         <mat-label>Ingredient</mat-label>
                         <mat-select [(ngModel)]="selectedIngredientType">
-                            <mat-option *ngFor="let ingredient of ingredients" [value]="ingredient">{{ingredient.ingredientName}}</mat-option>
+                            <mat-option *ngFor="let ingredient of displayableIngredients" [value]="ingredient">{{ingredient.ingredientName}}</mat-option>
                         </mat-select>
-                      </mat-form-field>
-                      <mat-form-field style="width:120px;" appearance="fill">
+                    </mat-form-field>                      
+                    <mat-form-field style="width:120px;" appearance="fill">
                         <mat-label>Unit</mat-label>
                         <mat-select [(ngModel)]="selectedMU">
-                            <mat-option *ngFor="let unit of measurementUnits" [value]="unit">{{unit.name}}</mat-option>
-                        </mat-select>
-                      </mat-form-field>
+                        <mat-option *ngFor="let unit of measurementUnits" [value]="unit">{{unit.name}}</mat-option>
+                     </mat-select>
+                    </mat-form-field>
+                    <div class="incremente-area" *ngIf="isUpdateMode" >
+                        <div (click)="plusMinusClicked(true)" tabindex="1" class="plus-minus-btn"
+                            matTooltip="Increment Quantity"
+                            aria-label="Increment Quantity"
+                            [matTooltipShowDelay]="500"
+                        >
+                            <img width="25" height="25" src="../../../assets/icons/PlusIcon/outline_add_blue_white_48dp.png" />
+                        </div>
+                        <div tabindex="2" class="ingredient-qty">
+                            <input type="number" [(ngModel)]="selectedIngredientQty" value="0" width="5"
+                            />
+                            
+                        </div>
+                        <div (click)="plusMinusClicked(false)" tabindex="3" class="plus-minus-btn"
+                            matTooltip="Decrement Quantity"
+                            aria-label="Decrement Quantity"
+                            [matTooltipShowDelay]="500"
+                        >
+                            <img width="25" height="25" src="../../../assets/icons/MinusIcon/outline_remove_blue_white_48dp.png" />
+                        </div>
+                    </div>
                 </div>
-                <div *ngIf="ingredientEditMode" class="new-modify-ingredient-buttons">
-                    <div class="incremente-area" >
+                <div *ngIf="ingredientEditMode" 
+                class="new-modify-ingredient-buttons"
+                [ngClass]="{'justify-center':!menuItemIngredients || !menuItemIngredients.length}"
+                >
+                    <div *ngIf="!isUpdateMode" class="incremente-area" >
                         <div (click)="plusMinusClicked(true)" tabindex="1" class="plus-minus-btn"
                             matTooltip="Increment Quantity"
                             aria-label="Increment Quantity"
@@ -69,7 +95,7 @@
                     <div class="save-cancel-area">
                         <div id="saveIngredBtn" tabindex="4"
                             (click)="createIngredient()"
-                            matTooltip="{{!this.isUpdateMode ? 'Add Ingredient' : 'Update Ingredient'}}"
+                            matTooltip="{{!isUpdateMode ? 'Add Ingredient' : 'Update Ingredient'}}"
                             aria-label="Add Ingredient"
                             [matTooltipShowDelay]="500"
                         >
@@ -84,6 +110,16 @@
                         >
                             <img width="28" height="28" src="../../../assets/icons/XIcon/outline_close_red_48dp.png" />
                         </div>
+                        <div
+                            *ngIf="isUpdateMode"
+                            (click)="deleteMenuItemIngredient()"
+                            id="cancelIngredBtn" tabindex="5"
+                            matTooltip="Remove Ingredient"
+                            aria-label="Remove Ingredient"
+                            [matTooltipShowDelay]="500"
+                        >
+                            <img width="28" height="28" src="../../../assets/icons/TrashcanIcon/outline_delete_red_48dp.png" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -94,5 +130,5 @@
     <hr>
 </div>
 <div class="modal-footer">
-    <button mat-raised-button color="accent">Save</button>
+    <button mat-raised-button color="accent" (click)="close()">Close</button>
 </div>
