@@ -26,10 +26,12 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
       from ingredient
       INNER JOIN menu_item_ingredient
       ON menu_item_ingredient.ingredientId = ingredient.ingredientId
-      WHERE ingredient.ingredientId IN (SELECT ingredientId FROM menu_item_ingredient WHERE menuItemId = ?)
+      WHERE ingredient.ingredientId IN (SELECT ingredientId FROM menu_item_ingredient WHERE menuItemId = ?) 
+      AND menuItemId = ?
+      
   `;
     new Promise((resolve, reject) => {
-      req.service.database().query(queryStr, [req.params.id], ((err, results) => {
+      req.service.database().query(queryStr, [req.params.id, req.params.id], ((err, results) => {
         if (err) {
           reject(err);
         }

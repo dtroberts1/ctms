@@ -13,15 +13,17 @@
         </div>
         <div class="ingredient-container">
             <div *ngIf="menuItemIngredients && menuItemIngredients.length" class="ingredient-list-container">
-                <div class="ingredient-list">
-                    <div (click)="selectMenuItemIngredient(ingredient)" 
-                        tabindex="4" 
-                        [ngClass]="{'selected-ingredient':ingredient.selected}"
-                        *ngFor="let ingredient of menuItemIngredients">
-                        {{ingredient.ingredientName}} -
-                        {{ingredient.ingredientQty}}
-                        {{ingredient.measurementType}}{{(ingredient.ingredientQty > 1) ? 's' : ''}}
-                    </div>                
+                <div class="ingredient-list-parent" [ngClass]="{'is-update-mode':isUpdateMode}">
+                    <div class="ingredient-list">
+                        <div (click)="selectMenuItemIngredient(ingredient)" 
+                            tabindex="4" 
+                            [ngClass]="{'selected-ingredient':ingredient.selected}"
+                            *ngFor="let ingredient of menuItemIngredients">
+                            {{ingredient.ingredientName}} -
+                            {{ingredient.ingredientQty}}
+                            {{ingredient.measurementType}}{{(ingredient.ingredientQty > 1) ? 's' : ''}}
+                        </div>                
+                    </div>
                 </div>
             </div>
             <div class="new-modify-ingredient">
@@ -123,6 +125,26 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="instructions">
+        <div class="instructions-header">
+            Instructions
+        </div>
+        <div class="instructions-body"             
+            >
+            <textarea matInput 
+            placeholder="Comment" 
+            (focus)="editInstructions()"
+            (blur)="saveInstructions()"
+            [readonly]="!isEditInstructionsMode"
+            [ngClass]="{'edit-text-mode':isEditInstructionsMode}"
+            >
+         </textarea>
+        </div>
+        <div class="instruction-submit">
+            <img (click)="editInstructions()" *ngIf="!isEditInstructionsMode" width="28" height="28" src="../../../assets/icons/EditIcon/outline_edit_blue_white_48dp.png" />
+            <img (click)="saveInstructions()" *ngIf="isEditInstructionsMode" width="28" height="28" src="../../../assets/icons/CheckIcon/outline_done_blue_white_48dp.png" />
         </div>
     </div>
 </div>

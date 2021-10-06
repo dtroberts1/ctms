@@ -29,6 +29,7 @@ type ModalInput = {title: string; menuItem: MenuItem}
     selectedMU !: MeasurementUnit;
     selectedIngredientQty : number = 0;
     isUpdateMode: boolean = false;
+    isEditInstructionsMode: boolean = false;
 
     ingredientEditMode: boolean = false;
     constructor(
@@ -71,6 +72,14 @@ type ModalInput = {title: string; menuItem: MenuItem}
             err => {
             }
         )
+    }
+
+    editInstructions(){
+        this.isEditInstructionsMode = true;
+    }
+
+    saveInstructions(){
+        this.isEditInstructionsMode = false;
     }
 
     enableIngredientEditMode(){

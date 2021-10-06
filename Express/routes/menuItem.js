@@ -101,6 +101,8 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
   }))
   
   router.delete('/deleteMenuItem/:id?', ((req, res, next) => {
+
+    
     if (!req.params.id){
       throw new BadRequestError('Missing req.params.id')
     }

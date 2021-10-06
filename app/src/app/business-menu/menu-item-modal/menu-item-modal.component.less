@@ -22,11 +22,12 @@
 
 .modal-body{
     .ingredients{
-        height: 240px;
         display: flex;
         flex-direction: column;
         margin-top:20px;
-
+        max-height: 240px;
+        min-height: 150px;
+        
 
         .ingredients-header{
             height:20px;
@@ -46,47 +47,61 @@
     
             .ingredient-list-container{
                 flex: 2.5;
-                outline: 1px dotted #26377b;
-                outline-offset: -20px;
+                padding: 15px;
 
-                .ingredient-list{
-                    margin: 30px;
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                    grid-gap: 5px;
-                    gap: 5px;
-                    font-size: 14px;
-                    overflow-y: auto;
-                    align-items: start;
-                    max-height: calc(100% - 60px);
-                    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-                    scrollbar-width: none;  /* Firefox */
+                .ingredient-list-parent.is-update-mode{
+                    -webkit-box-shadow: 0px 0px 33px 6px rgb(66 183 255 / 96%);
+                    -moz-box-shadow: 0px 0px 33px 6px rgba(66 183 255,0.96);
+                    box-shadow: 0px 0px 33px 6px rgb(66 183 255 / 96%);
+                }
 
-                    -webkit-scrollbar { /* WebKit */
-                        width: 0;
-                        height: 0;
-                    }
+                .ingredient-list-parent{
+                    -webkit-box-shadow: inset 0px 0px 0px 2px rgba(66 183 255 / 96%);
+                    -moz-box-shadow: inset 0px 0px 0px 2px rgba(66 183 255,0.96);
+                    box-shadow: inset 0px 0px 0px 2px rgba(66 183 255 / 96%);
+                    padding: 15px;
+                    border-radius: 8px;
 
-                    .selected-ingredient{
-                        background-color: orange;
-                    }
-
-                    div{
-                        display: inline-block;
-                        background: #26377b;
-                        border-radius: 10px;
-                        color: white;
-                        padding: 6px 10px;
-                        font-family: 'Lato', Arial, sans-serif;
-                        font-weight: normal;
-                        font-style: normal;
-                      }
-                    div:hover{
-                        border-color: rgba(229, 103, 23, 0.8);
-                        box-shadow: 0 2px 2px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
-                        outline: 0 none;
-                        cursor: pointer;
+                    .ingredient-list{
+                        display: flex;
+                        flex-direction: row;
+                        flex-wrap: wrap;
+                        grid-gap: 5px;
+                        gap: 5px;
+                        font-size: 14px;
+                        overflow-y: auto;
+                        align-items: start;
+                        max-height: 120px;
+                        box-sizing: border-box;
+    
+                        -ms-overflow-style: none;  /* Internet Explorer 10+ */
+                        scrollbar-width: none;  /* Firefox */
+    
+                        -webkit-scrollbar { /* WebKit */
+                            width: 0;
+                            height: 0;
+                        }
+    
+                        .selected-ingredient{
+                            background-color: orange;
+                        }
+    
+                        div{
+                            display: inline-block;
+                            background: #26377b;
+                            border-radius: 10px;
+                            color: white;
+                            padding: 6px 10px;
+                            font-family: 'Lato', Arial, sans-serif;
+                            font-weight: normal;
+                            font-style: normal;
+                          }
+                        div:hover{
+                            border-color: rgba(229, 103, 23, 0.8);
+                            box-shadow: 0 2px 2px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+                            outline: 0 none;
+                            cursor: pointer;
+                        }
                     }
                 }
             }
@@ -156,7 +171,10 @@
                             height: 28px;
                             width: 28px;
                             background-color: #42B7FF;
-                            border-radius: 8px;
+
+                            img{
+                                border-radius: 8px;
+                            }
                             display: flex;
                             justify-content: center;
                             align-items: center;
@@ -198,6 +216,10 @@
                             display: flex;
                             justify-content: center;
                             align-items: center;
+
+                            img{
+                                border-radius: 8px;
+                            }
                         }
 
                         #cancelIngredBtn{
@@ -237,6 +259,7 @@
                                 height: 20px;
                                 width: 30px;
                                 outline-color: #42B7FF !important;
+                                border-radius: 8px;
                             }
 
                             input:hover{
@@ -266,6 +289,10 @@
                             display: flex;
                             justify-content: center;
                             align-items: center;
+                            
+                            img{
+                                border-radius: 8px;
+                            }
                         }
     
                         .plus-minus-btn:hover{
@@ -276,6 +303,67 @@
                         }
                     }
                 }
+            }
+        }
+    }
+
+    .instructions{ 
+        height: 160px;
+
+        .instructions-header{
+            height: 15px;
+            padding: 7.5px 15px;
+            color: #26377B;
+            font-family: 'Lato', Arial, sans-serif;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 19px;
+        }
+
+        .instructions-body{
+            height: 150px;
+            padding: 9px 15px 0;
+            display: flex;
+            justify-content: center;
+
+            textarea{
+                outline: none;
+                background-color: white;
+                width: 100%;
+                height: calc(100% - 28px);
+                border-radius: 8px;
+                border: none;
+                -webkit-box-shadow: 0px 0px 0px 2px rgba(66 183 255 / 96%);
+                -moz-box-shadow: 0px 0px 0px 2px rgba(66 183 255,0.96);
+                box-shadow: 0px 0px 0px 2px rgba(66 183 255 / 96%);
+            }
+
+            textarea.edit-text-mode{
+                border: none;
+                -webkit-box-shadow: 0px 0px 33px 6px rgb(66 183 255 / 96%);
+                -moz-box-shadow: 0px 0px 33px 6px rgba(66 183 255,0.96);
+                box-shadow: 0px 0px 33px 6px rgb(66 183 255 / 96%);
+            }
+
+        }
+
+        .instruction-submit{
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 15px 0;
+            gap: 5px;
+            margin-top: -17px;
+
+            img{
+                border-radius: 8px;
+            }
+
+            img:hover{
+                cursor: pointer;
+                border-color: rgba(229, 103, 23, 0.8);
+                box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+                outline: 0 none;
             }
         }
     }

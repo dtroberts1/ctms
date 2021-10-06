@@ -27,6 +27,7 @@ import { ToastrModule } from 'ngx-toastr';
 import {MatSelectModule} from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatInputModule } from '@angular/material/input'
 import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-item-modal.component';
 
 @NgModule({
@@ -60,6 +61,7 @@ import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-ite
     FormsModule,
     MatSelectModule,
     MatDialogModule,
+    MatInputModule,
     MatTooltipModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
