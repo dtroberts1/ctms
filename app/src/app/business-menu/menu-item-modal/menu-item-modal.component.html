@@ -1,0 +1,157 @@
+<div class="modal-header">
+    <div style="align-items: center; justify-content: center;">
+        {{data.title}}
+    </div>
+    <div (click)="close()" class="close-icon">
+        <img width="28" height="28" src="../../../assets/icons/CloseIcon/outline_cancel_blue_48dp.png" />
+    </div>
+</div>
+<div class="modal-body" style="height: 400px;">
+    <div class="ingredients">
+        <div class="ingredients-header">
+            {{menuItemIngredients && menuItemIngredients.length ? 'Ingredients' : 'No Ingredients'}}
+        </div>
+        <div class="ingredient-container">
+            <div *ngIf="menuItemIngredients && menuItemIngredients.length" class="ingredient-list-container">
+                <div class="ingredient-list-parent" [ngClass]="{'is-update-mode':isUpdateMode}">
+                    <div class="ingredient-list">
+                        <div (click)="selectMenuItemIngredient(ingredient)" 
+                            tabindex="4" 
+                            [ngClass]="{'selected-ingredient':ingredient.selected}"
+                            *ngFor="let ingredient of menuItemIngredients">
+                            {{ingredient.ingredientName}} -
+                            {{ingredient.ingredientQty}}
+                            {{ingredient.measurementType}}{{(ingredient.ingredientQty > 1) ? 's' : ''}}
+                        </div>                
+                    </div>
+                </div>
+            </div>
+            <div class="new-modify-ingredient">
+                <div class="new-modify-ingredient-header">
+                    <button *ngIf="!ingredientEditMode" (click)="enableIngredientEditMode()" mat-raised-button color="accent">
+                        {{isUpdateMode ? 'Update' : 'Add'}} Ingredient
+                    </button>
+                </div>
+                <div class="new-modify-ingredient-select" 
+                    [ngClass]="{'justify-center':!menuItemIngredients || !menuItemIngredients.length}" 
+                    *ngIf="ingredientEditMode">
+                    <mat-form-field *ngIf="!isUpdateMode"  style="width:120px;" appearance="fill">
+                        <mat-label>Ingredient</mat-label>
+                        <mat-select [(ngModel)]="selectedIngredientType">
+                            <mat-option *ngFor="let ingredient of displayableIngredients" [value]="ingredient">{{ingredient.ingredientName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>                      
+                    <mat-form-field style="width:120px;" appearance="fill">
+                        <mat-label>Unit</mat-label>
+                        <mat-select [(ngModel)]="selectedMU">
+                        <mat-option *ngFor="let unit of measurementUnits" [value]="unit">{{unit.name}}</mat-option>
+                     </mat-select>
+                    </mat-form-field>
+                    <div class="incremente-area" *ngIf="isUpdateMode" >
+                        <div (click)="plusMinusClicked(true)" tabindex="1" class="plus-minus-btn"
+                            matTooltip="Increment Quantity"
+                            aria-label="Increment Quantity"
+                            [matTooltipShowDelay]="500"
+                        >
+                            <img width="25" height="25" src="../../../assets/icons/PlusIcon/outline_add_blue_white_48dp.png" />
+                        </div>
+                        <div tabindex="2" class="ingredient-qty">
+                            <input type="number" [(ngModel)]="selectedIngredientQty" value="0" width="5"
+                            />
+                            
+                        </div>
+                        <div (click)="plusMinusClicked(false)" tabindex="3" class="plus-minus-btn"
+                            matTooltip="Decrement Quantity"
+                            aria-label="Decrement Quantity"
+                            [matTooltipShowDelay]="500"
+                        >
+                            <img width="25" height="25" src="../../../assets/icons/MinusIcon/outline_remove_blue_white_48dp.png" />
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="ingredientEditMode" 
+                class="new-modify-ingredient-buttons"
+                [ngClass]="{'justify-center':!menuItemIngredients || !menuItemIngredients.length}"
+                >
+                    <div *ngIf="!isUpdateMode" class="incremente-area" >
+                        <div (click)="plusMinusClicked(true)" tabindex="1" class="plus-minus-btn"
+                            matTooltip="Increment Quantity"
+                            aria-label="Increment Quantity"
+                            [matTooltipShowDelay]="500"
+                        >
+                            <img width="25" height="25" src="../../../assets/icons/PlusIcon/outline_add_blue_white_48dp.png" />
+                        </div>
+                        <div tabindex="2" class="ingredient-qty">
+                            <input type="number" [(ngModel)]="selectedIngredientQty" value="0" width="5"
+                            />
+                            
+                        </div>
+                        <div (click)="plusMinusClicked(false)" tabindex="3" class="plus-minus-btn"
+                            matTooltip="Decrement Quantity"
+                            aria-label="Decrement Quantity"
+                            [matTooltipShowDelay]="500"
+                        >
+                            <img width="25" height="25" src="../../../assets/icons/MinusIcon/outline_remove_blue_white_48dp.png" />
+                        </div>
+                    </div>
+                    <div class="save-cancel-area">
+                        <div id="saveIngredBtn" tabindex="4"
+                            (click)="createIngredient()"
+                            matTooltip="{{!isUpdateMode ? 'Add Ingredient' : 'Update Ingredient'}}"
+                            aria-label="Add Ingredient"
+                            [matTooltipShowDelay]="500"
+                        >
+                            <img width="28" height="28" src="../../../assets/icons/CheckIcon/outline_done_blue_white_48dp.png" />
+                        </div>
+                        <div
+                            (click)="closeIngredientModifyMenu(true)"
+                            id="cancelIngredBtn" tabindex="5"
+                            matTooltip="Cancel Changes"
+                            aria-label="Cancel Changes"
+                            [matTooltipShowDelay]="500"
+                        >
+                            <img width="28" height="28" src="../../../assets/icons/XIcon/outline_close_red_48dp.png" />
+                        </div>
+                        <div
+                            *ngIf="isUpdateMode"
+                            (click)="deleteMenuItemIngredient()"
+                            id="cancelIngredBtn" tabindex="5"
+                            matTooltip="Remove Ingredient"
+                            aria-label="Remove Ingredient"
+                            [matTooltipShowDelay]="500"
+                        >
+                            <img width="28" height="28" src="../../../assets/icons/TrashcanIcon/outline_delete_red_48dp.png" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="instructions">
+        <div class="instructions-header">
+            Instructions
+        </div>
+        <div class="instructions-body"             
+            >
+            <textarea matInput 
+            placeholder="Comment" 
+            [(ngModel)]="data.menuItem.recipeInstructions"
+            (focus)="editInstructions()"
+            (blur)="saveInstructions()"
+            [readonly]="!isEditInstructionsMode"
+            [ngClass]="{'edit-text-mode':isEditInstructionsMode}"
+            >
+         </textarea>
+        </div>
+        <div class="instruction-submit">
+            <img (click)="editInstructions()" *ngIf="!isEditInstructionsMode" width="28" height="28" src="../../../assets/icons/EditIcon/outline_edit_blue_white_48dp.png" />
+            <img (click)="saveInstructions()" *ngIf="isEditInstructionsMode" width="28" height="28" src="../../../assets/icons/CheckIcon/outline_done_blue_white_48dp.png" />
+        </div>
+    </div>
+</div>
+<div class="footer-border">
+    <hr>
+</div>
+<div class="modal-footer">
+    <button mat-raised-button color="accent" (click)="close()">Close</button>
+</div>

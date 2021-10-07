@@ -24,6 +24,11 @@ import {FormsModule} from '@angular/forms';
 import{MatBadgeModule} from '@angular/material/badge';
 import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
+import {MatSelectModule} from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatInputModule } from '@angular/material/input'
+import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-item-modal.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +44,8 @@ import { ToastrModule } from 'ngx-toastr';
     ReportsComponent,
     LocationsComponent,
     DashboardComponent,
-    BusinessMenuTableComponent
+    BusinessMenuTableComponent,
+    MenuItemModalComponent
   ],
   imports: [
     CommonModule,
@@ -53,6 +59,10 @@ import { ToastrModule } from 'ngx-toastr';
     HttpClientModule,
     MatIconModule,
     FormsModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatInputModule,
+    MatTooltipModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,

@@ -31,6 +31,5 @@ export class AppComponent {
   }
   footerBtnClicked(item: string){
     this.selectedFooterItem = item;
-    console.log("selected footer is " + this.selectedFooterItem)
   }
 }
