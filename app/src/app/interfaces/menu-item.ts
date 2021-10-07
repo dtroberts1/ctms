@@ -13,5 +13,6 @@ export interface MenuItem {
     qtySold: number,
     popularity: number,
     reviewRank: number,
+    recipeInstructions: string,
     id: number,
 }

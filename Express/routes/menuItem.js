@@ -83,8 +83,8 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
         if (err){
           reject(err);
         }
-        let command = 'update ctms.menu_item SET name = ?, description = ?, price = ?, cost = ?, popularity = ?, reviewRank = ? where id = ?';
-        req.service.database().query(command, [req.body.name, req.body.description, req.body.price, req.body.cost, req.body.popularity, req.body.reviewRank, req.body.id], ((err, result) => {
+        let command = 'update ctms.menu_item SET name = ?, description = ?, price = ?, cost = ?, popularity = ?, reviewRank = ?, recipeInstructions = ? where id = ?';
+        req.service.database().query(command, [req.body.name, req.body.description, req.body.price, req.body.cost, req.body.popularity, req.body.reviewRank, req.body.recipeInstructions, req.body.id], ((err, result) => {
           if (err){
             reject(err);
           }

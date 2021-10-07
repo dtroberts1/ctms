@@ -135,6 +135,7 @@
             >
             <textarea matInput 
             placeholder="Comment" 
+            [(ngModel)]="data.menuItem.recipeInstructions"
             (focus)="editInstructions()"
             (blur)="saveInstructions()"
             [readonly]="!isEditInstructionsMode"

@@ -1,8 +1,10 @@
+import { nullSafeIsEquivalent } from "@angular/compiler/src/output/output_ast";
 import { Component, Inject, Type } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Ingredient, MeasurementUnit, MenuItemIngredient } from "src/app/interfaces/ingredient";
 import { MenuItem } from "src/app/interfaces/menu-item";
 import { IngredientService } from "src/app/services/ingredient-service.service";
+import { MenuService } from "../menu-service.service";
 
 
 type Selectable = {
@@ -29,6 +31,7 @@ type ModalInput = {title: string; menuItem: MenuItem}
     selectedMU !: MeasurementUnit;
     selectedIngredientQty : number = 0;
     isUpdateMode: boolean = false;
+    originalInstructions: string = '';
     isEditInstructionsMode: boolean = false;
 
     ingredientEditMode: boolean = false;
@@ -36,9 +39,11 @@ type ModalInput = {title: string; menuItem: MenuItem}
       public dialogRef: MatDialogRef<MenuItemModalComponent>,
       @Inject(MAT_DIALOG_DATA) public data: ModalInput,
       private ingredientsService: IngredientService,
+      private menuService: MenuService,
       ) {}
 
     ngOnInit(){
+        this.originalInstructions = this.data.menuItem.recipeInstructions;
         this.ingredientsService.getMeasurementUnits()
         .subscribe(
             result => {
@@ -80,6 +85,16 @@ type ModalInput = {title: string; menuItem: MenuItem}
 
     saveInstructions(){
         this.isEditInstructionsMode = false;
+        if (!(this.originalInstructions === this.data.menuItem.recipeInstructions)){
+            this.menuService.updateMenuItem(this.data.menuItem)
+            .subscribe(
+                result => {
+                    this.originalInstructions = this.data.menuItem.recipeInstructions;
+                },
+                err => {
+                }
+            )
+        }
     }
 
     enableIngredientEditMode(){
