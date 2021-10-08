@@ -13,6 +13,8 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
+const NBR_CHART_ITEMS : number = 5;
+
 @Component({
   selector: 'app-business-menu-overview',
   templateUrl: './business-menu-overview.component.html',
@@ -134,10 +136,10 @@ export class BusinessMenuOverviewComponent implements AfterViewInit {
     this.popularityChart = new Chart(this.popularityChartCanvas.nativeElement, {
       type: 'doughnut',
       data: {
-        labels: this.menuItemNames,
+        labels: this.menuItemNames.slice(0, NBR_CHART_ITEMS),
         datasets: [{
           backgroundColor: this.getColors(4, pal),
-          data: this.menuQtySold,
+          data: this.menuQtySold.slice(0, NBR_CHART_ITEMS),
           hoverBorderWidth: 5,
           hoverBorderColor: '#42b7ff',
           hoverOffset: 15,
@@ -174,10 +176,10 @@ export class BusinessMenuOverviewComponent implements AfterViewInit {
       type: 'doughnut',
       
       data: {
-        labels: this.menuItemNames,
+        labels: this.menuItemNames.slice(0, NBR_CHART_ITEMS),
         datasets: [{
           backgroundColor: this.getColors(4, pal),
-          data: this.menuRatings,
+          data: this.menuRatings.splice(0, NBR_CHART_ITEMS),
           hoverBorderWidth: 5,
           hoverBorderColor: '#42b7ff',
           hoverOffset: 15,
