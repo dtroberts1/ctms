@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { map } from 'rxjs/operators';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MenuItemModalComponent } from '../menu-item-modal/menu-item-modal.component';
+import { MatTableDataSource } from '@angular/material/table';
 
 interface IDictionary {
   [index: string]: number;
@@ -49,8 +50,6 @@ interface IDictionaryMenuItem {
   ],
 })
 export class BusinessMenuTableComponent implements OnInit {
-  @ViewChild(MatPaginator, { static: true })
-  paginator!: MatPaginator;
   expandedElement!: MenuItem | null;
   tableBtnColor!: string;
   panelOpenState = false;
@@ -63,13 +62,16 @@ export class BusinessMenuTableComponent implements OnInit {
     'cost': 7,
   }
   columns: string[] = ['type', 'name', 'description', 'price', 'cost'];
+  @ViewChild('paginator')
+  paginator!: MatPaginator;
+
   @Input() menuItems!: MenuItem[];
   @Output() menuItemsChange = new EventEmitter();
   @Output() notifyParent = new EventEmitter();
   @ViewChildren('text_input')
   menuItemTextInput!: QueryList<any>;
 
-  dataSource!: MenuItem[];
+  dataSource!: MatTableDataSource<MenuItem>;
 
   constructor(private menuService: MenuService, private toastr: ToastrService, public dialog: MatDialog) { }
 
@@ -88,8 +90,10 @@ export class BusinessMenuTableComponent implements OnInit {
           case 'menuItems': {
             let menuItems = change.currentValue;
             if (Array.isArray(menuItems) && menuItems.length){
-              menuItems.forEach((item) => {item.isReadOnly = true;})
-              this.dataSource = <MenuItem[]>menuItems; 
+              menuItems.forEach((item) => {item.isReadOnly = true;});
+              this.dataSource = new MatTableDataSource<MenuItem>();
+              this.dataSource.data = <MenuItem[]>menuItems;
+              this.dataSource.paginator = this.paginator;
             }
           }
         }
@@ -159,7 +163,10 @@ export class BusinessMenuTableComponent implements OnInit {
       next: data => {
         this.menuService.getMenuItems()
           .subscribe((menuItems: MenuItem[]) => {
-            this.dataSource = this.menuItems = menuItems
+            this.menuItems = menuItems;
+            this.dataSource = new MatTableDataSource<MenuItem>();
+            this.dataSource.data = this.menuItems;
+            this.dataSource.paginator = this.paginator;
             this.menuItemsChange.emit(this.menuItems);
             this.notifyParent.emit("menu items changed")
           })
