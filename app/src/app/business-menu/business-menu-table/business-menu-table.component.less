@@ -12,6 +12,7 @@
         height: 40px;
         display: flex;
         justify-content: end;
+        gap: 8px;
         
         >button{
           font-family: 'Lato', Arial, sans-serif;
@@ -40,7 +41,11 @@
           top: 104px;
           z-index: 5;
         }
-  
+        .mat-header-row{
+          th:nth-child(1){
+            width: 40px;
+          }
+        }
         .cell-data{
           color: #26377B;
           font-family: 'Lato', Arial, sans-serif;
@@ -213,6 +218,7 @@
     
     .example-element-row td {
       border-bottom-width: 0;
+      cursor: pointer;
     }
     
     .example-element-detail {

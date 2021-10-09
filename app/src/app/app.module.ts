@@ -28,6 +28,7 @@ import {MatSelectModule} from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input'
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-item-modal.component';
 
 @NgModule({
@@ -62,6 +63,7 @@ import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-ite
     MatSelectModule,
     MatDialogModule,
     MatInputModule,
+    MatCheckboxModule,
     MatTooltipModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',

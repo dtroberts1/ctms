@@ -55,7 +55,7 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
       throw new BadRequestError('Missing Fields')
     }
     let queryStr = 'insert into ctms.menu_item SET ?';
-  
+      
     new Promise((resolve, reject) => {
       req.service.database().query(queryStr, req.body, ((err, result) => {
         if (err){
@@ -65,7 +65,7 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
       }));
     })
     .then(()=>{
-      res.send("Data added")
+      res.send(JSON.stringify("{result: 'Ok'}"))
     })
      .catch ((err) =>{
       next(err)
@@ -101,7 +101,6 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
   }))
   
   router.delete('/deleteMenuItem/:id?', ((req, res, next) => {
-
     
     if (!req.params.id){
       throw new BadRequestError('Missing req.params.id')
@@ -111,6 +110,29 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
     let query = 'delete from menu_item where id = ?'
     new Promise((resolve, reject) => {
       req.service.database().query(query, [id], function (err, results) {
+        if (err){
+          reject(err);
+        }
+        resolve(results);
+      });
+    })
+    .then(()=>{
+      res.send(JSON.stringify({}))
+    })
+    .catch ((err) =>{
+      next(err)
+    });  
+  }));
+
+  router.delete('/deleteMenuItems', ((req, res, next) => {
+    if (!Object.keys(req.body).length){
+      throw new BadRequestError('Missing Fields')
+    }
+    let selectedIds = req.body.selectedIds;
+  
+    let query = 'delete from menu_item where id in (?)'
+    new Promise((resolve, reject) => {
+      req.service.database().query(query, [selectedIds], function (err, results) {
         if (err){
           reject(err);
         }

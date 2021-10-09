@@ -40,12 +40,48 @@ export class MenuService {
     );
   }
 
+  addMenuItem(menuItem: MenuItem){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        /*Authorization: 'my-auth-token'*/
+      })
+    };
+
+    return this.http.post<string>(`${this.serviceUrl}/addMenuItem`,
+      menuItem, httpOptions
+    );
+  }
+
   deleteMenuItem(menuId: number) : Observable<Object>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        /*Authorization: 'my-auth-token'*/
+      })
+    };
     return this.http.delete(`${this.serviceUrl}/deleteMenuItem/${menuId}`, {responseType: 'text'})
     .pipe(
       map((item: string) => {
         this.toastr.success("Menu Item Deleted");
         return item;
+      })
+    );
+  }
+
+  deleteMenuItems(menuIds: number[]) : Observable<Object>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        /*'Content-Type':  'application/json',*/
+        /*Authorization: 'my-auth-token'*/
+      }),
+      body: {selectedIds: menuIds},
+    };
+    return this.http.delete(`${this.serviceUrl}/deleteMenuItems`, httpOptions)    
+    .pipe(
+      map(() => {
+        this.toastr.success("Menu Items Deleted");
+        return 'Success';
       })
     );
   }

@@ -33,7 +33,7 @@ export class BusinessMenuOverviewComponent implements AfterViewInit {
   menuItemNames!: string[];
   menuRatings !: number[];
   menuQtySold !: number[];
-  popularityChart: any;
+  popularityChart!: Chart;
   tasteTestChart: any;
   mostPopularItem !: string;
   leastPopularItem !: string;
@@ -133,81 +133,104 @@ export class BusinessMenuOverviewComponent implements AfterViewInit {
   pieChartBrowser(): void {
     let pal = ["#001464", "#26377B", "#404F8B", "#59709A", "#8CA0B9", "#B2C7D0", "#CCDDE0"]
 
-    this.popularityChart = new Chart(this.popularityChartCanvas.nativeElement, {
-      type: 'doughnut',
-      data: {
-        labels: this.menuItemNames.slice(0, NBR_CHART_ITEMS),
-        datasets: [{
-          backgroundColor: this.getColors(4, pal),
-          data: this.menuQtySold.slice(0, NBR_CHART_ITEMS),
-          hoverBorderWidth: 5,
-          hoverBorderColor: '#42b7ff',
-          hoverOffset: 15,
-        }]
-      },
-      options: {
-        maintainAspectRatio: true,
-        layout: {
-          padding: {
-            left: 30,
-            right: 30,
-            bottom: 30,
-          },
+    if (!this.popularityChart){
+      this.popularityChart = new Chart(this.popularityChartCanvas.nativeElement, {
+        type: 'doughnut',
+        data: {
+          labels: this.menuItemNames.slice(0, NBR_CHART_ITEMS),
+          datasets: [{
+            backgroundColor: this.getColors(4, pal),
+            data: this.menuQtySold.slice(0, NBR_CHART_ITEMS),
+            hoverBorderWidth: 5,
+            hoverBorderColor: '#42b7ff',
+            hoverOffset: 15,
+          }]
         },
-        plugins: {
-          legend:{
-            display: true,
-            position: 'right',
-            title: {
-              text: 'Menu Items',
-              display: true,
-              font: {
-                size: 22,
-              }
+        options: {
+          maintainAspectRatio: true,
+          layout: {
+            padding: {
+              left: 30,
+              right: 30,
+              bottom: 30,
             },
+          },
+          plugins: {
+            legend:{
+              display: true,
+              position: 'right',
+              title: {
+                text: 'Menu Items',
+                display: true,
+                font: {
+                  size: 22,
+                }
+              },
+              
+            }
             
           }
-          
         }
-      }
-    });
-
-    this.tasteTestChart = new Chart(this.tasteTestChartCanvas.nativeElement, {
-      type: 'doughnut',
-      
-      data: {
-        labels: this.menuItemNames.slice(0, NBR_CHART_ITEMS),
-        datasets: [{
-          backgroundColor: this.getColors(4, pal),
-          data: this.menuRatings.splice(0, NBR_CHART_ITEMS),
-          hoverBorderWidth: 5,
-          hoverBorderColor: '#42b7ff',
-          hoverOffset: 15,
-        }]
-      },
-      options: {
-        maintainAspectRatio: true,
-        layout: {
-          padding: {
-            left: 30,
-            right: 30,
-            bottom: 30,
-          }
+      });
+    }
+    else{
+      // Update chart data 
+      this.popularityChart.data.datasets = [{
+        backgroundColor: this.getColors(4, pal),
+        data: this.menuQtySold.slice(0, NBR_CHART_ITEMS),
+        hoverBorderWidth: 5,
+        hoverBorderColor: '#42b7ff',
+        hoverOffset: 15,
+      }];
+    }
+    if (!this.tasteTestChart){
+      this.tasteTestChart = new Chart(this.tasteTestChartCanvas.nativeElement, {
+        type: 'doughnut',
+        
+        data: {
+          labels: this.menuItemNames.slice(0, NBR_CHART_ITEMS),
+          datasets: [{
+            backgroundColor: this.getColors(4, pal),
+            data: this.menuRatings.splice(0, NBR_CHART_ITEMS),
+            hoverBorderWidth: 5,
+            hoverBorderColor: '#42b7ff',
+            hoverOffset: 15,
+          }]
         },
-        plugins: {
-          legend:{
-            display: true,
-            position: 'right',
-            title: {
-              text: 'Menu Items',
+        options: {
+          maintainAspectRatio: true,
+          layout: {
+            padding: {
+              left: 30,
+              right: 30,
+              bottom: 30,
+            }
+          },
+          plugins: {
+            legend:{
               display: true,
-              font: {
-                size: 22,
-              }
-            },
-          },         
+              position: 'right',
+              title: {
+                text: 'Menu Items',
+                display: true,
+                font: {
+                  size: 22,
+                }
+              },
+            },         
+          }
         }
-      }
-    });
+      });
+    }
+    else{
+      // Update chart data 
+      this.popularityChart.data.datasets = [{
+        backgroundColor: this.getColors(4, pal),
+        data: this.menuRatings.splice(0, NBR_CHART_ITEMS),
+        hoverBorderWidth: 5,
+        hoverBorderColor: '#42b7ff',
+        hoverOffset: 15,
+      }];
+    }
   }
 }

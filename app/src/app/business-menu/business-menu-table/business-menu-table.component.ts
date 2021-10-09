@@ -46,6 +46,8 @@ export class BusinessMenuTableComponent implements OnInit {
   tableBtnColor!: string;
   panelOpenState = false;
   myVal!: any;
+  rowsSelected: boolean = false;
+  mainTableChkbox: boolean = false;
   columnSizeMap: IDictionary = {
     'type': 50,
     'name': 40,
@@ -53,7 +55,9 @@ export class BusinessMenuTableComponent implements OnInit {
     'price': 7,
     'cost': 7,
   }
-  columns: string[] = ['type', 'name', 'description', 'price', 'cost'];
+  columns: string[] = ['checkbox', 'type', 'name', 'description', 'price', 'cost'];
+  mainColumns: string[] = ['type', 'name', 'description', 'price', 'cost'];
+
   @ViewChild('paginator')
   paginator!: MatPaginator;
 
@@ -74,6 +78,21 @@ export class BusinessMenuTableComponent implements OnInit {
 
   }
 
+  selectDeselectAllRows(){
+    setTimeout(() => {
+      this.menuItems.forEach(item => item.selected = this.mainTableChkbox);
+    }, 0);
+  }
+
+  rowSelected(event: any){
+    event.stopPropagation();
+    setTimeout(()=>{
+      this.rowsSelected = this.menuItems.some(item =>item.selected);
+    }, 0);
+
+
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
@@ -84,13 +103,25 @@ export class BusinessMenuTableComponent implements OnInit {
             let menuItems = change.currentValue;
             if (Array.isArray(menuItems) && menuItems.length){
               menuItems.forEach((item) => {item.isReadOnly = true;});
-              console.log("on changes..")
               this.updateDataSource(this.menuItems);
             }
           }
         }
       }
     }
+  }
+
+  deleteMenuItems(){
+    let selectedIds = this.menuItems.filter(item => item.selected).map(item => item.id);
+    this.menuService.deleteMenuItems(selectedIds)
+      .subscribe(
+        result => {
+          this.updateLatestMenuItems();
+          this.menuItems.forEach(item => item.selected = false);
+        },
+        err => {
+        }
+      )
   }
 
   deleteIconClicked(event : any, menuItem: MenuItem, col: any){
@@ -135,22 +166,35 @@ export class BusinessMenuTableComponent implements OnInit {
 
   addMenuItem(){
     let newItem : MenuItem = {
-      type: 'Test',
-      description: 'Test',
-      name: 'Test',
-      price: 0.00,
-      cost: 0.00,
-      ranking: 0,  
+      type: '____',
+      description: '____',
+      name: '____',
+      price: 0,
+      cost: 0,
       averageReviewRating: 0,
       qtySold: 0,
       popularity: 0,
       reviewRank: 0,
       recipeInstructions: '',
-      id: -1,
     }
-    this.menuItems.splice(0, 0, newItem);
-    console.log({"menuItems":this.menuItems})
+    this.menuService.addMenuItem(<MenuItem>newItem)
+    .subscribe(
+      val => {
+        this.updateLatestMenuItems();
+      }
+    )
     this.updateDataSource(this.menuItems);
+  }
+
+  updateLatestMenuItems(){
+    this.menuService.getMenuItems()
+    .subscribe((menuItems: MenuItem[]) => {
+      this.menuItems = menuItems;
+      this.menuItems.sort((a,b) => a.name.localeCompare(b.name));
+      this.updateDataSource(this.menuItems);
+      this.menuItemsChange.emit(this.menuItems);
+      this.notifyParent.emit("menu items changed")
+    });
   }
 
   editIconClicked(event : any, row: any, col: any){
@@ -160,20 +204,14 @@ export class BusinessMenuTableComponent implements OnInit {
     row.editableColumn = col;
     let colIndex = this.columns.findIndex(column => column === col);
     let rowIndex = this.menuItems.findIndex(rowItem => rowItem.id == row.id);
-    console.log("Row index is  " + rowIndex)
-    console.log("this.dataSource.paginator.pageSize is " + (this.dataSource.paginator ? this.dataSource.paginator.pageSize : 0))
-    console.log({"dataSource":this.dataSource})
 
     const arr = this.menuItemTextInput.toArray();
     if (this.dataSource.paginator){
       let index = (colIndex * (this.dataSource.paginator ? this.menuItems.length / this.dataSource.paginator.pageSize : 0)) + (rowIndex % this.dataSource.paginator.pageSize);
-      console.log("index is  " + index);
-      console.log({"arr":arr})
       if (arr[index] && arr[index].nativeElement){
         arr[index].nativeElement.children[0].children[0].children[0].focus();
       }
       else{
-        console.log("unable to access at index " + index)
       }
     }
 
