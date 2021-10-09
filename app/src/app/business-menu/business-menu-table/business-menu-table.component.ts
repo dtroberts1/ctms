@@ -125,8 +125,6 @@ export class BusinessMenuTableComponent implements OnInit {
   }
 
   disableEditMode(event : Event, element : any, column : string, val: any){
-    console.log("blurring")
-    console.log({"event.target":event.target})
     element.isReadOnly = true;
     element.editableColumn = null;
 
@@ -150,9 +148,12 @@ export class BusinessMenuTableComponent implements OnInit {
     row.editableColumn = col;
     let colIndex = this.columns.findIndex(column => column === col);
     let rowIndex = this.menuItems.findIndex(rowItem => rowItem.id == row.id);
+
     const arr = this.menuItemTextInput.toArray();
-    let index = (colIndex * (this.menuItems.length)) + rowIndex;
-    arr[index].nativeElement.children[0].children[0].children[0].focus();
+    if (this.dataSource.paginator){
+      let index = (colIndex * (this.dataSource.paginator ? this.menuItems.length / this.dataSource.paginator.pageSize : 0)) + (rowIndex % this.dataSource.paginator.pageSize);
+      arr[index].nativeElement.children[0].children[0].children[0].focus();
+    }
 
     
   }
@@ -172,7 +173,6 @@ export class BusinessMenuTableComponent implements OnInit {
           })
       },
       error: error => {
-          console.error('There was an error!', error);
       }
   });
   }
