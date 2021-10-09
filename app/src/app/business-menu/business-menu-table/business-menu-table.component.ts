@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output, QueryList, SimpleChange, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ContentChildren, EventEmitter, Inject, Input, OnInit, Output, QueryList, SimpleChange, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MenuItem } from '../../interfaces/menu-item';
 import {animate, state, style, transition, trigger} from '@angular/animations';
@@ -13,14 +13,6 @@ import { MatTableDataSource } from '@angular/material/table';
 interface IDictionary {
   [index: string]: number;
 }
-
-type MenuItemKeys = keyof 'type' | 'name' | 'description' | 'price' | 'cost'
-
-
-interface IDictionaryMenuItem {
-  [index: string]: MenuItem;
-}
-
 
 @Component({
   selector: 'app-business-menu-table',
@@ -68,8 +60,9 @@ export class BusinessMenuTableComponent implements OnInit {
   @Input() menuItems!: MenuItem[];
   @Output() menuItemsChange = new EventEmitter();
   @Output() notifyParent = new EventEmitter();
-  @ViewChildren('text_input')
+  @ContentChildren('text_input')
   menuItemTextInput!: QueryList<any>;
+  tableReady: boolean = false;
 
   dataSource!: MatTableDataSource<MenuItem>;
 
@@ -91,9 +84,8 @@ export class BusinessMenuTableComponent implements OnInit {
             let menuItems = change.currentValue;
             if (Array.isArray(menuItems) && menuItems.length){
               menuItems.forEach((item) => {item.isReadOnly = true;});
-              this.dataSource = new MatTableDataSource<MenuItem>();
-              this.dataSource.data = <MenuItem[]>menuItems;
-              this.dataSource.paginator = this.paginator;
+              console.log("on changes..")
+              this.updateDataSource(this.menuItems);
             }
           }
         }
@@ -141,6 +133,26 @@ export class BusinessMenuTableComponent implements OnInit {
       )
   }
 
+  addMenuItem(){
+    let newItem : MenuItem = {
+      type: 'Test',
+      description: 'Test',
+      name: 'Test',
+      price: 0.00,
+      cost: 0.00,
+      ranking: 0,  
+      averageReviewRating: 0,
+      qtySold: 0,
+      popularity: 0,
+      reviewRank: 0,
+      recipeInstructions: '',
+      id: -1,
+    }
+    this.menuItems.splice(0, 0, newItem);
+    console.log({"menuItems":this.menuItems})
+    this.updateDataSource(this.menuItems);
+  }
+
   editIconClicked(event : any, row: any, col: any){
     event.stopPropagation()
     let evt = JSON.parse(JSON.stringify(event))
@@ -148,14 +160,32 @@ export class BusinessMenuTableComponent implements OnInit {
     row.editableColumn = col;
     let colIndex = this.columns.findIndex(column => column === col);
     let rowIndex = this.menuItems.findIndex(rowItem => rowItem.id == row.id);
+    console.log("Row index is  " + rowIndex)
+    console.log("this.dataSource.paginator.pageSize is " + (this.dataSource.paginator ? this.dataSource.paginator.pageSize : 0))
+    console.log({"dataSource":this.dataSource})
 
     const arr = this.menuItemTextInput.toArray();
     if (this.dataSource.paginator){
       let index = (colIndex * (this.dataSource.paginator ? this.menuItems.length / this.dataSource.paginator.pageSize : 0)) + (rowIndex % this.dataSource.paginator.pageSize);
-      arr[index].nativeElement.children[0].children[0].children[0].focus();
+      console.log("index is  " + index);
+      console.log({"arr":arr})
+      if (arr[index] && arr[index].nativeElement){
+        arr[index].nativeElement.children[0].children[0].children[0].focus();
+      }
+      else{
+        console.log("unable to access at index " + index)
+      }
     }
 
     
+  }
+
+  updateDataSource(menuItems: MenuItem[]){
+    this.tableReady = false;
+    this.dataSource = new MatTableDataSource<MenuItem>();
+    this.dataSource.data = menuItems;
+    this.dataSource.paginator = this.paginator;
+    this.tableReady = true;
   }
 
   deleteMenuItem(menuId: number){
@@ -165,9 +195,7 @@ export class BusinessMenuTableComponent implements OnInit {
         this.menuService.getMenuItems()
           .subscribe((menuItems: MenuItem[]) => {
             this.menuItems = menuItems;
-            this.dataSource = new MatTableDataSource<MenuItem>();
-            this.dataSource.data = this.menuItems;
-            this.dataSource.paginator = this.paginator;
+            this.updateDataSource(this.menuItems);
             this.menuItemsChange.emit(this.menuItems);
             this.notifyParent.emit("menu items changed")
           })

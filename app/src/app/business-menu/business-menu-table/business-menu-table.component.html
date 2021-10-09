@@ -1,81 +1,84 @@
 <div class="business-menu-table">
     <div>
-        <table mat-table
-        [dataSource]="dataSource" multiTemplateDataRows
-        class="mat-elevation-z8">
-    <ng-container matColumnDef="{{column}}" *ngFor="let column of columns">
-    <th mat-header-cell *matHeaderCellDef class="column"> {{column}} </th>
-    <td  #text_input mat-cell *matCellDef="let element" class="cell-data">
-        <div class="cell-data-div">
-            <div class="cell-data-div-first-div" (click)="editIconClicked($event, element, column)" tabindex="1">
-                <input 
-                    style="border-color: #42b7ff; text-overflow: ellipsis" 
-                    (blur)="disableEditMode($event, element, column, element[column])" 
-                    [readonly]="element.isReadOnly || element.editableColumn != column" 
-                    value="{{element[column]}}" 
-                    [maxLength]="columnSizeMap[column]"
-                    [(ngModel)]="element[column]"
-            />
-                
-            </div>
-            <div style="display: flex; flex-direction: row; justify-content: space-around">
-                <div [ngClass]="{'visibility-hidden': element.isReadOnly || element.editableColumn != column}" *ngIf="element.isReadOnly || element.editableColumn != column" class="cell-data-div-img-edit" style="display: inline-flex;">
-                    <img (click)="editIconClicked($event, element, column)" width="23" height="23">
-                </div>
-                <div *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-check" style="display: inline-flex;">
-                    <img (click)="editIconClicked($event, element, column)" width="23" height="23">
-                </div>
-                <div *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-close" style="display: inline-flex;">
-                    <img (mousedown)="deleteIconClicked($event, element, column)" width="23" height="23">
-                </div>
-            </div>
+        <div class="table-header-panel">
+            <button (click)="addMenuItem()" mat-raised-button color="primary">Add Menu Item</button>
         </div>
-        <mat-icon class="expand-icon" *ngIf="column === 'cost'"  [@openClose]=" expandedElement !==element ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
-
-    </td>
-    </ng-container>
-
-    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-    <ng-container matColumnDef="expandedDetail">
-    <td mat-cell *matCellDef="let element" [attr.colspan]="columns.length">
-    <div class="example-element-detail"
-        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-        <div class="sub-row-grid">
-            <div class="grid-item-1">
-                <div>
-                    Popularity Rank <span matBadge="11" class="inline-badge">&nbsp;</span>
+        <table *ngIf="tableReady" mat-table
+            [dataSource]="dataSource" multiTemplateDataRows
+            class="mat-elevation-z8">
+            <ng-container matColumnDef="{{column}}" *ngFor="let column of columns">
+            <th mat-header-cell *matHeaderCellDef class="column"> {{column}} </th>
+            <td #text_input mat-cell *matCellDef="let element" class="cell-data">
+                <div class="cell-data-div">
+                    <div class="cell-data-div-first-div" (click)="editIconClicked($event, element, column)" tabindex="1">
+                        <input 
+                            style="border-color: #42b7ff; text-overflow: ellipsis" 
+                            (blur)="disableEditMode($event, element, column, element[column])" 
+                            [readonly]="element.isReadOnly || element.editableColumn != column" 
+                            value="{{element[column]}}" 
+                            [maxLength]="columnSizeMap[column]"
+                            [(ngModel)]="element[column]"
+                    />
+                        
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: space-around">
+                        <div [ngClass]="{'visibility-hidden': element.isReadOnly || element.editableColumn != column}" *ngIf="element.isReadOnly || element.editableColumn != column" class="cell-data-div-img-edit" style="display: inline-flex;">
+                            <img (click)="editIconClicked($event, element, column)" width="23" height="23">
+                        </div>
+                        <div *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-check" style="display: inline-flex;">
+                            <img (click)="editIconClicked($event, element, column)" width="23" height="23">
+                        </div>
+                        <div *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-close" style="display: inline-flex;">
+                            <img (mousedown)="deleteIconClicked($event, element, column)" width="23" height="23">
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    Review Rank <span matBadge="18" class="inline-badge">&nbsp;</span>
+                <mat-icon class="expand-icon" *ngIf="column === 'cost'"  [@openClose]=" expandedElement !==element ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
+
+            </td>
+            </ng-container>
+
+            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+            <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let element" [attr.colspan]="columns.length">
+            <div class="example-element-detail"
+                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                <div class="sub-row-grid">
+                    <div class="grid-item-1">
+                        <div>
+                            Popularity Rank <span matBadge="11" class="inline-badge">&nbsp;</span>
+                        </div>
+                        <div>
+                            Review Rank <span matBadge="18" class="inline-badge">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="grid-item-2">
+                        <div>
+                            Ingredient Count <span matBadge="20" class="inline-badge">&nbsp;</span>
+                        </div>
+                    </div>
+                    <div class="grid-item-4">
+                        <button (click)="openDialog(element)" mat-raised-button color="primary">Recipe</button>
+                        <button mat-raised-button color="primary">Copy</button>
+                        <button mat-raised-button color="primary">Upload</button>
+                        <button mat-raised-button color="primary">Print</button>
+                        <button mat-raised-button color="primary">Events</button>
+                        <button mat-raised-button (click)="deleteMenuItem(element.id)" color="warn">Delete</button>
+                    </div>
                 </div>
             </div>
-            <div class="grid-item-2">
-                <div>
-                    Ingredient Count <span matBadge="20" class="inline-badge">&nbsp;</span>
-                </div>
-            </div>
-            <div class="grid-item-4">
-                <button (click)="openDialog(element)" mat-raised-button color="primary">Recipe</button>
-                <button mat-raised-button color="primary">Copy</button>
-                <button mat-raised-button color="primary">Upload</button>
-                <button mat-raised-button color="primary">Print</button>
-                <button mat-raised-button color="primary">Events</button>
-                <button mat-raised-button (click)="deleteMenuItem(element.id)" color="warn">Delete</button>
-            </div>
-        </div>
-    </div>
-    </td>
-    </ng-container>
+            </td>
+            </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="columns"></tr>
-    <tr mat-row *matRowDef="let element; columns: columns;"
-        class="example-element-row"
-        [class.example-expanded-row]="expandedElement === element"
-        (click)="expandedElement = expandedElement === element ? null : element"
-    >
-    </tr>
-    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-    </table>
-    <mat-paginator #paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+            <tr mat-header-row *matHeaderRowDef="columns"></tr>
+            <tr mat-row *matRowDef="let element; columns: columns;"
+                class="example-element-row"
+                [class.example-expanded-row]="expandedElement === element"
+                (click)="expandedElement = expandedElement === element ? null : element"
+            >
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+        </table>
+        <mat-paginator #paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
     </div>
 </div>
