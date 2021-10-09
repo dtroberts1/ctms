@@ -66,14 +66,13 @@ values('Vanilla Scope', 'Vanilla Scope Description', 2.36, 0.30, 'Food Item', 'H
 insert into store(launchDate, storeName)
 values('2017-01-01', 'Riverwalk');
 
-DELETE FROM SALE;
 SET SQL_SAFE_UPDATES = 0;
+
+/*** Insert Sales Data ***/
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS seed_sales_with_menu_item $$
-
 DROP PROCEDURE IF EXISTS update_popularity_on_new_sale $$
-
 
 CREATE PROCEDURE `seed_sales_with_menu_item`()
 BEGIN
@@ -160,5 +159,99 @@ call seed_sales_with_menu_item();
 
 insert into sale(saleDate, menuItemId, storeId, salePrice, saleCost)
 	values('2021-10-03', 8, 1, 3.83, 1.11);
+    
+/*** Insert Review Data ***/
+insert into campaign_event(campaignDate) values('2021-01-01');
 
+DELIMITER $$
+DROP PROCEDURE IF EXISTS seed_reviews_with_menu_item $$
+DROP PROCEDURE IF EXISTS update_reviewRank_on_new_review $$
+
+CREATE PROCEDURE `seed_reviews_with_menu_item`()
+BEGIN
+	DECLARE finished INTEGER DEFAULT 0;
+    DECLARE menu_item_id int DEFAULT 0;
+    DECLARE COUNTER int;
+	DECLARE i int;
+	DECLARE menu_item_curs CURSOR for (select id from menu_item ORDER BY ID DESC);
+	DECLARE CONTINUE HANDLER 
+        FOR NOT FOUND SET finished = 1;
+    SET SQL_SAFE_UPDATES = 0;
+    SET COUNTER = 1;
+	OPEN menu_item_curs;
+	menu_loop: LOOP
+    FETCH menu_item_curs INTO menu_item_id;
+		IF finished = 1 THEN 
+			LEAVE menu_loop;
+		END IF;
+		
+        SET i=1;
+		myloop: LOOP
+			IF i=COUNTER then
+					LEAVE myloop;
+			END IF;
+            insert into review(reviewDate, campaignEventId, menuItemId, rating)
+				values('2021-10-03', 1, menu_item_id, RAND()*(9.9-8.0)+8.0);
+             SET i=i+1;
+		END LOOP myloop;
+
+	SET COUNTER = COUNTER + 1;
+    END LOOP menu_loop;
+	CLOSE menu_item_curs;
+END$$    
+
+DROP PROCEDURE IF EXISTS update_reviewRank_on_new_review $$
+
+CREATE PROCEDURE `update_reviewRank_on_new_review`()
+BEGIN
+	DECLARE finished INTEGER DEFAULT 0;
+	DECLARE row_review_percent double DEFAULT 0;
+    DECLARE row_menu_id int DEFAULT 0;
+    DECLARE counter int;
+
+	DECLARE menu_review_mapping_cursor CURSOR FOR (
+	SELECT  menuItemId, Avg(rating) Average from review
+    inner join menu_item
+    ON review.menuItemId = menu_item.id
+    group by menuItemId
+    order by Average DESC
+    );
+	DECLARE CONTINUE HANDLER 
+        FOR NOT FOUND SET finished = 1;
+     
+    SET SQL_SAFE_UPDATES = 0;
+    update menu_item set reviewRank = null;
+    
+    
+    SET counter = 1;
+    OPEN menu_review_mapping_cursor;
+	menu_review_mapping_loop: LOOP
+		FETCH menu_review_mapping_cursor INTO row_menu_id, row_review_percent;
+		IF finished = 1 THEN 
+			LEAVE menu_review_mapping_loop;
+		END IF;
+		-- build email list
+          
+		  ### call debug_msg(TRUE, row_menu_id);
+		  ### call debug_msg(TRUE, row_review_percent);
+		
+        update menu_item set reviewRank = counter where id = row_menu_id;
+        update menu_item set averageReviewRating = row_review_percent where id = row_menu_id;
+
+		SET counter = counter + 1;
+	END LOOP menu_review_mapping_loop;
+	CLOSE menu_review_mapping_cursor;
+    
+    SET SQL_SAFE_UPDATES = 1;
+END$$
+
+DELIMITER ;
+
+CALL seed_reviews_with_menu_item();
+
+SET SQL_SAFE_UPDATES = 1;
+
+insert into review(reviewDate, campaignEventId, menuItemId, rating)
+	values('2021-09-08', 1, 8, 9.4);
+                
 
