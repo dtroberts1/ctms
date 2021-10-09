@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MenuItemModalComponent } from '../menu-item-modal/menu-item-modal.component';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 
 interface IDictionary {
   [index: string]: number;
@@ -66,6 +67,9 @@ export class BusinessMenuTableComponent implements OnInit {
   @Output() notifyParent = new EventEmitter();
   @ContentChildren('text_input')
   menuItemTextInput!: QueryList<any>;
+  @ViewChild(MatSort)
+  sort!: MatSort;
+
   tableReady: boolean = false;
 
   dataSource!: MatTableDataSource<MenuItem>;
@@ -75,7 +79,9 @@ export class BusinessMenuTableComponent implements OnInit {
   ngOnInit(): void {
     this.tableBtnColor = 'primary';
     let str = 'title';
-
+    this.dataSource = new MatTableDataSource<MenuItem>();
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   selectDeselectAllRows(){
@@ -218,11 +224,13 @@ export class BusinessMenuTableComponent implements OnInit {
     
   }
 
+  
+
   updateDataSource(menuItems: MenuItem[]){
     this.tableReady = false;
-    this.dataSource = new MatTableDataSource<MenuItem>();
-    this.dataSource.data = menuItems;
+    this.dataSource = new MatTableDataSource<MenuItem>(menuItems);
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
     this.tableReady = true;
   }
 
@@ -241,6 +249,34 @@ export class BusinessMenuTableComponent implements OnInit {
       error: error => {
       }
   });
+  }
+
+
+
+  onMatSortChange(event: any){
+    this.menuItems.sort((a,b) => {
+      if (a[event.active] && b[event.active]){
+        if (typeof a[event.active] == 'number'){
+          return a[event.active] - b[event.active];
+        }
+        else{
+          return a[event.active].toUpperCase().localeCompare(b[event.active].toUpperCase(), 'en');
+        }
+      }
+      else if(!a[event.active] && b[event.active]){
+        return -1;
+      }
+      else if(a[event.active] && !b[event.active]){
+        return 1;
+      }
+      else{
+        return -1;
+      }
+    });
+    if (event.direction === 'desc'){
+      this.menuItems.reverse();
+    }
+    this.updateDataSource(this.menuItems);
   }
   
 }
