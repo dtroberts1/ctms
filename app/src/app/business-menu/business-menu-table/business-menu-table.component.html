@@ -26,16 +26,30 @@
             <th mat-header-cell mat-sort-header *matHeaderCellDef class="column"> {{column}} </th>
             <td #text_input mat-cell *matCellDef="let element" class="cell-data">
                 <div class="cell-data-div">
-                    <div class="cell-data-div-first-div" (click)="editIconClicked($event, element, column)" tabindex="1">
-                        <input 
+                    <div class="cell-data-div-first-div" (click)="editIconClicked($event, element, column)">
+                        <input tabindex="1" *ngIf="!(column == 'price' || column == 'cost')"
                             style="border-color: #42b7ff; text-overflow: ellipsis" 
                             (blur)="disableEditMode($event, element, column, element[column])" 
                             [readonly]="element.isReadOnly || element.editableColumn != column" 
                             value="{{element[column]}}" 
                             [maxLength]="columnSizeMap[column]"
                             [(ngModel)]="element[column]"
-                    />
-                        
+                            type="text"
+                            (keyup.Tab)="onTabKey($event, element, column)"
+                            (keyup.shift.tab)="onTabKey($event, element, column)"
+                            (keydown)="onKeyDown($event, element)"
+                        />
+                        <input tabindex="1" *ngIf="column == 'price' || column == 'cost'"
+                        style="border-color: #42b7ff; text-overflow: ellipsis" 
+                        (blur)="disableEditMode($event, element, column, element[column])" 
+                        [readonly]="element.isReadOnly || element.editableColumn != column" 
+                        value="{{isNumber(element[column]) ? (money|currency:'USD':true:'1.2-2') : element[column]}" 
+                        [maxLength]="columnSizeMap[column]"
+                        [(ngModel)]="element[column]"
+                        (keyup.Tab)="onTabKey($event, element, column)"
+                        (keyup.shift.tab)="onTabKey($event, element, column)"
+                        (keydown)="onKeyDown($event, element)"
+                    />             
                     </div>
                     <div style="display: flex; flex-direction: row; justify-content: space-around">
                         <div [ngClass]="{'visibility-hidden': element.isReadOnly || element.editableColumn != column}" *ngIf="element.isReadOnly || element.editableColumn != column" class="cell-data-div-img-edit" style="display: inline-flex;">
@@ -44,8 +58,8 @@
                         <div *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-check" style="display: inline-flex;">
                             <img (click)="editIconClicked($event, element, column)" width="23" height="23">
                         </div>
-                        <div *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-close" style="display: inline-flex;">
-                            <img (mousedown)="deleteIconClicked($event, element, column)" width="23" height="23">
+                        <div tabindex="5" (mousedown)="deleteIconClicked($event, element, column)"  *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-close" style="display: inline-flex;">
+                            <img width="23" height="23">
                         </div>
                     </div>
                 </div>

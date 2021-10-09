@@ -69,9 +69,10 @@ export class BusinessMenuTableComponent implements OnInit {
   menuItemTextInput!: QueryList<any>;
   @ViewChild(MatSort)
   sort!: MatSort;
+  freezeSave : boolean = false;
 
   tableReady: boolean = false;
-
+  origMenuItems!: MenuItem[];
   dataSource!: MatTableDataSource<MenuItem>;
 
   constructor(private menuService: MenuService, private toastr: ToastrService, public dialog: MatDialog) { }
@@ -95,6 +96,18 @@ export class BusinessMenuTableComponent implements OnInit {
     setTimeout(()=>{
       this.rowsSelected = this.menuItems.some(item =>item.selected);
     }, 0);
+  }
+
+  onKeyDown(event: any, element: MenuItem){
+    if (event.key === "Enter") {
+      this.updateItem(element);
+    }
+  }
+  
+  onTabKey(event: any, element: MenuItem, column: string){
+    element.isReadOnly = false;
+    element.editableColumn = column;
+    element.isReadOnly = false;
   }
 
   applyFilter(event: any){
@@ -135,6 +148,14 @@ export class BusinessMenuTableComponent implements OnInit {
 
   deleteIconClicked(event : any, menuItem: MenuItem, col: any){
     event.stopPropagation();
+    this.freezeSave = true;
+
+    let origMenuItem = this.origMenuItems.find(item => item.id === menuItem.id);
+    let origData = this.dataSource.data.find(item => item.id == menuItem.id);
+
+    if (origMenuItem){
+      menuItem[col] = origMenuItem[col];
+    }
   }
 
   openDialog(menuItem: MenuItem): void {
@@ -152,15 +173,11 @@ export class BusinessMenuTableComponent implements OnInit {
     });
   }
 
-  setProp<T, K extends keyof T>(obj: T, key: K, val: any) {
-    obj[key] = val;
-  }
-
-  disableEditMode(event : Event, element : any, column : string, val: any){
+  updateItem(element: MenuItem){
     element.isReadOnly = true;
-    element.editableColumn = null;
+    element.editableColumn = null;    // Save Row
 
-    // Save Row
+    if (!this.freezeSave){
     this.menuService.updateMenuItem(<MenuItem>element)
       .pipe(
         map((str: string) => {
@@ -169,8 +186,24 @@ export class BusinessMenuTableComponent implements OnInit {
       )
       .subscribe(
         val => {
+          this.origMenuItems = JSON.parse(JSON.stringify(this.menuItems));
         }
       )
+    }
+    this.freezeSave = false;
+  }
+
+  disableEditMode(event : Event, element : any, column : string, val: any){
+    let item = this.origMenuItems.find(item => item.id == element.id);
+    if (item){
+      if (item[column] != element[column]){
+        this.updateItem(element);
+      }
+      else{
+        element.isReadOnly = true;
+        element.editableColumn = null;    // Save Row
+      }
+    }
   }
 
   addMenuItem(){
@@ -207,7 +240,7 @@ export class BusinessMenuTableComponent implements OnInit {
   }
 
   editIconClicked(event : any, row: any, col: any){
-    event.stopPropagation()
+    //event.stopPropagation()
     let evt = JSON.parse(JSON.stringify(event))
     row.isReadOnly = false;
     row.editableColumn = col;
@@ -227,14 +260,13 @@ export class BusinessMenuTableComponent implements OnInit {
     
   }
 
-  
-
   updateDataSource(menuItems: MenuItem[]){
     this.tableReady = false;
     this.dataSource = new MatTableDataSource<MenuItem>(menuItems);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.tableReady = true;
+    this.origMenuItems = JSON.parse(JSON.stringify(menuItems));
   }
 
   deleteMenuItem(menuId: number){
@@ -253,8 +285,6 @@ export class BusinessMenuTableComponent implements OnInit {
       }
   });
   }
-
-
 
   onMatSortChange(event: any){
     this.menuItems.sort((a,b) => {

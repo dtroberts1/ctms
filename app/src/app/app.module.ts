@@ -20,7 +20,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import{MatBadgeModule} from '@angular/material/badge';
 import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
@@ -47,7 +47,7 @@ import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-ite
     LocationsComponent,
     DashboardComponent,
     BusinessMenuTableComponent,
-    MenuItemModalComponent
+    MenuItemModalComponent,
   ],
   imports: [
     CommonModule,
@@ -61,6 +61,7 @@ import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-ite
     HttpClientModule,
     MatIconModule,
     FormsModule,
+    ReactiveFormsModule,
     MatSelectModule,
     MatDialogModule,
     MatInputModule,
