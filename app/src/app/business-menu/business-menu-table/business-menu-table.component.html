@@ -20,11 +20,7 @@
             <ng-container matColumnDef="{{column}}" *ngFor="let column of mainColumns; let index=index;">
             <th mat-header-cell *matHeaderCellDef class="column"> {{column}} </th>
             <td #text_input mat-cell *matCellDef="let element" class="cell-data">
-                <div *ngIf="index === 0">
-                    
-
-                </div>
-                <div *ngIf="index > 0" class="cell-data-div">
+                <div class="cell-data-div">
                     <div class="cell-data-div-first-div" (click)="editIconClicked($event, element, column)" tabindex="1">
                         <input 
                             style="border-color: #42b7ff; text-overflow: ellipsis" 
