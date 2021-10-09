@@ -95,8 +95,11 @@ export class BusinessMenuTableComponent implements OnInit {
     setTimeout(()=>{
       this.rowsSelected = this.menuItems.some(item =>item.selected);
     }, 0);
+  }
 
-
+  applyFilter(event: any){
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   ngOnChanges(changes: SimpleChanges) {

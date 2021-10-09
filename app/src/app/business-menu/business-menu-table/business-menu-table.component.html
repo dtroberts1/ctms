@@ -1,6 +1,10 @@
 <div class="business-menu-table">
     <div>
         <div class="table-header-panel">
+            <mat-form-field appearance="standard">
+                <mat-label>Filter</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Latte" #input>
+              </mat-form-field>
             <button *ngIf="rowsSelected" mat-raised-button (click)="deleteMenuItems()" color="warn">Delete</button>
             <button *ngIf="rowsSelected" mat-raised-button color="primary">Copy</button>
             <button (click)="addMenuItem()" mat-raised-button color="primary">Add Menu Item</button>
