@@ -115,9 +115,10 @@ CREATE TABLE IF NOT EXISTS `ctms`.`menu_item` (
   `type` VARCHAR(50) NULL DEFAULT NULL,
   `averageReviewRating` FLOAT NULL DEFAULT NULL,
   `qtySold` INT NULL DEFAULT NULL,
+  `recipeInstructions` VARCHAR(280) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
+AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -186,7 +187,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 DROP TABLE IF EXISTS `ctms`.`store` ;
 
 CREATE TABLE IF NOT EXISTS `ctms`.`store` (
-  `storeId` INT NOT NULL,
+  `storeId` INT NOT NULL AUTO_INCREMENT,
   `launchDate` DATETIME NULL DEFAULT NULL,
   `storeName` VARCHAR(90) NULL DEFAULT NULL,
   PRIMARY KEY (`storeId`))

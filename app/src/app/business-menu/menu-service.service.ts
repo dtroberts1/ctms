@@ -80,7 +80,7 @@ export class MenuService {
     return this.http.delete(`${this.serviceUrl}/deleteMenuItems`, httpOptions)    
     .pipe(
       map(() => {
-        this.toastr.success("Menu Items Deleted");
+        this.toastr.success(`Menu Item${menuIds.length > 1 ? 's':''} Deleted`);
         return 'Success';
       })
     );
