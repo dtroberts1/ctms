@@ -10,6 +10,12 @@ export interface MenuItemIngredient {
 export interface Ingredient {
     ingredientId: number,
     ingredientName: string,
+    ingredientTypeId: number,
+}
+
+export interface IngredientType {
+    ingredientTypeId: number,
+    name: string,
 }
 
 export interface MeasurementUnit {

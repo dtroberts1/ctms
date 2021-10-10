@@ -48,7 +48,6 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
   }));
 
   router.post('/postMenuItemIngredient/', ((req, res, next) => {
-    console.log({"req.body":req.body})
     if (!Object.keys(req.body).length){
       throw new BadRequestError('Missing Fields')
     }
@@ -59,7 +58,6 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
       req.service.database().query(queryStr, [req.body.menuItemId, req.body.ingredientId, 
         req.body.measurementUnitId, req.body.ingredientQty], ((err, result) => {
         if (err){
-          console.log({"err":err})
           reject(err);
         }
         resolve();
@@ -69,15 +67,12 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
       res.send({"successResult":'DataAdded'})
     })
      .catch ((err) =>{
-      console.log({"err":err})
 
       next(err)
     });
   }))
 
   router.delete('/deleteMenuItemIngredient/:menuItemId/:ingredientId', ((req, res, next) => {
-    console.log({"req.params":req.params})
-    console.log({"req.body":req.body})
 
     if (!req.params.menuItemId || !req.params.ingredientId){
       throw new BadRequestError('Missing menuItemId or ingredientId')
@@ -87,7 +82,6 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
     new Promise((resolve, reject) => {
       req.service.database().query(queryStr, [req.params.menuItemId, req.params.ingredientId], ((err, result) => {
         if (err){
-          console.log({"err":err})
           reject(err);
         }
         resolve();
@@ -97,7 +91,6 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
       res.send({"successResult":'DataSaved'})
     })
      .catch ((err) =>{
-      console.log({"err":err})
 
       next(err)
     });
@@ -114,7 +107,6 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
       req.service.database().query(queryStr, [req.body.measurementUnitId, req.body.ingredientQty, 
         req.body.menuItemId, req.body.ingredientId], ((err, result) => {
         if (err){
-          console.log({"err":err})
           reject(err);
         }
         resolve();
@@ -124,7 +116,6 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
       res.send({"successResult":'DataSaved'})
     })
      .catch ((err) =>{
-      console.log({"err":err})
 
       next(err)
     });
@@ -132,7 +123,27 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
 
   router.get('/getIngredients', ((req, res, next) => {
 
-    let queryStr = `SELECT * from ingredient`;
+    let queryStr = `SELECT * from ingredient ORDER BY ingredientName`;
+    new Promise((resolve, reject) => {
+      req.service.database().query(queryStr, ((err, results) => {
+        if (err) {
+          reject(err);
+        }
+    
+        resolve(results);
+      }))
+    })
+    .then((result) => {
+      res.send(JSON.stringify(result))
+    })
+    .catch ((err) =>{
+      next(err)
+    });  
+  }));
+
+  router.get('/getIngredientTypes', ((req, res, next) => {
+
+    let queryStr = `SELECT * from ingredient_type ORDER BY name`;
     new Promise((resolve, reject) => {
       req.service.database().query(queryStr, ((err, results) => {
         if (err) {
@@ -152,7 +163,7 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
 
   router.get('/getMeasurementUnits', ((req, res, next) => {
 
-    let queryStr = `SELECT * from measurement_unit`;
+    let queryStr = `SELECT * from measurement_unit ORDER BY name`;
     new Promise((resolve, reject) => {
       req.service.database().query(queryStr, ((err, results) => {
         if (err) {

@@ -8,11 +8,9 @@ export interface MenuItem {
     /*ingredients: Array<Ingredient>,*/
     price: number,
     cost: number,
-    ranking: number,  
     averageReviewRating: number,
     qtySold: number,
     popularity: number,
     reviewRank: number,
     recipeInstructions: string,
-    id: number,
 }

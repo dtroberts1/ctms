@@ -15,7 +15,6 @@ export class BusinessMenuComponent implements OnInit {
   }
 
   tableMenuItemsChanged(message: string){
-    console.log({"message":message})
 
     // Update Charts - since menu items have changed in child (table) component
   }

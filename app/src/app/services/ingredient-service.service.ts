@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
-import { Ingredient, MeasurementUnit, MenuItemIngredient } from '../interfaces/ingredient';
+import { Ingredient, IngredientType, MeasurementUnit, MenuItemIngredient } from '../interfaces/ingredient';
 import { HighLvlSaleData } from '../interfaces/sale';
 import { catchError } from 'rxjs/operators';
 
@@ -31,6 +31,13 @@ export class IngredientService {
   getIngredients() : Observable<Ingredient[]>{
     return this.http.get<Ingredient[]>(`${this.serviceUrl}/getIngredients`)
       .pipe(map((ingredients: Ingredient[]) => {
+        return ingredients
+      }))
+  }
+
+  getIngredientTypes() : Observable<IngredientType[]>{
+    return this.http.get<IngredientType[]>(`${this.serviceUrl}/getIngredientTypes`)
+      .pipe(map((ingredients: IngredientType[]) => {
         return ingredients
       }))
   }

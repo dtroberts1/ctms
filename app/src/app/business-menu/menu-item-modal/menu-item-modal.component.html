@@ -35,15 +35,21 @@
                 <div class="new-modify-ingredient-select" 
                     [ngClass]="{'justify-center':!menuItemIngredients || !menuItemIngredients.length}" 
                     *ngIf="ingredientEditMode">
-                    <mat-form-field *ngIf="!isUpdateMode"  style="width:120px;" appearance="fill">
+                    <mat-form-field *ngIf="!isUpdateMode"  style="width:94px;" appearance="fill">
+                        <mat-label>Category</mat-label>
+                        <mat-select (selectionChange)="ingredientCategorySelected()" [(ngModel)]="selectedIngredientType">
+                            <mat-option *ngFor="let ingredientType of ingredientTypes" [value]="ingredientType">{{ingredientType.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field> 
+                    <mat-form-field [ngClass]="{'invalid': selectedIngredientInvalid}" *ngIf="!isUpdateMode"  style="width:94px;" appearance="fill">
                         <mat-label>Ingredient</mat-label>
-                        <mat-select [(ngModel)]="selectedIngredientType">
+                        <mat-select (selectionChange)="selectedIngredientChanged()"  [(ngModel)]="selectedIngredient">
                             <mat-option *ngFor="let ingredient of displayableIngredients" [value]="ingredient">{{ingredient.ingredientName}}</mat-option>
                         </mat-select>
                     </mat-form-field>                      
-                    <mat-form-field style="width:120px;" appearance="fill">
+                    <mat-form-field [ngClass]="{'invalid': selectedMUInvalid}" style="width:94px;" appearance="fill">
                         <mat-label>Unit</mat-label>
-                        <mat-select [(ngModel)]="selectedMU">
+                        <mat-select (selectionChange)="selectedMUChanged()" [(ngModel)]="selectedMU">
                         <mat-option *ngFor="let unit of measurementUnits" [value]="unit">{{unit.name}}</mat-option>
                      </mat-select>
                     </mat-form-field>
@@ -134,7 +140,7 @@
         <div class="instructions-body"             
             >
             <textarea matInput 
-            placeholder="Comment" 
+            placeholder="Instructions.." 
             [(ngModel)]="data.menuItem.recipeInstructions"
             (focus)="editInstructions()"
             (blur)="saveInstructions()"

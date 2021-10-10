@@ -37,6 +37,7 @@
             font-weight: normal;
             font-style: normal;
             font-size: 19px;
+            margin-bottom: 8px;
         }
 
         .ingredient-container{
@@ -105,10 +106,18 @@
                     }
                 }
             }
-
+            ::ng-deep mat-form-field.invalid{
+                .mat-form-field-wrapper{
+                    .mat-form-field-flex{
+                        outline: 3px red solid !important;
+                    
+                    }
+                }
+            }
 
             .new-modify-ingredient-select.justify-center{
                 justify-content: center;
+
             }
             .new-modify-ingredient-select:not(.justify-center){
                 justify-content: flex-start;

@@ -20,7 +20,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import{MatBadgeModule} from '@angular/material/badge';
 import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
@@ -28,6 +28,8 @@ import {MatSelectModule} from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input'
+import {MatSortModule} from '@angular/material/sort';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-item-modal.component';
 
 @NgModule({
@@ -45,7 +47,7 @@ import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-ite
     LocationsComponent,
     DashboardComponent,
     BusinessMenuTableComponent,
-    MenuItemModalComponent
+    MenuItemModalComponent,
   ],
   imports: [
     CommonModule,
@@ -59,10 +61,13 @@ import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-ite
     HttpClientModule,
     MatIconModule,
     FormsModule,
+    ReactiveFormsModule,
     MatSelectModule,
     MatDialogModule,
     MatInputModule,
+    MatCheckboxModule,
     MatTooltipModule,
+    MatSortModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
