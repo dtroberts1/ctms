@@ -31,6 +31,8 @@ import { MatInputModule } from '@angular/material/input'
 import {MatSortModule} from '@angular/material/sort';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-item-modal.component';
+import { SalesOverviewComponent } from './sales/sales-overview/sales-overview.component';
+import { SalesTableComponent } from './sales/sales-table/sales-table.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +50,8 @@ import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-ite
     DashboardComponent,
     BusinessMenuTableComponent,
     MenuItemModalComponent,
+    SalesOverviewComponent,
+    SalesTableComponent,
   ],
   imports: [
     CommonModule,

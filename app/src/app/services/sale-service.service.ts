@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { HighLvlSaleData } from '../interfaces/sale';
+import { HighLvlSaleData, Sale } from '../interfaces/sale';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +18,24 @@ export class SaleService {
   getHighLvlSalesData() : Observable<HighLvlSaleData>{
     return this.http.get<HighLvlSaleData>(`${this.serviceUrl}/getHighLvlSalesData`)
       .pipe(map((saleData: HighLvlSaleData) => {
-        console.log({"saleData":saleData})
         return saleData;
       }));
+  }
+
+  getSales() : Observable<Sale[]>{
+    return this.http.get<any[]>(`${this.serviceUrl}/getSales`)
+      .pipe(
+        map((sales : any[]) => {
+          return sales.map(sale => <Sale>{
+            saleId: sale.saleId,
+            saleDate: new Date(sale.saleDate).toString(),
+            itemSold: sale.itemSold,
+            menuItemId: sale.menuItemId,
+            storeId: sale.storeId,
+            salePrice: sale.salePrice,
+            saleCost: sale.saleCost,
+          });
+        })
+      );
   }
 }

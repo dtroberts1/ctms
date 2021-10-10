@@ -50,5 +50,27 @@ router.use(bodyParser.urlencoded({
       next(err)
     });
   }));
+
+  router.get('/getSales', ((req, res, next) => {
+    let queryStr = `SELECT saleId, saleDate, menuItemId, menu_item.name AS itemSold, storeId, salePrice, saleCost
+    FROM ctms.sale
+    INNER JOIN menu_item
+    ON menu_item.id = sale.menuItemId ORDER BY saleDate`;
+  
+    new Promise((resolve, reject) => {
+      req.service.database().query(queryStr, ((err, results) => {
+        if (err){
+          reject(err);
+        }
+        resolve(JSON.stringify(results));
+      }));
+    })
+    .then((result) => {
+      res.send(result)
+    })
+    .catch ((err) =>{
+      next(err)
+    });
+  }));
   
   module.exports = router;
