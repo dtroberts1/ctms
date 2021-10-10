@@ -123,7 +123,27 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
 
   router.get('/getIngredients', ((req, res, next) => {
 
-    let queryStr = `SELECT * from ingredient`;
+    let queryStr = `SELECT * from ingredient ORDER BY ingredientName`;
+    new Promise((resolve, reject) => {
+      req.service.database().query(queryStr, ((err, results) => {
+        if (err) {
+          reject(err);
+        }
+    
+        resolve(results);
+      }))
+    })
+    .then((result) => {
+      res.send(JSON.stringify(result))
+    })
+    .catch ((err) =>{
+      next(err)
+    });  
+  }));
+
+  router.get('/getIngredientTypes', ((req, res, next) => {
+
+    let queryStr = `SELECT * from ingredient_type ORDER BY name`;
     new Promise((resolve, reject) => {
       req.service.database().query(queryStr, ((err, results) => {
         if (err) {
@@ -143,7 +163,7 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
 
   router.get('/getMeasurementUnits', ((req, res, next) => {
 
-    let queryStr = `SELECT * from measurement_unit`;
+    let queryStr = `SELECT * from measurement_unit ORDER BY name`;
     new Promise((resolve, reject) => {
       req.service.database().query(queryStr, ((err, results) => {
         if (err) {

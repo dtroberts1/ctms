@@ -32,7 +32,7 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
   }));
   
   router.get('/getMenuItems', ((req, res, next) => {
-    let queryStr = 'SELECT * FROM menu_item';
+    let queryStr = 'SELECT * FROM menu_item ORDER BY name';
   
     new Promise((resolve, reject) => {
       req.service.database().query(queryStr, ((err, results) => {
