@@ -28,6 +28,22 @@ CREATE TABLE IF NOT EXISTS `ctms`.`campaign_event` (
   `campaignDate` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`campaignId`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `ctms`.`ingredient_type`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ctms`.`ingredient_type` ;
+
+CREATE TABLE IF NOT EXISTS `ctms`.`ingredient_type` (
+  `ingredientTypeId` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`ingredientTypeId`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 15
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -40,9 +56,15 @@ DROP TABLE IF EXISTS `ctms`.`ingredient` ;
 CREATE TABLE IF NOT EXISTS `ctms`.`ingredient` (
   `ingredientId` INT NOT NULL AUTO_INCREMENT,
   `ingredientName` VARCHAR(200) NULL DEFAULT NULL,
-  PRIMARY KEY (`ingredientId`))
+  `isNut` TINYINT(1) NULL DEFAULT NULL,
+  `ingredientTypeId` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`ingredientId`),
+  INDEX `ingredientTypeId` (`ingredientTypeId` ASC) VISIBLE,
+  CONSTRAINT `ingredient_ibfk_1`
+    FOREIGN KEY (`ingredientTypeId`)
+    REFERENCES `ctms`.`ingredient_type` (`ingredientTypeId`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 4
+AUTO_INCREMENT = 98
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -94,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`measurement_unit` (
   `name` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`measurementUnitId`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 9
+AUTO_INCREMENT = 21
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -118,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`menu_item` (
   `recipeInstructions` VARCHAR(280) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 8
+AUTO_INCREMENT = 29
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -176,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`review` (
     REFERENCES `ctms`.`campaign_event` (`campaignId`)
     ON DELETE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 77
+AUTO_INCREMENT = 288
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -192,6 +214,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`store` (
   `storeName` VARCHAR(90) NULL DEFAULT NULL,
   PRIMARY KEY (`storeId`))
 ENGINE = InnoDB
+AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -220,7 +243,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`sale` (
     REFERENCES `ctms`.`menu_item` (`id`)
     ON DELETE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 45
+AUTO_INCREMENT = 256
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -240,6 +263,115 @@ BEGIN
   IF enabled THEN
     select concat('** ', msg) AS '** DEBUG:';
   END IF;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure insertIngredientWithType
+-- -----------------------------------------------------
+
+USE `ctms`;
+DROP procedure IF EXISTS `ctms`.`insertIngredientWithType`;
+
+DELIMITER $$
+USE `ctms`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insertIngredientWithType`(ingredientName varchar(200), isNut boolean)
+BEGIN
+	DECLARE refId int DEFAULT 0;
+    SET refId = (SELECT ingredientTypeId FROM ingredient_type ORDER BY ingredientTypeId DESC LIMIT 1);
+		insert into ingredient(ingredientName, isNut, ingredientTypeId) values(ingredientName, isNut, refId);
+
+    END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure seed_reviews_with_menu_item
+-- -----------------------------------------------------
+
+USE `ctms`;
+DROP procedure IF EXISTS `ctms`.`seed_reviews_with_menu_item`;
+
+DELIMITER $$
+USE `ctms`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `seed_reviews_with_menu_item`()
+BEGIN
+	DECLARE finished INTEGER DEFAULT 0;
+    DECLARE menu_item_id int DEFAULT 0;
+    DECLARE COUNTER int;
+	DECLARE i int;
+	DECLARE menu_item_curs CURSOR for (select id from menu_item ORDER BY ID DESC);
+	DECLARE CONTINUE HANDLER 
+        FOR NOT FOUND SET finished = 1;
+    SET SQL_SAFE_UPDATES = 0;
+    SET COUNTER = 1;
+	OPEN menu_item_curs;
+	menu_loop: LOOP
+    FETCH menu_item_curs INTO menu_item_id;
+		IF finished = 1 THEN 
+			LEAVE menu_loop;
+		END IF;
+		
+        SET i=1;
+		myloop: LOOP
+			IF i=COUNTER then
+					LEAVE myloop;
+			END IF;
+            insert into review(reviewDate, campaignEventId, menuItemId, rating)
+				values('2021-10-03', 1, menu_item_id, RAND()*(9.9-8.0)+8.0);
+             SET i=i+1;
+		END LOOP myloop;
+
+	SET COUNTER = COUNTER + 1;
+    END LOOP menu_loop;
+	CLOSE menu_item_curs;
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
+-- procedure seed_sales_with_menu_item
+-- -----------------------------------------------------
+
+USE `ctms`;
+DROP procedure IF EXISTS `ctms`.`seed_sales_with_menu_item`;
+
+DELIMITER $$
+USE `ctms`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `seed_sales_with_menu_item`()
+BEGIN
+	DECLARE finished INTEGER DEFAULT 0;
+    DECLARE menu_item_id int DEFAULT 0;
+    DECLARE menu_item_price float DEFAULT 0;
+    DECLARE menu_item_cost float DEFAULT 0;
+    DECLARE COUNTER int;
+	DECLARE i int;
+	DECLARE menu_item_curs CURSOR for (select id, price, cost from menu_item);
+	DECLARE CONTINUE HANDLER 
+        FOR NOT FOUND SET finished = 1;
+    SET SQL_SAFE_UPDATES = 0;
+    SET COUNTER = 1;
+	OPEN menu_item_curs;
+	menu_loop: LOOP
+    FETCH menu_item_curs INTO menu_item_id, menu_item_price, menu_item_cost;
+		IF finished = 1 THEN 
+			LEAVE menu_loop;
+		END IF;
+		
+        SET i=1;
+		myloop: LOOP
+			IF i=COUNTER then
+					LEAVE myloop;
+			END IF;
+            insert into sale(saleDate, menuItemId, storeId, salePrice, saleCost)
+				values('2021-10-03', menu_item_id, 1, menu_item_price, menu_item_cost);
+             SET i=i+1;
+		END LOOP myloop;
+
+	SET COUNTER = COUNTER + 1;
+    END LOOP menu_loop;
+	CLOSE menu_item_curs;
 END$$
 
 DELIMITER ;

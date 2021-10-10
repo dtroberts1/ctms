@@ -254,4 +254,96 @@ SET SQL_SAFE_UPDATES = 1;
 insert into review(reviewDate, campaignEventId, menuItemId, rating)
 	values('2021-09-08', 1, 8, 9.4);
                 
+insert into measurement_unit(name) values('Pinch');
+insert into measurement_unit(name) values('Dash');
+insert into measurement_unit(name) values('Teaspoon');
+insert into measurement_unit(name) values('Tablespoon');
+insert into measurement_unit(name) values('Fluid Oz');
+insert into measurement_unit(name) values('Cup');
+insert into measurement_unit(name) values('Pint');
+insert into measurement_unit(name) values('Quart');
+insert into measurement_unit(name) values('Gallon');
+insert into measurement_unit(name) values('Shot');       
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS insertIngredientWithType $$
+
+CREATE PROCEDURE `insertIngredientWithType`(ingredientName varchar(200), isNut boolean)
+BEGIN
+	DECLARE refId int DEFAULT 0;
+    SET refId = (SELECT ingredientTypeId FROM ingredient_type ORDER BY ingredientTypeId DESC LIMIT 1);
+		insert into ingredient(ingredientName, isNut, ingredientTypeId) values(ingredientName, isNut, refId);
+
+    END$$    
+DELIMITER ;
+
+insert into ingredient_type(name) values('Seasoning');
+CALL insertIngredientWithType('Salt', false);
+CALL insertIngredientWithType('Pepper', false);
+CALL insertIngredientWithType('Ground Red Pepper', false);
+CALL insertIngredientWithType('Green Chile Pepper, Sliced', false);
+
+insert into ingredient_type(name) values('Spice');
+CALL insertIngredientWithType('Ginger', false);
+CALL insertIngredientWithType('Pumpkin Pie Spice', false);
+CALL insertIngredientWithType('Cinnamon', false);
+CALL insertIngredientWithType('Ground Cinnamon', false);
+CALL insertIngredientWithType('Ground Cloves', false);
+
+insert into ingredient_type(name) values('Dairy');
+CALL insertIngredientWithType('2% Milk', false);
+CALL insertIngredientWithType('2% Whole Milk', false);
+CALL insertIngredientWithType('Skim Milk', false);
+CALL insertIngredientWithType('Gelato', false);
+CALL insertIngredientWithType('Vanilla Ice Cream', false);
+CALL insertIngredientWithType('Eggnog', false);
+CALL insertIngredientWithType('Whipped Cream', false);
+
+insert into ingredient_type(name) values('Oil');
+CALL insertIngredientWithType('Vegetable Oil', false);
+CALL insertIngredientWithType('Coconut Oil', false);
+
+insert into ingredient_type(name) values('Sugar');
+CALL insertIngredientWithType('Brown Sugar', false);
+CALL insertIngredientWithType('Cane Sugar', false);
+CALL insertIngredientWithType('White Sugar', false);
+
+insert into ingredient_type(name) values('Espresso');
+CALL insertIngredientWithType('Dark Roast Espresso', false);
+
+insert into ingredient_type(name) values('Coffee');
+CALL insertIngredientWithType('Instant Coffee Granules', false);
+
+insert into ingredient_type(name) values('Extract');
+CALL insertIngredientWithType('Vanilla Extract', false);
+
+insert into ingredient_type(name) values('Powder');
+CALL insertIngredientWithType('Cocoa Powder', false);
+CALL insertIngredientWithType('Chocolate Powder', false);
+CALL insertIngredientWithType('Unsweetened Cocoa Powder', false);
+CALL insertIngredientWithType('Peanut Powder', false);
+
+insert into ingredient_type(name) values('Sweetener');
+CALL insertIngredientWithType('Honey', false);
+
+insert into ingredient_type(name) values('Syrup');
+CALL insertIngredientWithType('Chocolate Syrup', false);
+CALL insertIngredientWithType('Peppermint Flavored Syrup', false);
+CALL insertIngredientWithType('Vanilla Flavored Syrup', false);
+CALL insertIngredientWithType('Raspberry Flavored Syrup', false);
+CALL insertIngredientWithType('Molasses', false);
+
+insert into ingredient_type(name) values('Fruit');
+CALL insertIngredientWithType('Banana', false);
+
+insert into ingredient_type(name) values('Seed');
+CALL insertIngredientWithType('Almond', true);
+CALL insertIngredientWithType('Tree Nut', true);
+CALL insertIngredientWithType('Ground Nutmeg', true);
+CALL insertIngredientWithType('Red Raspberries', false);
+
+insert into ingredient_type(name) values('Chocolate');
+CALL insertIngredientWithType('Cocoa', false);
+CALL insertIngredientWithType('Semisweet Chocolate Chips', false);
+
 
