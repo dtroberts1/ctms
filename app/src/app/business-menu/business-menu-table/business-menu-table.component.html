@@ -53,13 +53,16 @@
                     </div>
                     <div style="display: flex; flex-direction: row; justify-content: space-around">
                         <div [ngClass]="{'visibility-hidden': element.isReadOnly || element.editableColumn != column}" *ngIf="element.isReadOnly || element.editableColumn != column" class="cell-data-div-img-edit" style="display: inline-flex;">
-                            <img (click)="editIconClicked($event, element, column)" width="23" height="23">
+                            <div tabindex="1" (click)="editIconClicked($event, element, column)">
+                            </div>
                         </div>
                         <div *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-check" style="display: inline-flex;">
-                            <img (click)="editIconClicked($event, element, column)" width="23" height="23">
+                            <div tabindex="2" (click)="editIconClicked($event, element, column)">
+                            </div>
                         </div>
                         <div tabindex="5" (mousedown)="deleteIconClicked($event, element, column)"  *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-close" style="display: inline-flex;">
-                            <img width="23" height="23">
+                            <div>
+                            </div>
                         </div>
                     </div>
                 </div>
