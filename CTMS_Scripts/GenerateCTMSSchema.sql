@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`campaign_event` (
   `campaignDate` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`campaignId`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 1
+AUTO_INCREMENT = 0
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`ingredient_type` (
   `name` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`ingredientTypeId`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 1
+AUTO_INCREMENT = 0
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`ingredient` (
     FOREIGN KEY (`ingredientTypeId`)
     REFERENCES `ctms`.`ingredient_type` (`ingredientTypeId`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 1
+AUTO_INCREMENT = 0
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -91,6 +91,7 @@ DROP TABLE IF EXISTS `ctms`.`ingredient_partner` ;
 CREATE TABLE IF NOT EXISTS `ctms`.`ingredient_partner` (
   `partnerId` INT NULL DEFAULT NULL,
   `ingredientId` INT NULL DEFAULT NULL,
+  `cost` FLOAT NULL DEFAULT NULL,
   INDEX `partnerId` (`partnerId` ASC) VISIBLE,
   INDEX `ingredientId` (`ingredientId` ASC) VISIBLE,
   CONSTRAINT `ingredient_partner_ibfk_1`
@@ -116,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`measurement_unit` (
   `name` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`measurementUnitId`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 1
+AUTO_INCREMENT = 0
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -140,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`menu_item` (
   `recipeInstructions` VARCHAR(280) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 1
+AUTO_INCREMENT = 0
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -198,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`review` (
     REFERENCES `ctms`.`campaign_event` (`campaignId`)
     ON DELETE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 1
+AUTO_INCREMENT = 0
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -214,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`store` (
   `storeName` VARCHAR(90) NULL DEFAULT NULL,
   PRIMARY KEY (`storeId`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 1
+AUTO_INCREMENT = 0
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -243,7 +244,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`sale` (
     REFERENCES `ctms`.`menu_item` (`id`)
     ON DELETE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 1
+AUTO_INCREMENT = 0
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
