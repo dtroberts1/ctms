@@ -298,7 +298,10 @@ export class SalesTableComponent implements OnInit {
 
     
   }
-
+  
+  menuOrDateSelectOpened(event: Event){
+    event.stopPropagation();
+  }
   updateDataSource(sales: Sale[]){
 
     this.menuService.getMenuItems()
