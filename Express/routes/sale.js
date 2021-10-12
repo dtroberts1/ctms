@@ -99,17 +99,22 @@ router.use(bodyParser.urlencoded({
   router.put('/updateSale', ((req, res, next) => {
   
     if (!Object.keys(req.body).length){
-      throw new BadRequestError('Missing Fields')
+      console.log("missing fields")
+      throw new BadRequestError('Missing Fields');
     }
-    
+    console.log({"req.body":req.body})
+
+    console.log("creating query")
     new Promise((resolve, reject) => {
       req.service.database().query('select * from sale where saleId = ?', [req.body.saleId], ((err, result) => {
         if (err){
+          console.log({"err":err})
           reject(err);
         }
         let command = 'update ctms.sale SET saleDate = ?, menuItemId = ?, storeId = ?, salePrice = ?, saleCost = ? where saleId = ?';
         req.service.database().query(command, [req.body.saleDate, req.body.menuItemId, req.body.storeId, req.body.salePrice, req.body.saleCost, req.body.saleId], ((err, result) => {
           if (err){
+            console.log({"err":err})
             reject(err);
           }
           resolve(true);

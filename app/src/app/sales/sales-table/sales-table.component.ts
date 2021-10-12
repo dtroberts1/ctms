@@ -65,8 +65,8 @@ export class SalesTableComponent implements OnInit {
     'salePrice': 7,
     'saleCost': 7,
   }
-  columns: string[] = ['checkbox', 'saleDate', 'itemSold', 'salePrice', 'saleCost'];
-  mainColumns: string[] = ['saleDate', 'itemSold', 'salePrice', 'saleCost'];
+  columns: string[] = ['checkbox', 'saleDate', 'menuItem', 'salePrice', 'saleCost'];
+  mainColumns: string[] = ['saleDate', 'menuItem', 'salePrice', 'saleCost'];
 
   @ViewChild('paginator')
   paginator!: MatPaginator;
@@ -80,6 +80,7 @@ export class SalesTableComponent implements OnInit {
   @ViewChild(MatSort)
   sort!: MatSort;
   freezeSave : boolean = false;
+  availMenuItems!: MenuItem[];
 
   tableReady: boolean = false;
   origSales!: Sale[];
@@ -111,6 +112,13 @@ export class SalesTableComponent implements OnInit {
     setTimeout(()=>{
       //this.rowsSelected = this.menuItems.some(item =>item.selected);
     }, 0);
+  }
+
+  menuItemSelectionChanged(event: any, element: any){
+    let updatedElement = JSON.parse(JSON.stringify(element));
+    updatedElement.menuItemId = element.menuItem.id;
+    updatedElement.saleDate = element.saleDate.toISOString().slice(0, 19).replace('T', ' ');
+    this.updateItem(updatedElement);
   }
 
   onKeyDown(event: any, element: Sale){
@@ -190,10 +198,10 @@ export class SalesTableComponent implements OnInit {
 
   updateItem(element: Sale){
     element.isReadOnly = true;
-    element.editableColumn = null;    // Save Row
+    element.editableColumn = null;
     
       if (!this.freezeSave){
-      this.saleService.updateSale(<Sale>element)
+        this.saleService.updateSale(<Sale>element)
         .pipe(
           map((str: string) => {
             return {data: 'heres data'}
@@ -292,6 +300,21 @@ export class SalesTableComponent implements OnInit {
   }
 
   updateDataSource(sales: Sale[]){
+
+    this.menuService.getMenuItems()
+    .subscribe(
+      res => {
+        this.availMenuItems = res;
+        this.sales.forEach((sale) => {
+          if (Array.isArray(this.availMenuItems) && this.availMenuItems.length){
+            sale.menuItem = this.availMenuItems.find(item => item.id === sale.menuItemId);
+          }
+        })
+      },
+      err => {
+
+      }
+    )
     this.tableReady = false;
     this.dataSource = new MatTableDataSource<Sale>(sales);
     this.dataSource.paginator = this.paginator;

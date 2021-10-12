@@ -43,6 +43,7 @@ export class SaleService {
   }
 
   updateSale(sale: Sale){
+
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
