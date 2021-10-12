@@ -20,6 +20,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import{MatBadgeModule} from '@angular/material/badge';
 import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
@@ -29,10 +30,13 @@ import { MatDialogModule } from '@angular/material/dialog';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { MatInputModule } from '@angular/material/input'
 import {MatSortModule} from '@angular/material/sort';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule} from '@angular/material/core';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MenuItemModalComponent } from './business-menu/menu-item-modal/menu-item-modal.component';
 import { SalesOverviewComponent } from './sales/sales-overview/sales-overview.component';
 import { SalesTableComponent } from './sales/sales-table/sales-table.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -57,6 +61,7 @@ import { SalesTableComponent } from './sales/sales-table/sales-table.component';
     CommonModule,
     BrowserAnimationsModule,
     BrowserModule,
+    MatFormFieldModule,
     AppRoutingModule,
     MatTableModule,
     MatPaginatorModule,
@@ -70,6 +75,8 @@ import { SalesTableComponent } from './sales/sales-table/sales-table.component';
     MatDialogModule,
     MatInputModule,
     MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatTooltipModule,
     MatSortModule,
     ToastrModule.forRoot({
@@ -78,7 +85,7 @@ import { SalesTableComponent } from './sales/sales-table/sales-table.component';
     }),
   ],
   providers: [
-
+    DatePipe,
   ],
   bootstrap: [AppComponent]
 })

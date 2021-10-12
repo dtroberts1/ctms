@@ -1,7 +1,7 @@
 export interface Sale {
     [key: string]: any,
     saleId: number,
-    saleDate: string,
+    saleDate: Date | string,
     itemSold: string,
     menuItemId: number,
     storeId: number,

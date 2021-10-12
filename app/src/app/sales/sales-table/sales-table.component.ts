@@ -12,6 +12,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { Sale } from 'src/app/interfaces/sale';
 import { SaleService } from 'src/app/services/sale-service.service';
+import { DatePipe } from '@angular/common'
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 interface IDictionary {
   [index: string]: number;
@@ -45,18 +47,23 @@ interface IDictionary {
   ],
 })
 export class SalesTableComponent implements OnInit {
-  expandedElement!: MenuItem | null;
+
+  expandedElement!: Sale | null;
   tableBtnColor!: string;
   panelOpenState = false;
+  myFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    // Prevent Saturday and Sunday from being selected.
+    return day !== 0 && day !== 6;
+  }
   myVal!: any;
   rowsSelected: boolean = false;
   mainTableChkbox: boolean = false;
   columnSizeMap: IDictionary = {
-    'type': 50,
-    'name': 40,
-    'description': 260,
-    'price': 7,
-    'cost': 7,
+    'saleDate': 100,
+    'itemSold': 40,
+    'salePrice': 7,
+    'saleCost': 7,
   }
   columns: string[] = ['checkbox', 'saleDate', 'itemSold', 'salePrice', 'saleCost'];
   mainColumns: string[] = ['saleDate', 'itemSold', 'salePrice', 'saleCost'];
@@ -78,7 +85,7 @@ export class SalesTableComponent implements OnInit {
   origSales!: Sale[];
   dataSource!: MatTableDataSource<Sale>;
 
-  constructor(private menuService: MenuService, private saleService: SaleService, private toastr: ToastrService, public dialog: MatDialog) { }
+  constructor(private datePipe: DatePipe, private menuService: MenuService, private saleService: SaleService, private toastr: ToastrService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.tableBtnColor = 'primary';
@@ -106,18 +113,16 @@ export class SalesTableComponent implements OnInit {
     }, 0);
   }
 
-  onKeyDown(event: any, element: MenuItem){
+  onKeyDown(event: any, element: Sale){
     if (event.key === "Enter") {
-      //this.updateItem(element);
+      this.updateItem(element);
     }
   }
   
-  onTabKey(event: any, element: MenuItem, column: string){
-    /*
+  onTabKey(event: any, element: Sale, column: string){
     element.isReadOnly = false;
     element.editableColumn = column;
     element.isReadOnly = false;
-    */
   }
 
   applyFilter(event: any){
@@ -129,8 +134,8 @@ export class SalesTableComponent implements OnInit {
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
         let change = changes[propName];
-
         switch (propName) {
+          
           case 'sales': {
             let sales = change.currentValue;
             if (Array.isArray(sales) && sales.length){
@@ -186,30 +191,49 @@ export class SalesTableComponent implements OnInit {
   updateItem(element: Sale){
     element.isReadOnly = true;
     element.editableColumn = null;    // Save Row
+    
+      if (!this.freezeSave){
+      this.saleService.updateSale(<Sale>element)
+        .pipe(
+          map((str: string) => {
+            return {data: 'heres data'}
+          })
+        )
+        .subscribe(
+          val => {
+            this.origSales = JSON.parse(JSON.stringify(this.sales));
+          }
+        )
+      }
+      this.freezeSave = false;
 
-    if (!this.freezeSave){
-      /*
-    this.menuService.updateMenuItem(<Sale>element)
-      .pipe(
-        map((str: string) => {
-          return {data: 'heres data'}
-        })
-      )
-      .subscribe(
-        val => {
-          this.origSales = JSON.parse(JSON.stringify(this.sales));
-        }
-      )
-      */
-    }
-    this.freezeSave = false;
+  }
+
+  updateSaleDate(event: MatDatepickerInputEvent<any,any>, element : any){
+
+    element.saleDate = event.value.toISOString().slice(0, 19).replace('T', ' ');
+
+    this.saleService.updateSale(<Sale>element)
+    .pipe(
+      map((str: string) => {
+        return {data: 'heres data'}
+      })
+    )
+    .subscribe(
+      val => {
+        this.origSales = JSON.parse(JSON.stringify(this.sales));
+        element.saleDate = event.value;
+      }
+    )
   }
 
   disableEditMode(event : Event, element : any, column : string, val: any){
     let item = this.origSales.find(item => item.saleId == element.saleId);
     if (item){
       if (item[column] != element[column]){
-        this.updateItem(element);
+        let updatedElement = JSON.parse(JSON.stringify(element))
+        updatedElement.saleDate = element.saleDate.toISOString().slice(0, 19).replace('T', ' ');
+        this.updateItem(updatedElement);
       }
       else{
         element.isReadOnly = true;
@@ -218,21 +242,14 @@ export class SalesTableComponent implements OnInit {
     }
   }
 
-  addMenuItem(){
-    /*
-    let newItem : MenuItem = {
-      type: '____',
-      description: '____',
-      name: '____',
-      price: 0,
-      cost: 0,
-      averageReviewRating: 0,
-      qtySold: 0,
-      popularity: 0,
-      reviewRank: 0,
-      recipeInstructions: '',
+  addSale(){
+    let newItem : any = {
+      saleDate: new Date().toISOString().slice(0, 19).replace('T', ' '),
+      storeId: 1,
+      salePrice: 0.00,
+      saleCost: 0.00,
     }
-    this.menuService.addMenuItem(<Sale>newItem)
+    this.saleService.addSale(<Sale>newItem)
     .subscribe(
       val => {
         this.updateLatestMenuItems();
@@ -240,7 +257,6 @@ export class SalesTableComponent implements OnInit {
     )
     
     this.updateDataSource(this.sales);
-    */
   }
 
   updateLatestMenuItems(){
@@ -306,6 +322,9 @@ export class SalesTableComponent implements OnInit {
       if (a[event.active] && b[event.active]){
         if (typeof a[event.active] == 'number'){
           return a[event.active] - b[event.active];
+        }
+        else if (a[event.active] instanceof Date){
+          return a[event.active].getTime() < b[event.active].getTime();
         }
         else{
           return a[event.active].toUpperCase().localeCompare(b[event.active].toUpperCase(), 'en');

@@ -72,5 +72,56 @@ router.use(bodyParser.urlencoded({
       next(err)
     });
   }));
+
+  router.post('/addSale/', ((req, res, next) => {
+
+    if (!Object.keys(req.body).length){
+      throw new BadRequestError('Missing Fields')
+    }
+    let queryStr = 'insert into ctms.sale SET ?';
+      
+    new Promise((resolve, reject) => {
+      req.service.database().query(queryStr, req.body, ((err, result) => {
+        if (err){
+          reject(err);
+        }
+        resolve();
+      }));
+    })
+    .then(()=>{
+      res.send(JSON.stringify("{result: 'Ok'}"))
+    })
+     .catch ((err) =>{
+      next(err)
+    });
+  }));
+
+  router.put('/updateSale', ((req, res, next) => {
+  
+    if (!Object.keys(req.body).length){
+      throw new BadRequestError('Missing Fields')
+    }
+    
+    new Promise((resolve, reject) => {
+      req.service.database().query('select * from sale where saleId = ?', [req.body.saleId], ((err, result) => {
+        if (err){
+          reject(err);
+        }
+        let command = 'update ctms.sale SET saleDate = ?, menuItemId = ?, storeId = ?, salePrice = ?, saleCost = ? where saleId = ?';
+        req.service.database().query(command, [req.body.saleDate, req.body.menuItemId, req.body.storeId, req.body.salePrice, req.body.saleCost, req.body.saleId], ((err, result) => {
+          if (err){
+            reject(err);
+          }
+          resolve(true);
+        }))
+      }))
+    })
+    .then((result) => {
+      res.send(JSON.stringify({}));
+    })
+    .catch ((err) =>{
+      next(err)
+    });
+  }));
   
   module.exports = router;
