@@ -5,12 +5,12 @@
                 <mat-label>Filter</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Latte" #input>
               </mat-form-field>
-              <button *ngIf="rowsSelected" mat-raised-button (click)="deleteMenuItems()" color="warn">Delete</button>
+              <button *ngIf="rowsSelected" mat-raised-button (click)="deleteSales()" color="warn">Delete</button>
               <button *ngIf="rowsSelected" mat-raised-button color="primary">Copy</button>
               <button (click)="addSale()" mat-raised-button color="primary">Add Sale</button>
         </div>
         <table *ngIf="tableReady" mat-table matSort
-        (matSortChange)="onMatSortChange($event)"
+            (matSortChange)="onMatSortChange($event)"
             [dataSource]="dataSource" multiTemplateDataRows
             class="mat-elevation-z8">
               <!-- Position Column -->

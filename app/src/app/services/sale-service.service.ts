@@ -62,6 +62,23 @@ export class SaleService {
     );
   }
 
+  deleteSales(saleIds: number[]) : Observable<Object>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        /*'Content-Type':  'application/json',*/
+        /*Authorization: 'my-auth-token'*/
+      }),
+      body: {selectedIds: saleIds},
+    };
+    return this.http.delete(`${this.serviceUrl}/deleteSales`, httpOptions)    
+    .pipe(
+      map(() => {
+        this.toastr.success(`Sale${saleIds.length > 1 ? 's':''} Deleted`);
+        return 'Success';
+      })
+    );
+  }
+
   getSales() : Observable<Sale[]>{
     return this.http.get<any[]>(`${this.serviceUrl}/getSales`)
       .pipe(

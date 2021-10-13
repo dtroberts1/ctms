@@ -88,6 +88,7 @@ export class BusinessMenuTableComponent implements OnInit {
   selectDeselectAllRows(){
     setTimeout(() => {
       this.menuItems.forEach(item => item.selected = this.mainTableChkbox);
+      this.rowsSelected = true;
     }, 0);
   }
 
@@ -140,8 +141,10 @@ export class BusinessMenuTableComponent implements OnInit {
         result => {
           this.updateLatestMenuItems();
           this.menuItems.forEach(item => item.selected = false);
+          this.rowsSelected = false;
         },
         err => {
+          this.rowsSelected = false;
         }
       )
   }

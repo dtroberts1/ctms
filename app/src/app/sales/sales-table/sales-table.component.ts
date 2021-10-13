@@ -103,14 +103,15 @@ export class SalesTableComponent implements OnInit {
 
   selectDeselectAllRows(){
     setTimeout(() => {
-      //this.sales.forEach(item => item.selected = this.mainTableChkbox);
+      this.sales.forEach(item => item.selected = this.mainTableChkbox);
+      this.rowsSelected = this.mainTableChkbox;
     }, 0);
   }
 
   rowSelected(event: any){
     event.stopPropagation();
     setTimeout(()=>{
-      //this.rowsSelected = this.menuItems.some(item =>item.selected);
+      this.rowsSelected = this.sales.some(item =>item.selected);
     }, 0);
   }
 
@@ -156,15 +157,17 @@ export class SalesTableComponent implements OnInit {
     }
   }
 
-  deleteMenuItems(){
+  deleteSales(){
     let selectedIds = this.sales.filter(item => item.selected).map(item => item.saleId);
-    this.menuService.deleteMenuItems(selectedIds)
+    this.saleService.deleteSales(selectedIds)
       .subscribe(
         result => {
           this.updateLatestMenuItems();
           this.sales.forEach(item => item.selected = false);
+          this.rowsSelected = false;
         },
         err => {
+          this.rowsSelected = false;
         }
       )
   }
@@ -245,7 +248,7 @@ export class SalesTableComponent implements OnInit {
       }
       else{
         element.isReadOnly = true;
-        element.editableColumn = null;    // Save Row
+        element.editableColumn = null;
       }
     }
   }
@@ -256,6 +259,7 @@ export class SalesTableComponent implements OnInit {
       storeId: 1,
       salePrice: 0.00,
       saleCost: 0.00,
+      menuItemId : null,
     }
     this.saleService.addSale(<Sale>newItem)
     .subscribe(
@@ -271,7 +275,7 @@ export class SalesTableComponent implements OnInit {
     this.saleService.getSales()
     .subscribe((sales: Sale[]) => {
       this.sales = sales;
-      this.sales.sort((a,b) => a.name.localeCompare(b.name));
+      this.sales.sort((a,b) => a.name && b.name && a.name.localeCompare(b.name));
       this.updateDataSource(this.sales);
       this.salesChange.emit(this.sales);
       this.notifyParent.emit("menu items changed")
@@ -345,9 +349,13 @@ export class SalesTableComponent implements OnInit {
 
   onMatSortChange(event: any){
     this.sales.sort((a,b) => {
+
       if (a[event.active] && b[event.active]){
         if (typeof a[event.active] == 'number'){
           return a[event.active] - b[event.active];
+        }
+        if (a[event.active].recipeInstructions !== undefined){
+          return a[event.active].name.toUpperCase().localeCompare(b[event.active].name.toUpperCase(), 'en');
         }
         else if (a[event.active] instanceof Date){
           return a[event.active].getTime() < b[event.active].getTime();
