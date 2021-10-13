@@ -62,6 +62,23 @@ export class SaleService {
     );
   }
 
+  deleteSale(saleId: number) : Observable<Object>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        /*Authorization: 'my-auth-token'*/
+      })
+    };
+    console.log({"saleId":saleId})
+    return this.http.delete(`${this.serviceUrl}/deleteSale/${saleId}`, {responseType: 'text'})
+    .pipe(
+      map((item: string) => {
+        this.toastr.success("Sale Item Deleted");
+        return item;
+      })
+    );
+  }
+
   deleteSales(saleIds: number[]) : Observable<Object>{
     const httpOptions = {
       headers: new HttpHeaders({
@@ -73,7 +90,7 @@ export class SaleService {
     return this.http.delete(`${this.serviceUrl}/deleteSales`, httpOptions)    
     .pipe(
       map(() => {
-        this.toastr.success(`Sale${saleIds.length > 1 ? 's':''} Deleted`);
+        this.toastr.success(`Sale Item${saleIds.length > 1 ? 's':''} Deleted`);
         return 'Success';
       })
     );

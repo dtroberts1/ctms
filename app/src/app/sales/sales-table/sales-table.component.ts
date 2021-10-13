@@ -157,6 +157,21 @@ export class SalesTableComponent implements OnInit {
     }
   }
 
+  deleteSale(saleId : number){
+    this.saleService.deleteSale(saleId)
+      .subscribe(
+        result => {
+          this.updateLatestMenuItems();
+          this.sales.forEach(item => item.selected = false);
+          this.rowsSelected = false;
+        },
+        err => {
+          this.rowsSelected = false;
+        }
+      )
+  }
+
+
   deleteSales(){
     let selectedIds = this.sales.filter(item => item.selected).map(item => item.saleId);
     this.saleService.deleteSales(selectedIds)

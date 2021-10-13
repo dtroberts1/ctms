@@ -177,5 +177,32 @@ router.delete('/deleteSales', ((req, res, next) => {
     next(err)
   });  
 }));
+
+router.delete('/deleteSale/:saleId?', ((req, res, next) => {
+    
+  if (!req.params.saleId){
+    throw new BadRequestError('Missing req.params.saleId')
+  }
+  let saleId = JSON.parse(req.params.saleId)
+
+  let query = 'delete from sale where saleId = ?'
+  new Promise((resolve, reject) => {
+    req.service.database().query(query, [saleId], function (err, results) {
+      if (err){
+        console.log({"err":err})
+        reject(err);
+      }
+      resolve(results);
+    });
+  })
+  .then(()=>{
+    res.send(JSON.stringify({}))
+  })
+  .catch ((err) =>{
+    console.log({"err":err})
+
+    next(err)
+  });  
+}));
   
   module.exports = router;
