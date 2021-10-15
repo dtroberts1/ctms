@@ -28,5 +28,5 @@
         [stores]="stores"
         ></app-sales-overview>
     </div>
-    <app-sales-table [(sales)]="sales" (notifyParent)="tableMenuItemsChanged($event)"></app-sales-table>
+    <app-sales-table [startDateStr]="startDateStr" [endDateStr]="endDateStr" [(sales)]="sales" (notifyParent)="tableMenuItemsChanged($event)"></app-sales-table>
 </div>

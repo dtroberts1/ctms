@@ -72,7 +72,8 @@ export class SalesTableComponent implements OnInit {
   paginator!: MatPaginator;
 
   @Input() sales!: Sale[];
-
+  @Input() startDateStr !: string;
+  @Input() endDateStr !: string;
   @Output() salesChange = new EventEmitter();
   @Output() notifyParent = new EventEmitter();
   @ContentChildren('text_input')
@@ -287,7 +288,7 @@ export class SalesTableComponent implements OnInit {
   }
 
   updateLatestMenuItems(){
-    this.saleService.getSales()
+    this.saleService.getSales(this.startDateStr, this.endDateStr)
     .subscribe((sales: Sale[]) => {
       this.sales = sales;
       this.sales.sort((a,b) => a.name && b.name && a.name.localeCompare(b.name));
@@ -349,7 +350,7 @@ export class SalesTableComponent implements OnInit {
     this.menuService.deleteMenuItem(menuId)
     .subscribe({
       next: data => {
-        this.saleService.getSales()
+        this.saleService.getSales(this.startDateStr, this.endDateStr)
           .subscribe((sales: Sale[]) => {
             this.sales = sales;
             this.updateDataSource(this.sales);

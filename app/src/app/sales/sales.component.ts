@@ -45,7 +45,6 @@ export class SalesComponent implements OnInit {
   }
 
   updateSaleDate(event: any, isStartDate: boolean){
-    console.log("updating...")
     if (this.startDate){
       this.startDateStr = this.startDate.toISOString().slice(0, 19).replace('T', ' ');
     }
@@ -53,11 +52,19 @@ export class SalesComponent implements OnInit {
       this.endDateStr = this.endDate.toISOString().slice(0, 19).replace('T', ' ');
     }
     this.sharedFunction();
+    this.saleService.getSales(this.startDateStr, this.endDateStr)
+    .subscribe(
+      result => {
+        this.sales = result;
+      },
+      err => {
+      }
+    )
   }
 
   sharedFunction() : void{
-    console.log("calling shared in parent");
     this.salesOverview.updateChartData();
+
   }
 
   ngOnInit(): void {
@@ -69,7 +76,7 @@ export class SalesComponent implements OnInit {
         err => {
         });
 
-      this.saleService.getSales()
+      this.saleService.getSales(this.startDateStr, this.endDateStr)
         .subscribe(
           result => {
             this.sales = result;

@@ -22,8 +22,6 @@ router.get('/getHighLvlSalesData/:fromDate?/:toDate?', ((req, res, next) => {
     },
   }
 
-  console.log({"req.params":req.params})
-
   let fromDate = req.params.fromDate;
   let toDate = req.params.toDate;
 
@@ -36,49 +34,50 @@ router.get('/getHighLvlSalesData/:fromDate?/:toDate?', ((req, res, next) => {
 
   let menuPopularity = `select COUNT(*) AS nbrItemsSoldMenuItem, SUM(salePrice) 
     AS salesForItem, menuItemId 
-    from sale where saleDate >= '${fromDate}' AND saleDate < '${toDate}'
+    from sale where saleDate >= ? AND saleDate < ?
     GROUP BY menuItemId
     ORDER BY COUNT(*) DESC`;
 
   let storePopularity = `select COUNT(*) AS nbrItemsSoldStore, SUM(salePrice) 
     AS salesForStore, storeId 
-    from sale where saleDate >= '${fromDate}' AND saleDate < '${toDate}'
+    from sale where saleDate >= ? AND saleDate < ?
     GROUP BY storeId
     ORDER BY COUNT(*) DESC`;
 
   let revenuePeriod = `select SUM(salePrice) AS periodRevenue, SUM(saleCost) AS periodCosts
-    from sale where saleDate >= '${fromDate}' AND saleDate < '${toDate}'`;
+    from sale where saleDate >= ? AND saleDate < ?`;
+
 
   new Promise((resolve, reject) => {
-    req.service.database().query(salesThisMonthQueryStr, ((err, results) => {
+    req.service.database().query(salesThisMonthQueryStr, fromDate && toDate ? [fromDate, toDate] : null, ((err, results) => {
       if (err){
         reject(err);
       }
       if (Array.isArray(results) && results.length){
         highLvlSales.salesForCurrMonth = results[0].salesForCurrMonth;
       }
-      req.service.database().query(salesThisYearQueryStr, ((err, results) => {
+      req.service.database().query(salesThisYearQueryStr, fromDate && toDate ? [fromDate, toDate] : null, ((err, results) => {
         if (err){
           reject(err);
         }
         if (Array.isArray(results) && results.length){
           highLvlSales.salesForCurrYear = results[0].salesForCurrYear;
         }
-        req.service.database().query(menuPopularity, ((err, results) => {
+        req.service.database().query(menuPopularity, fromDate && toDate ? [fromDate, toDate] : null, ((err, results) => {
           if (err){
             reject(err);
           }
           if (Array.isArray(results) && results.length){
             highLvlSales.menuPopularitySales = results;
           }
-          req.service.database().query(storePopularity, ((err, results) => {
+          req.service.database().query(storePopularity, fromDate && toDate ? [fromDate, toDate] : null, ((err, results) => {
             if (err){
               reject(err);
             }
             if (Array.isArray(results) && results.length){
               highLvlSales.storePopularitySales = results;
             }
-            req.service.database().query(revenuePeriod, ((err, results) => {
+            req.service.database().query(revenuePeriod, null, ((err, results) => {
               if (err){
                 reject(err);
               }
@@ -104,19 +103,42 @@ router.get('/getHighLvlSalesData/:fromDate?/:toDate?', ((req, res, next) => {
   });
 }));
 
-router.get('/getSales', ((req, res, next) => {
-  let queryStr = `SELECT saleId, saleDate, menuItemId, menu_item.name AS itemSold, storeId, salePrice, saleCost
+router.get('/getSales/:fromDate?/:toDate?', ((req, res, next) => {
+
+  let fromDate = req.params.fromDate;
+  let toDate = req.params.toDate;  
+
+  let queryWithoutParamsStr = `SELECT saleId, saleDate, menuItemId, menu_item.name AS itemSold, storeId, salePrice, saleCost
   FROM ctms.sale
   INNER JOIN menu_item
-  ON menu_item.id = sale.menuItemId ORDER BY saleDate`;
+  ON menu_item.id = sale.menuItemId ORDER BY saleDate
+  `;
+
+  let queryWithParamsStr = `SELECT saleId, saleDate, menuItemId, menu_item.name AS itemSold, storeId, salePrice, saleCost
+  FROM ctms.sale
+  INNER JOIN menu_item
+  ON menu_item.id = sale.menuItemId
+  where saleDate >= ? AND saleDate < ?
+  ORDER BY saleDate
+  `;
 
   new Promise((resolve, reject) => {
-    req.service.database().query(queryStr, ((err, results) => {
-      if (err){
-        reject(err);
-      }
-      resolve(JSON.stringify(results));
-    }));
+    if (fromDate && toDate){
+      req.service.database().query(queryWithParamsStr, [fromDate, toDate], ((err, results) => {
+        if (err){
+          reject(err);
+        }
+        resolve(JSON.stringify(results));
+      }));
+    }
+    else{
+      req.service.database().query(queryWithoutParamsStr, ((err, results) => {
+        if (err){
+          reject(err);
+        }
+        resolve(JSON.stringify(results));
+      }));
+    }
   })
   .then((result) => {
     res.send(result)

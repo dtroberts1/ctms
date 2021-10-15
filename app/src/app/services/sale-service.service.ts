@@ -95,8 +95,9 @@ export class SaleService {
     );
   }
 
-  getSales() : Observable<Sale[]>{
-    return this.http.get<any[]>(`${this.serviceUrl}/getSales`)
+  getSales(startDate: any, endDate: any) : Observable<Sale[]>{
+    if (startDate && endDate){
+      return this.http.get<any[]>(`${this.serviceUrl}/getSales/${startDate}/${endDate}`)
       .pipe(
         map((sales : any[]) => {
           return sales.map(sale => <Sale>{
@@ -110,5 +111,22 @@ export class SaleService {
           });
         })
       );
+    }
+    else{
+      return this.http.get<any[]>(`${this.serviceUrl}/getSales`)
+      .pipe(
+        map((sales : any[]) => {
+          return sales.map(sale => <Sale>{
+            saleId: sale.saleId,
+            saleDate: new Date(sale.saleDate),
+            itemSold: sale.itemSold,
+            menuItemId: sale.menuItemId,
+            storeId: sale.storeId,
+            salePrice: sale.salePrice,
+            saleCost: sale.saleCost,
+          });
+        })
+      );
+    }
   }
 }
