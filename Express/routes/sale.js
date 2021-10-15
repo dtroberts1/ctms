@@ -22,6 +22,8 @@ router.get('/getHighLvlSalesData/:fromDate?/:toDate?', ((req, res, next) => {
     },
   }
 
+  console.log({"req.params":req.params})
+
   let fromDate = req.params.fromDate;
   let toDate = req.params.toDate;
 

@@ -2,6 +2,7 @@ import { Ingredient } from "./ingredient";
 
 export interface MenuItem {
     [key: string]: any
+    id : number | null,
     type: string,
     name: string,
     description: string,

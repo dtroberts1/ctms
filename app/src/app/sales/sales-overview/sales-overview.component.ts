@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, Input, SimpleChanges, ViewChild }
 import { ArcElement, Chart, PieController, DoughnutController, Tooltip, Legend } from 'chart.js';
 import { MenuItem } from 'src/app/interfaces/menu-item';
 import { HighLvlSaleData } from 'src/app/interfaces/sale';
+import { Store } from 'src/app/interfaces/store';
 import { SaleService } from 'src/app/services/sale-service.service';
 Chart.register(PieController);
 Chart.register(ArcElement);
@@ -26,9 +27,19 @@ export class SalesOverviewComponent implements AfterViewInit {
   @ViewChild('tasteTestChartCanvas') 
   private tasteTestChartCanvas!: ElementRef;
   @Input() menuItems!: MenuItem[];
+  @Input() stores !: Store[];
+  @Input() startDate!: string;
+  @Input() endDate!: string;
+
   highLvlSales: HighLvlSaleData = {
     salesForCurrYear: 0,
     salesForCurrMonth: 0,
+    menuPopularitySales: [],
+    storePopularitySales: [],
+    revenuePeriodSales: {
+      periodRevenue: null,
+      periodCosts: null,
+    },
   }
   menuItemNames!: string[];
   menuRatings !: number[];
@@ -56,47 +67,63 @@ export class SalesOverviewComponent implements AfterViewInit {
         let change = changes[propName];
 
         switch (propName) {
-          case 'menuItems': {
-            if (Array.isArray(change.currentValue)){
-              this.menuItemNames = (<MenuItem[]>change.currentValue).map(menuItem => menuItem.name);
-              this.menuRatings = (<MenuItem[]>change.currentValue).map(menuItem => menuItem.averageReviewRating);
-              this.menuQtySold = (<MenuItem[]>change.currentValue).map(menuItem => menuItem.qtySold);
-              this.saleService.getHighLvlSalesData().toPromise()
-                .then((highLvlSales) => {
-                  this.highLvlSales = JSON.parse(JSON.stringify(highLvlSales));
-                  
-                })
-              this.setMenuOverviewDetails(change.currentValue);
-              this.pieChartBrowser();
-            }
+          case 'startDate': {
+            this.saleService.getHighLvlSalesData(this.startDate, this.endDate).toPromise()
+            .then((result : any) => {
+              if (result){
+                this.setMenuItems();
+              }
+            })
+          }
+          break;
+          case 'endDate': {
+            this.saleService.getHighLvlSalesData(this.startDate, this.endDate).toPromise()
+            .then((result : any) => {
+              if (result){
+                this.highLvlSales = result.highLvlSales;
+                this.setMenuItems();
+              }
+            })
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  setMenuItems(){
+    if (Array.isArray(this.highLvlSales.menuPopularitySales) && this.highLvlSales.menuPopularitySales.length){
+      this.highLvlSales.menuPopularitySales.forEach((saleItem) => {
+        if (Array.isArray(this.menuItems) && this.menuItems.length){
+          let menuItemName = this.menuItems.find(item => item.id == saleItem.menuItemId)?.name;
+          if (menuItemName){
+            saleItem.menuName = menuItemName;
           }
         }
-      }
+      });
     }
-  }
-
-  setMenuOverviewDetails(menuItems: MenuItem[]){
-    if (Array.isArray(menuItems) && menuItems.length){
-      this.mostPopularItem = this.getMostLeastPopularItem(menuItems, true);
-      this.leastPopularItem = this.getMostLeastPopularItem(menuItems, false);
-      this.bestReviewedItem = this.getBestWorstReviewedItem(menuItems, true);
-      this.worstReviewedItem = this.getBestWorstReviewedItem(menuItems, false);
-    }
-  }
-
-  getMostLeastPopularItem(menuItems: MenuItem[], byMost: boolean){
-    if (Array.isArray(menuItems) && menuItems.length){
-      let popularItems = (<MenuItem[]>menuItems).filter(item => item.popularity != null);
-      if (Array.isArray(popularItems) && popularItems.length){
-        let sorted = popularItems.sort((item1 :MenuItem, item2 : MenuItem) => 
-        {
-          return item1.popularity - item2.popularity
-        })
-        if (!byMost){
-          sorted.reverse();
+    
+    if (Array.isArray(this.highLvlSales.storePopularitySales) && this.highLvlSales.storePopularitySales.length){
+      this.highLvlSales.storePopularitySales.forEach((storeItem) => {
+        if (Array.isArray(this.stores) && this.stores.length){
+          let storeName = this.stores.find(item => item.storeId == storeItem.storeId)?.storeName;
+          if (storeName){
+            storeItem.storeName = storeName;
+          }
         }
-        return sorted[0].name;
-      }
+      })
+    }
+  }
+
+
+
+  setMenuOverviewDetails(obj: any){
+
+  }
+
+  getMostLeastPopularItem(){
+    if (Array.isArray(this.highLvlSales) && this.highLvlSales.length){
+      this.highLvlSales[0]
     }
     return '';
   }
@@ -131,6 +158,15 @@ export class SalesOverviewComponent implements AfterViewInit {
   }
 
   pieChartBrowser(): void {
+
+    if (true){
+      return;
+    }
+
+
+
+
+
     let pal = ["#001464", "#26377B", "#404F8B", "#59709A", "#8CA0B9", "#B2C7D0", "#CCDDE0"]
 
     if (!this.popularityChart){

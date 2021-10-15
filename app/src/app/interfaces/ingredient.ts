@@ -1,6 +1,6 @@
 export interface MenuItemIngredient {
     ingredientId: number,
-    menuItemId: number,
+    menuItemId: number | null,
     measurementUnitId: number,
     ingredientName: string,
     measurementType: string,

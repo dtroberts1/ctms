@@ -16,8 +16,8 @@ export class SaleService {
   };
   constructor(private http: HttpClient, private toastr: ToastrService) { }
 
-  getHighLvlSalesData() : Observable<HighLvlSaleData>{
-    return this.http.get<HighLvlSaleData>(`${this.serviceUrl}/getHighLvlSalesData`)
+  getHighLvlSalesData(startDate: string | null, endDate: string | null) : Observable<HighLvlSaleData>{
+    return this.http.get<HighLvlSaleData>(`${this.serviceUrl}/getHighLvlSalesData/${startDate}/${endDate}`)
       .pipe(map((saleData: HighLvlSaleData) => {
         return saleData;
       }));
@@ -69,7 +69,6 @@ export class SaleService {
         /*Authorization: 'my-auth-token'*/
       })
     };
-    console.log({"saleId":saleId})
     return this.http.delete(`${this.serviceUrl}/deleteSale/${saleId}`, {responseType: 'text'})
     .pipe(
       map((item: string) => {

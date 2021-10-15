@@ -22,50 +22,54 @@
     <div class="menu-overview-details">
         <div>
             <label>
-                Key 
+                Period Revenue 
             </label>
-            <div>
-                Value
+            <div *ngIf="highLvlSales && highLvlSales.revenuePeriodSales">
+                ${{highLvlSales.revenuePeriodSales.periodRevenue}}
             </div>
         </div>
         <div>
             <label>
-                Key 
+                Period Costs 
             </label>
-            <div>
-                Value
+            <div *ngIf="highLvlSales && highLvlSales.revenuePeriodSales">
+                ${{highLvlSales.revenuePeriodSales.periodCosts}}
             </div>
         </div>
         <div>
             <label>
-                Key 
+                Most Popular Menu Item 
             </label>
-            <div>
-                Value
+            <div *ngIf="highLvlSales && highLvlSales.menuPopularitySales && highLvlSales.menuPopularitySales.length">
+                {{highLvlSales.menuPopularitySales[0].menuName}} ({{highLvlSales.menuPopularitySales[0].nbrItemsSoldMenuItem}})
+                ${{highLvlSales.menuPopularitySales[0].salesForItem}}
             </div>
         </div>
         <div>
             <label>
-                Key 
+                Least Popular Menu Item 
             </label>
-            <div>
-                Value
+            <div *ngIf="highLvlSales && highLvlSales.menuPopularitySales && highLvlSales.menuPopularitySales.length">
+                {{highLvlSales.menuPopularitySales[highLvlSales.menuPopularitySales.length - 1].menuName}} ({{highLvlSales.menuPopularitySales[highLvlSales.menuPopularitySales.length - 1].nbrItemsSoldMenuItem}})
+                ${{highLvlSales.menuPopularitySales[highLvlSales.menuPopularitySales.length - 1].salesForItem}}
             </div>
         </div>
         <div>
             <label>
-                Key 
+                Most Popular Store
             </label>
-            <div>
-                Value
+            <div *ngIf="highLvlSales && highLvlSales.storePopularitySales && highLvlSales.storePopularitySales.length">
+                {{highLvlSales.storePopularitySales[0].storeName}} ({{highLvlSales.storePopularitySales[0].nbrItemsSoldStore}})
+                ${{highLvlSales.storePopularitySales[0].salesForStore}}
             </div>
         </div>
         <div>
             <label>
-                Key 
+                Least Popular Store
             </label>
-            <div>
-                Value
+            <div *ngIf="highLvlSales && highLvlSales.menuPopularitySales && highLvlSales.menuPopularitySales.length">
+                {{highLvlSales.storePopularitySales[highLvlSales.storePopularitySales.length - 1].storeName}} ({{highLvlSales.storePopularitySales[highLvlSales.storePopularitySales.length - 1].nbrItemsSoldStore}})
+                ${{highLvlSales.storePopularitySales[highLvlSales.storePopularitySales.length - 1].salesForStore}}
             </div>
         </div>
     </div>

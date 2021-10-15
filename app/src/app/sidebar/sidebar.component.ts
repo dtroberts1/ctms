@@ -16,6 +16,5 @@ export class SidebarComponent implements OnInit {
   }
   selectItem(item: string){
     this.selectedMenuItem = item;
-    console.log("selected item is " + item)
 }
 }

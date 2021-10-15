@@ -212,6 +212,7 @@ export class BusinessMenuTableComponent implements OnInit {
   addMenuItem(){
     let newItem : MenuItem = {
       type: '____',
+      id: null,
       description: '____',
       name: '____',
       price: 0,

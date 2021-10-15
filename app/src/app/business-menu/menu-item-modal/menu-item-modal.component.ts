@@ -82,12 +82,10 @@ type ModalInput = {title: string; menuItem: MenuItem}
     }
 
     ingredientCategorySelected(){
-        console.log("selected..");
         this.ingredients = this.nonFilteredIngredients
             .filter(ingred => ingred.ingredientTypeId == this.selectedIngredientType.ingredientTypeId);  
 
         if (!this.ingredients.some(ingred => this.selectedIngredient && ingred.ingredientId == this.selectedIngredient.ingredientId)){
-            console.log("setting ingredient to null")
             this.selectedIngredient = null as any;
         }
                         
@@ -128,7 +126,6 @@ type ModalInput = {title: string; menuItem: MenuItem}
 
     enableIngredientEditMode(){
         this.ingredientEditMode = true;
-        console.log({"this.menuItemIngredients":this.menuItemIngredients})
         let selectedIngredient = this.menuItemIngredients.find(item => item.selected) as MenuItemIngredient;
         
         if (this.isUpdateMode && selectedIngredient){
@@ -154,7 +151,6 @@ type ModalInput = {title: string; menuItem: MenuItem}
     }
 
     closeIngredientModifyMenu(canClearAllSelected: boolean){
-        console.log("setting selected ingredient to null")
         this.selectedMU = null as any;
         this.selectedIngredientQty = 0;
         this.ingredientEditMode = false;
@@ -178,11 +174,8 @@ type ModalInput = {title: string; menuItem: MenuItem}
             let selectedIngred = this.nonFilteredIngredients.find(ingred => ingred.ingredientId == menuItemIngred.ingredientId);
             if (selectedIngred){
                 this.selectedIngredient = selectedIngred;
-                console.log({"selectedIngredient":this.selectedIngredient})
             }
             else{
-                console.log("selected is null.. bad state..");
-                console.log({"this.nonFilteredIngredients":this.nonFilteredIngredients})
             }
         }
         else{
@@ -192,7 +185,6 @@ type ModalInput = {title: string; menuItem: MenuItem}
     }
 
     deleteMenuItemIngredient(){
-        console.log({"selectedIngredient":this.selectedIngredient})
         if (this.selectedIngredient){
             this.ingredientsService.deleteMenuItemIngredient(
                 this.data.menuItem.id,
@@ -210,19 +202,15 @@ type ModalInput = {title: string; menuItem: MenuItem}
     }
 
     selectedMUChanged(){
-        console.log("selected MU changed")
         this.selectedMUInvalid = false;
     }
 
     selectedIngredientChanged(){
-        console.log("selected Ingredient changed")
         this.selectedIngredientInvalid = false;
     }
 
     createIngredient(){
         // Save, then call cancel changes
-        console.log("in create ingredient")
-        console.log("updatemode is " + this.isUpdateMode)
 
         if (!this.isUpdateMode){
             if (this.selectedIngredient && this.selectedMU){
@@ -281,13 +269,10 @@ type ModalInput = {title: string; menuItem: MenuItem}
             else{
                 if (!this.selectedIngredient){
                     // Mark Red
-                    console.log(" invalid selected ingred")
                     this.selectedIngredientInvalid = true;
                 }
                 if (!this.selectedMU){
                     // Mark Red
-                    console.log(" invalid  selectedMUInvalid")
-
                     this.selectedMUInvalid = true;
                 }
             }

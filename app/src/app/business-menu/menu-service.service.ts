@@ -69,7 +69,7 @@ export class MenuService {
     );
   }
 
-  deleteMenuItems(menuIds: number[]) : Observable<Object>{
+  deleteMenuItems(menuIds: (number | null)[]) : Observable<Object>{
     const httpOptions = {
       headers: new HttpHeaders({
         /*'Content-Type':  'application/json',*/
