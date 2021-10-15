@@ -1,20 +1,20 @@
 <div class="business-menu-overview">
     <div class="card-two-charts">
         <div class="card-two-charts-container">
-            <div>
+            <div [style.visibility]="menuItemRevenues && menuItemRevenues.length ? 'visible' : 'visible'">
                 <div class="chart-label">
-                    Quantity Sold
+                    Top Sellers - Revenue
                 </div>
                 <div class="chart-container">
-                    <canvas #popularityChartCanvas></canvas>
+                    <canvas #menuPopularityChartCanvas></canvas>
                 </div>
             </div>
-            <div>
+            <div [style.visibility]="storeRevenues && storeRevenues.length ? 'visible' : 'visible'">
                 <div class="chart-label">
-                    Average Rating
+                    Stores - Revenue
                 </div>
                 <div class="chart-container">
-                    <canvas #tasteTestChartCanvas></canvas>
+                    <canvas #storeRevChartCanvas></canvas>
                 </div> 
             </div>  
         </div>
@@ -24,17 +24,20 @@
             <label>
                 Period Revenue 
             </label>
-            <div *ngIf="highLvlSales && highLvlSales.revenuePeriodSales">
+            <div *ngIf="highLvlSales && highLvlSales.revenuePeriodSales && highLvlSales.revenuePeriodSales.periodRevenue">
                 ${{highLvlSales.revenuePeriodSales.periodRevenue}}
             </div>
+            <div *ngIf="!highLvlSales || !highLvlSales.revenuePeriodSales || !highLvlSales.revenuePeriodSales.periodRevenue">N/A</div>
         </div>
         <div>
             <label>
                 Period Costs 
             </label>
-            <div *ngIf="highLvlSales && highLvlSales.revenuePeriodSales">
+            <div *ngIf="highLvlSales && highLvlSales.revenuePeriodSales && highLvlSales.revenuePeriodSales.periodCosts">
                 ${{highLvlSales.revenuePeriodSales.periodCosts}}
             </div>
+            <div *ngIf="!highLvlSales || !highLvlSales.revenuePeriodSales || !highLvlSales.revenuePeriodSales.periodCosts">N/A</div>
+
         </div>
         <div>
             <label>
@@ -44,6 +47,7 @@
                 {{highLvlSales.menuPopularitySales[0].menuName}} ({{highLvlSales.menuPopularitySales[0].nbrItemsSoldMenuItem}})
                 ${{highLvlSales.menuPopularitySales[0].salesForItem}}
             </div>
+            <div *ngIf="!highLvlSales || !highLvlSales.menuPopularitySales || !highLvlSales.menuPopularitySales.length">N/A</div>
         </div>
         <div>
             <label>
@@ -53,6 +57,7 @@
                 {{highLvlSales.menuPopularitySales[highLvlSales.menuPopularitySales.length - 1].menuName}} ({{highLvlSales.menuPopularitySales[highLvlSales.menuPopularitySales.length - 1].nbrItemsSoldMenuItem}})
                 ${{highLvlSales.menuPopularitySales[highLvlSales.menuPopularitySales.length - 1].salesForItem}}
             </div>
+            <div *ngIf="!highLvlSales || !highLvlSales.menuPopularitySales || !highLvlSales.menuPopularitySales.length">N/A</div>
         </div>
         <div>
             <label>
@@ -62,6 +67,8 @@
                 {{highLvlSales.storePopularitySales[0].storeName}} ({{highLvlSales.storePopularitySales[0].nbrItemsSoldStore}})
                 ${{highLvlSales.storePopularitySales[0].salesForStore}}
             </div>
+            <div *ngIf="!highLvlSales || !highLvlSales.storePopularitySales || !highLvlSales.storePopularitySales.length">N/A</div>
+
         </div>
         <div>
             <label>
@@ -71,6 +78,7 @@
                 {{highLvlSales.storePopularitySales[highLvlSales.storePopularitySales.length - 1].storeName}} ({{highLvlSales.storePopularitySales[highLvlSales.storePopularitySales.length - 1].nbrItemsSoldStore}})
                 ${{highLvlSales.storePopularitySales[highLvlSales.storePopularitySales.length - 1].salesForStore}}
             </div>
+            <div *ngIf="!highLvlSales || !highLvlSales.storePopularitySales || !highLvlSales.storePopularitySales.length">N/A</div>
         </div>
     </div>
 </div>
