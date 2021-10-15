@@ -9,12 +9,21 @@ router.use(bodyParser.urlencoded({
   extended: true
 }));
   
-router.get('/getHighLvlSalesData', ((req, res, next) => {
+router.get('/getHighLvlSalesData/:fromDate?/:toDate?', ((req, res, next) => {
 
   let highLvlSales = {
     salesForCurrMonth: null,
     salesForCurrYear: null,
+    menuPopularitySales: [],
+    storePopularitySales: [],
+    revenuePeriodSales: {
+      periodRevenue: null,
+      periodCosts: null,
+    },
   }
+
+  let fromDate = req.params.fromDate;
+  let toDate = req.params.toDate;
 
   let salesThisMonthQueryStr = `select COUNT(*) As salesForCurrMonth from sale
     WHERE MONTH(saleDate) = MONTH(CURRENT_DATE())
@@ -22,6 +31,21 @@ router.get('/getHighLvlSalesData', ((req, res, next) => {
 
   let salesThisYearQueryStr = `select COUNT(*) As salesForCurrYear from sale
     WHERE YEAR(saleDate) = YEAR(CURRENT_DATE())`;
+
+  let menuPopularity = `select COUNT(*) AS nbrItemsSoldMenuItem, SUM(salePrice) 
+    AS salesForItem, menuItemId 
+    from sale where saleDate >= '${fromDate}' AND saleDate < '${toDate}'
+    GROUP BY menuItemId
+    ORDER BY COUNT(*) DESC`;
+
+  let storePopularity = `select COUNT(*) AS nbrItemsSoldStore, SUM(salePrice) 
+    AS salesForStore, storeId 
+    from sale where saleDate >= '${fromDate}' AND saleDate < '${toDate}'
+    GROUP BY storeId
+    ORDER BY COUNT(*) DESC`;
+
+  let revenuePeriod = `select SUM(salePrice) AS periodRevenue, SUM(saleCost) AS periodCosts
+    from sale where saleDate >= '${fromDate}' AND saleDate < '${toDate}'`;
 
   new Promise((resolve, reject) => {
     req.service.database().query(salesThisMonthQueryStr, ((err, results) => {
@@ -38,7 +62,35 @@ router.get('/getHighLvlSalesData', ((req, res, next) => {
         if (Array.isArray(results) && results.length){
           highLvlSales.salesForCurrYear = results[0].salesForCurrYear;
         }
-        resolve(JSON.stringify(highLvlSales));
+        req.service.database().query(menuPopularity, ((err, results) => {
+          if (err){
+            reject(err);
+          }
+          if (Array.isArray(results) && results.length){
+            highLvlSales.menuPopularitySales = results;
+          }
+          req.service.database().query(storePopularity, ((err, results) => {
+            if (err){
+              reject(err);
+            }
+            if (Array.isArray(results) && results.length){
+              highLvlSales.storePopularitySales = results;
+            }
+            req.service.database().query(revenuePeriod, ((err, results) => {
+              if (err){
+                reject(err);
+              }
+              if (Array.isArray(results) && results.length){  
+                highLvlSales.revenuePeriodSales.periodRevenue = results[0].periodRevenue;
+                highLvlSales.revenuePeriodSales.periodCosts = results[0].periodCosts;
+              }
+              resolve(JSON.stringify({highLvlSales}));
+
+            
+            }));
+          }));
+        }));
+          
       }));
     }));
   })
@@ -189,7 +241,6 @@ router.delete('/deleteSale/:saleId?', ((req, res, next) => {
   new Promise((resolve, reject) => {
     req.service.database().query(query, [saleId], function (err, results) {
       if (err){
-        console.log({"err":err})
         reject(err);
       }
       resolve(results);
@@ -199,7 +250,6 @@ router.delete('/deleteSale/:saleId?', ((req, res, next) => {
     res.send(JSON.stringify({}))
   })
   .catch ((err) =>{
-    console.log({"err":err})
 
     next(err)
   });  
