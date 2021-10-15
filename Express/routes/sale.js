@@ -22,7 +22,7 @@ router.get('/getHighLvlSalesData/:fromDate?/:toDate?', ((req, res, next) => {
     },
   }
 
-  let fromDate = req.params.fromDate;
+  let fromDate =  req.params.fromDate;
   let toDate = req.params.toDate;
 
   let salesThisMonthQueryStr = `select COUNT(*) As salesForCurrMonth from sale
@@ -49,14 +49,14 @@ router.get('/getHighLvlSalesData/:fromDate?/:toDate?', ((req, res, next) => {
 
 
   new Promise((resolve, reject) => {
-    req.service.database().query(salesThisMonthQueryStr, fromDate && toDate ? [fromDate, toDate] : null, ((err, results) => {
+    req.service.database().query(salesThisMonthQueryStr, ((err, results) => {
       if (err){
         reject(err);
       }
       if (Array.isArray(results) && results.length){
         highLvlSales.salesForCurrMonth = results[0].salesForCurrMonth;
       }
-      req.service.database().query(salesThisYearQueryStr, fromDate && toDate ? [fromDate, toDate] : null, ((err, results) => {
+      req.service.database().query(salesThisYearQueryStr, ((err, results) => {
         if (err){
           reject(err);
         }
@@ -77,7 +77,7 @@ router.get('/getHighLvlSalesData/:fromDate?/:toDate?', ((req, res, next) => {
             if (Array.isArray(results) && results.length){
               highLvlSales.storePopularitySales = results;
             }
-            req.service.database().query(revenuePeriod, null, ((err, results) => {
+            req.service.database().query(revenuePeriod, fromDate && toDate ? [fromDate, toDate] : null, ((err, results) => {
               if (err){
                 reject(err);
               }
@@ -108,13 +108,13 @@ router.get('/getSales/:fromDate?/:toDate?', ((req, res, next) => {
   let fromDate = req.params.fromDate;
   let toDate = req.params.toDate;  
 
-  let queryWithoutParamsStr = `SELECT saleId, saleDate, menuItemId, menu_item.name AS itemSold, storeId, salePrice, saleCost
+  let queryWithoutParamsStr = `SELECT saleId, saleDate, transactionId, menuItemId, menu_item.name AS itemSold, storeId, salePrice, saleCost
   FROM ctms.sale
   INNER JOIN menu_item
   ON menu_item.id = sale.menuItemId ORDER BY saleDate
   `;
 
-  let queryWithParamsStr = `SELECT saleId, saleDate, menuItemId, menu_item.name AS itemSold, storeId, salePrice, saleCost
+  let queryWithParamsStr = `SELECT saleId, saleDate, transactionId, menuItemId, menu_item.name AS itemSold, storeId, salePrice, saleCost
   FROM ctms.sale
   INNER JOIN menu_item
   ON menu_item.id = sale.menuItemId

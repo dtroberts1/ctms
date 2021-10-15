@@ -9,6 +9,7 @@ export interface Sale {
     storeId: number,
     salePrice: number,
     saleCost: number,
+    transactionId: number | null,
 }
 
 type menuPopularitySale = {

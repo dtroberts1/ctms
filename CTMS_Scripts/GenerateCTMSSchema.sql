@@ -232,6 +232,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`sale` (
   `storeId` INT NULL DEFAULT NULL,
   `salePrice` DECIMAL(5,2) NULL DEFAULT NULL,
   `saleCost` DECIMAL(5,2) NULL DEFAULT NULL,
+  `transactionId` BigInt NULL,
   PRIMARY KEY (`saleId`),
   INDEX `storeId` (`storeId` ASC) VISIBLE,
   INDEX `menuItemId` (`menuItemId` ASC) VISIBLE,

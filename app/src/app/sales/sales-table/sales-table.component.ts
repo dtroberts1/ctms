@@ -152,6 +152,10 @@ export class SalesTableComponent implements OnInit {
               sales.forEach((item) => {item.isReadOnly = true;});
               this.updateDataSource(this.sales);
             }
+            else{
+              sales = [];
+              this.updateDataSource(this.sales);
+            }
           }
         }
       }
@@ -343,7 +347,9 @@ export class SalesTableComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.tableReady = true;
-    this.origSales = JSON.parse(JSON.stringify(sales));
+    if (Array.isArray(sales) && sales.length){
+      this.origSales = JSON.parse(JSON.stringify(sales));
+    }
   }
 
   deleteMenuItem(menuId: number){
