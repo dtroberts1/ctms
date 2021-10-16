@@ -66,6 +66,12 @@ values('Vanilla Scope', 'Vanilla Scope Description', 2.36, 0.30, 'Food Item', 'H
 insert into store(launchDate, storeName)
 values('2017-01-01', 'Riverwalk');
 
+insert into store(launchDate, storeName)
+values('2017-09-01', 'Marketplace');
+
+insert into store(launchDate, storeName)
+values('2018-04-11', 'Boardwalk');
+
 SET SQL_SAFE_UPDATES = 0;
 
 /*** Insert Sales Data ***/
@@ -99,8 +105,10 @@ BEGIN
 			IF i=COUNTER then
 					LEAVE myloop;
 			END IF;
-            insert into sale(saleDate, menuItemId, storeId, salePrice, saleCost)
-				values('2021-10-03', menu_item_id, 1, menu_item_price, menu_item_cost);
+            insert into sale(saleDate, menuItemId, storeId, salePrice, saleCost, transactionId)
+				values(FROM_UNIXTIME(
+        UNIX_TIMESTAMP(CONCAT(CONCAT(DATE_SUB(curdate(), INTERVAL 1 YEAR), ' '), curtime())) + FLOOR(0 + (RAND() * 63072000))
+    ), menu_item_id, RAND()*(3-1)+1, menu_item_price, menu_item_cost, RAND()*(99999999-1000)+1000);
              SET i=i+1;
 		END LOOP myloop;
 
@@ -157,11 +165,15 @@ DELIMITER ;
 
 call seed_sales_with_menu_item();
 
-insert into sale(saleDate, menuItemId, storeId, salePrice, saleCost)
-	values('2021-10-03', 8, 1, 3.83, 1.11);
+insert into sale(saleDate, menuItemId, storeId, salePrice, saleCost, transactionId)
+	values(FROM_UNIXTIME(
+        UNIX_TIMESTAMP(CONCAT(CONCAT(DATE_SUB(curdate(), INTERVAL 1 YEAR), ' '), curtime())) + FLOOR(0 + (RAND() * 63072000))
+    ), 8, RAND()*(3-1)+1, 3.83, 1.11, RAND()*(99999999-1000)+1000);
     
 /*** Insert Review Data ***/
-insert into campaign_event(campaignDate) values('2021-01-01');
+insert into campaign_event(campaignDate) values(FROM_UNIXTIME(
+        UNIX_TIMESTAMP(CONCAT(CONCAT(DATE_SUB(curdate(), INTERVAL 1 YEAR), ' '), curtime())) + FLOOR(0 + (RAND() * 63072000))
+    ));
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS seed_reviews_with_menu_item $$
@@ -191,7 +203,9 @@ BEGIN
 					LEAVE myloop;
 			END IF;
             insert into review(reviewDate, campaignEventId, menuItemId, rating)
-				values('2021-10-03', 1, menu_item_id, RAND()*(9.9-8.0)+8.0);
+				values(FROM_UNIXTIME(
+        UNIX_TIMESTAMP(CONCAT(CONCAT(DATE_SUB(curdate(), INTERVAL 1 YEAR), ' '), curtime())) + FLOOR(0 + (RAND() * 63072000))
+    ), 1, menu_item_id, RAND()*(9.9-8.0)+8.0);
              SET i=i+1;
 		END LOOP myloop;
 
@@ -252,7 +266,9 @@ CALL seed_reviews_with_menu_item();
 SET SQL_SAFE_UPDATES = 1;
 
 insert into review(reviewDate, campaignEventId, menuItemId, rating)
-	values('2021-09-08', 1, 8, 9.4);
+	values(FROM_UNIXTIME(
+        UNIX_TIMESTAMP(CONCAT(CONCAT(DATE_SUB(curdate(), INTERVAL 1 YEAR), ' '), curtime())) + FLOOR(0 + (RAND() * 63072000))
+    ), 1, 8, 9.4);
                 
 insert into measurement_unit(name) values('Pinch');
 insert into measurement_unit(name) values('Dash');

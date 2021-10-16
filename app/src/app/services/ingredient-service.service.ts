@@ -21,7 +21,7 @@ export class IngredientService {
     
     ) { }
 
-  getMenuItemIngredients(menuItemId: number) : Observable<MenuItemIngredient[]>{
+  getMenuItemIngredients(menuItemId: number | null) : Observable<MenuItemIngredient[]>{
     return this.http.get<MenuItemIngredient[]>(`${this.serviceUrl}/getMenuItemIngredients/${menuItemId}`)
       .pipe(map((menuItemIngredients: MenuItemIngredient[]) => {
         return menuItemIngredients
@@ -50,49 +50,58 @@ export class IngredientService {
   }
   postMenuItemIngredient(menuIngredient: MenuItemIngredient) : Observable<Object>{
     let failed = false
-
-    const headers = { 'content-type': 'application/json'}  
-    return this.http.post(`${this.serviceUrl}/postMenuItemIngredient`, JSON.stringify(menuIngredient), {'headers': headers})
-    .pipe(
-    map((item: Object) => {
-      return item;
-    }),
-    catchError((err, caught) => {
-      failed = true;
+    if (menuIngredient.menuItemId){
+      const headers = { 'content-type': 'application/json'}  
+      return this.http.post(`${this.serviceUrl}/postMenuItemIngredient`, JSON.stringify(menuIngredient), {'headers': headers})
+      .pipe(
+      map((item: Object) => {
+        return item;
+      }),
+      catchError((err, caught) => {
+        failed = true;
+        this.toastr.warning("Unable to save");
+        return of(`i caught error`);
+      }),
+      finalize(() => {if(!failed){
+        this.toastr.success("Ingredient Added");
+      }}));  
+    }
+    else{
       this.toastr.warning("Unable to save");
-      return of(`i caught error`);
-    }),
-    finalize(() => {if(!failed){
-      this.toastr.success("Ingredient Added");
-    }}));  
+      return new Observable();
+    }
 
   }
 
-  deleteMenuItemIngredient(menuItemId: number, ingredientId: number){
-    console.log("in service. deleting")
-
-    let failed = false
-    const headers = { 'content-type': 'application/json'}  
-    let params = new HttpParams().set('params', menuItemId)
-      .set('ingredientId', ingredientId)
-    let options = {
-      headers: headers,
+  deleteMenuItemIngredient(menuItemId: number | null, ingredientId: number){
+    if (menuItemId){
+      let failed = false
+      const headers = { 'content-type': 'application/json'}  
+      let params = new HttpParams().set('params', menuItemId)
+        .set('ingredientId', ingredientId)
+      let options = {
+        headers: headers,
+      }
+  
+      return this.http.delete(`${this.serviceUrl}/deleteMenuItemIngredient/${menuItemId}/${ingredientId}`, options)
+      .pipe(
+      map((item: Object) => {
+        return item;
+      }),
+      catchError((err, caught) => {
+        failed = true;
+        this.toastr.warning("Unable to save");
+        return of(`i caught error`);
+      }),
+      finalize(() => {if(!failed){
+        this.toastr.success("Ingredient Removed");
+      }}));  
     }
-    console.log({"params":params})
-
-    return this.http.delete(`${this.serviceUrl}/deleteMenuItemIngredient/${menuItemId}/${ingredientId}`, options)
-    .pipe(
-    map((item: Object) => {
-      return item;
-    }),
-    catchError((err, caught) => {
-      failed = true;
+    else{
       this.toastr.warning("Unable to save");
-      return of(`i caught error`);
-    }),
-    finalize(() => {if(!failed){
-      this.toastr.success("Ingredient Removed");
-    }}));  
+
+      return new Observable();
+    }
   }
 
   putMenuItemIngredient(menuIngredient: MenuItemIngredient) : Observable<Object>{

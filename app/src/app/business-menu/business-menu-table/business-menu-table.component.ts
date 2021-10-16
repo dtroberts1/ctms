@@ -56,7 +56,7 @@ export class BusinessMenuTableComponent implements OnInit {
     'price': 7,
     'cost': 7,
   }
-  columns: string[] = ['checkbox', 'type', 'name', 'description', 'price', 'cost'];
+  columns: string[] = ['checkbox', 'type', 'name', 'description', 'price', 'cost', 'expicn'];
   mainColumns: string[] = ['type', 'name', 'description', 'price', 'cost'];
 
   @ViewChild('paginator')
@@ -88,6 +88,7 @@ export class BusinessMenuTableComponent implements OnInit {
   selectDeselectAllRows(){
     setTimeout(() => {
       this.menuItems.forEach(item => item.selected = this.mainTableChkbox);
+      this.rowsSelected = true;
     }, 0);
   }
 
@@ -140,8 +141,10 @@ export class BusinessMenuTableComponent implements OnInit {
         result => {
           this.updateLatestMenuItems();
           this.menuItems.forEach(item => item.selected = false);
+          this.rowsSelected = false;
         },
         err => {
+          this.rowsSelected = false;
         }
       )
   }
@@ -209,6 +212,7 @@ export class BusinessMenuTableComponent implements OnInit {
   addMenuItem(){
     let newItem : MenuItem = {
       type: '____',
+      id: null,
       description: '____',
       name: '____',
       price: 0,

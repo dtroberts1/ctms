@@ -1,1 +1,32 @@
-<p>sales works!</p>
+<div class="business-menu-header">
+    <div class="business-menu-header-container">
+        <img style="display: block;" width="35" height="35" src="../../assets/icons/SalesIcon/2x/outline_attach_money_blue_white_48dp.png">
+        <div class="business-menu-header-text">
+            Sales
+        </div>
+        <div class="date-header">
+            <div>
+                <mat-form-field appearance="fill">
+                    <mat-date-range-input [rangePicker]="picker">
+                      <input (dateChange)="updateSaleDate($event, true)" [(ngModel)]="startDate" matStartDate placeholder="Start date">
+                      <input (dateChange)="updateSaleDate($event, false)"  [(ngModel)]="endDate" matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                  </mat-form-field>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="background-color: #F5F6F7; padding-bottom:300px;">
+    <div style="display: flex; justify-content: center;">
+        <app-sales-overview 
+        #salesOverview
+        [startDateStr]="startDateStr" 
+        [endDateStr]="endDateStr" 
+        [menuItems]="menuItems"
+        [stores]="stores"
+        ></app-sales-overview>
+    </div>
+    <app-sales-table [startDateStr]="startDateStr" [endDateStr]="endDateStr" [(sales)]="sales" (notifyParent)="tableMenuItemsChanged($event)"></app-sales-table>
+</div>

@@ -29,6 +29,12 @@ export class BusinessMenuOverviewComponent implements AfterViewInit {
   highLvlSales: HighLvlSaleData = {
     salesForCurrYear: 0,
     salesForCurrMonth: 0,
+    menuPopularitySales: [],
+    storePopularitySales: [],
+    revenuePeriodSales: {
+      periodRevenue: null,
+      periodCosts: null,
+    }
   }
   menuItemNames!: string[];
   menuRatings !: number[];
@@ -61,7 +67,7 @@ export class BusinessMenuOverviewComponent implements AfterViewInit {
               this.menuItemNames = (<MenuItem[]>change.currentValue).map(menuItem => menuItem.name);
               this.menuRatings = (<MenuItem[]>change.currentValue).map(menuItem => menuItem.averageReviewRating);
               this.menuQtySold = (<MenuItem[]>change.currentValue).map(menuItem => menuItem.qtySold);
-              this.saleService.getHighLvlSalesData().toPromise()
+              this.saleService.getHighLvlSalesData(null, null).toPromise()
                 .then((highLvlSales) => {
                   this.highLvlSales = JSON.parse(JSON.stringify(highLvlSales));
                   
