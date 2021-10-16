@@ -231,6 +231,59 @@ router.put('/updateSale', ((req, res, next) => {
   });
 }));
 
+router.get('/getWeekMonthYearRevenues', ((req, res, next) => {
+
+  let revenues = {
+    weekSales: null,
+    monthSales: null,
+    yearSales: null,
+  }
+
+  let weekQueryStr = `select SUM(salePrice) AS weekSales from sale where saleDate 
+    BETWEEN DATE_ADD(CURRENT_DATE(), INTERVAL(1-DAYOFWEEK(CURRENT_DATE())) DAY) AND 
+    DATE_ADD(DATE_ADD(CURRENT_DATE(), interval  -WEEKDAY(CURRENT_DATE())-1 day), interval 6 day)`;
+
+    let monthQueryStr = `select SUM(salePrice) AS monthSales from sale where saleDate BETWEEN
+    DATE_ADD(CURRENT_DATE(),interval -DAY(CURRENT_DATE())+1 DAY) AND LAST_DAY(CURRENT_DATE())`;
+
+    let yearQueryStr = `select SUM(salePrice) AS yearSales from sale where saleDate BETWEEN 
+    CONCAT(YEAR(CURRENT_DATE()),'-01-01') AND LAST_DAY(DATE_ADD(NOW(), INTERVAL 12-MONTH(NOW()) MONTH))`;
+
+  new Promise((resolve, reject) => {
+    req.service.database().query(weekQueryStr, null, ((err, results) => {
+      if (err){
+        reject(err);
+      }
+      revenues.weekSales = results[0].weekSales;
+
+      req.service.database().query(monthQueryStr, null, ((err, results) => {
+        if (err){
+          reject(err);
+        }
+        revenues.monthSales = results[0].monthSales;
+
+        req.service.database().query(yearQueryStr, null, ((err, results) => {
+          if (err){
+            reject(err);
+          }
+          revenues.yearSales = results[0].yearSales;
+
+          resolve(revenues);
+
+        }));
+        
+
+      }));
+    }));
+  })
+  .then((result) => {
+    res.send(result)
+  })
+  .catch ((err) =>{
+    next(err)
+  });
+}));
+
 router.delete('/deleteSales', ((req, res, next) => {
   if (!Object.keys(req.body).length){
     throw new BadRequestError('Missing Fields')

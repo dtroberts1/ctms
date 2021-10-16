@@ -5,24 +5,24 @@
   <div class="sidebar-container-item-lf">
     Profits
   </div>
-  <div style="color:green;" class="sidebar-container-item-rf">        
-    + 113178.26
+  <div *ngIf="profit" [ngStyle]="{'color': getPosOrNeg(profit.yearProfits) ? '#66ff00' : '#EE4B2B'}" class="sidebar-container-item-rf">        
+    {{getProfitDisplay(profit.yearProfits)}}
   </div> 
 </div>
 <div class="sidebar-container-item">
   <div class="sidebar-container-item-lf">
     Revenue
   </div>
-  <div style="color:green;" class="sidebar-container-item-rf">        
-    + 121422.48
+  <div *ngIf="revenue" style="color:#66ff00;" class="sidebar-container-item-rf">        
+    + {{revenue.yearSales}}
   </div> 
 </div>
 <div class="sidebar-container-item">
   <div class="sidebar-container-item-lf">
     Expenses
   </div>
-  <div style="color:#e64b30;" class="sidebar-container-item-rf">        
-    - 8244.22
+  <div *ngIf="expense" style="color:#EE4B2B;" class="sidebar-container-item-rf">        
+    - {{expense.yearExpenses}}
   </div> 
 </div>
 <div class="sidebar-container" style="padding-top:7px;">
@@ -33,24 +33,24 @@
     <div class="sidebar-container-item-lf">
       Profits
     </div>
-    <div style="color:green;" class="sidebar-container-item-rf">        
-      + 2314.32
+    <div *ngIf="profit" [ngStyle]="{'color': getPosOrNeg(profit.monthProfits) ? '#66ff00' : '#EE4B2B'}" class="sidebar-container-item-rf">        
+      {{getProfitDisplay(profit.monthProfits)}}
     </div> 
   </div>
   <div class="sidebar-container-item">
     <div class="sidebar-container-item-lf">
       Revenue
     </div>
-    <div style="color:green;" class="sidebar-container-item-rf">        
-      + 2836.11
+    <div *ngIf="revenue" style="color:#66ff00;" class="sidebar-container-item-rf">        
+      + {{revenue.monthSales}}
     </div> 
   </div>
   <div class="sidebar-container-item">
     <div class="sidebar-container-item-lf">
       Expenses
     </div>
-    <div style="color:#e64b30;" class="sidebar-container-item-rf">        
-      - 521.79
+    <div *ngIf="expense" style="color:#EE4B2B;" class="sidebar-container-item-rf">        
+      - {{expense.monthExpenses}}
     </div> 
   </div>
 </div>
@@ -62,24 +62,24 @@
     <div class="sidebar-container-item-lf">
       Profits
     </div>
-    <div style="color:green;" class="sidebar-container-item-rf">        
-      + 1571.22
+    <div *ngIf="profit" [ngStyle]="{'color': getPosOrNeg(profit.weekProfits) ? '#66ff00' : '#EE4B2B'}" class="sidebar-container-item-rf">        
+      {{getProfitDisplay(profit.weekProfits)}}
     </div> 
   </div>
   <div class="sidebar-container-item">
     <div class="sidebar-container-item-lf">
       Revenue
     </div>
-    <div style="color:green;" class="sidebar-container-item-rf">        
-      + 1802.39
+    <div *ngIf="revenue" style="color:#66ff00;" class="sidebar-container-item-rf">        
+      + {{revenue.weekSales}}
     </div> 
   </div>
   <div class="sidebar-container-item">
     <div class="sidebar-container-item-lf">
       Expenses
     </div>
-    <div style="color:#e64b30;" class="sidebar-container-item-rf">        
-      - 231.17
+    <div *ngIf="expense" style="color:#EE4B2B;" class="sidebar-container-item-rf">        
+      - {{expense.weekExpenses}}
     </div> 
   </div>
 </div>

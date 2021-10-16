@@ -23,6 +23,13 @@ export class SaleService {
       }));
   }
 
+  getWeekMonthYearRevenues(){
+    return this.http.get<any>(`${this.serviceUrl}/getWeekMonthYearRevenues`)
+    .pipe(map((saleData: any) => {
+      return saleData;
+    }));
+  }
+
   addSale(sale: Sale){
     const httpOptions = {
       headers: new HttpHeaders({
