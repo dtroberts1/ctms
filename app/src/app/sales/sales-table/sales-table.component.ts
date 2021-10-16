@@ -65,7 +65,7 @@ export class SalesTableComponent implements OnInit {
     'salePrice': 7,
     'saleCost': 7,
   }
-  columns: string[] = ['checkbox', 'saleDate', 'menuItem', 'salePrice', 'saleCost'];
+  columns: string[] = ['checkbox', 'saleDate', 'menuItem', 'salePrice', 'saleCost', 'expicn'];
   mainColumns: string[] = ['saleDate', 'menuItem', 'salePrice', 'saleCost'];
 
   @ViewChild('paginator')

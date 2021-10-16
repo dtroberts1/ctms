@@ -33,6 +33,7 @@
       }
       table {
         width: 100%;
+        table-layout: fixed;
         .column{
           color: #26377B;
           font-family: 'Lato', Arial, sans-serif;
@@ -50,8 +51,8 @@
           th:nth-child(1){
             width: 40px;
           }
-          th{
-            width: 16.67%;
+          th:nth-child(6){
+            width: 40px;
           }
         }
         .cell-data{
@@ -62,6 +63,16 @@
           font-size: 15px;
           border-radius:5px;
 
+          &:nth-child(1){
+            width: 40px;
+          }
+          &:nth-child(6){
+            width: 40px;
+          }
+
+          &:not(:nth-child(1)):not(:nth-child(6)){
+            width: calc((100% - 80px) / 50);
+          }
   
           .cell-data-div:focus{
             border-color: blue;
@@ -71,17 +82,21 @@
 
           .datepicker{
             display: inline-block;
+            width: 100%;
             
             ::ng-deep mat-form-field{
               margin: 8px 0 8px 0 !important;
+              width: 70%;
               height: 50px !important;
             }
           }
 
           .menu-item-select{
             display: inline-block;
+            width: 100%;
 
             ::ng-deep mat-form-field{
+              width: 70%;
               margin: 8px 0 8px 0 !important;
               height: 50px !important;
             }
@@ -110,6 +125,7 @@
                 border: none;
               }
               input{
+                width: 100%;
                 display: block;
                 height: 100%;
                 background-color: transparent;
