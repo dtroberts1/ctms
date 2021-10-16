@@ -56,7 +56,7 @@ export class BusinessMenuTableComponent implements OnInit {
     'price': 7,
     'cost': 7,
   }
-  columns: string[] = ['checkbox', 'type', 'name', 'description', 'price', 'cost'];
+  columns: string[] = ['checkbox', 'type', 'name', 'description', 'price', 'cost', 'expicn'];
   mainColumns: string[] = ['type', 'name', 'description', 'price', 'cost'];
 
   @ViewChild('paginator')
