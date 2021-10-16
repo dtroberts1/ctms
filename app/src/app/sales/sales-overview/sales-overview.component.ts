@@ -30,8 +30,9 @@ export class SalesOverviewComponent implements AfterViewInit {
   private storeRevChartCanvas!: ElementRef;
   @Input() menuItems!: MenuItem[];
   @Input() stores !: Store[];
-  @Input() startDate!: string;
-  @Input() endDate!: string;
+  @Input() startDateStr!: string;
+  @Input() endDateStr!: string;
+
 
   highLvlSales: HighLvlSaleData = {
     salesForCurrYear: 0,
@@ -69,14 +70,15 @@ export class SalesOverviewComponent implements AfterViewInit {
   public sharedFunction(){
   }
 
-  updateChartData(){
-    this.saleService.getHighLvlSalesData(this.startDate, this.endDate).toPromise()
+  updateChartData(startDateStr: string, endDateStr: string){
+
+    this.saleService.getHighLvlSalesData(startDateStr, endDateStr).toPromise()
     .then((result : any) => {
       if (result){
         this.setMenuItems();
       }
     });
-    this.saleService.getHighLvlSalesData(this.startDate, this.endDate).toPromise()
+    this.saleService.getHighLvlSalesData(startDateStr, endDateStr).toPromise()
     .then((result : any) => {
       if (result){
         this.highLvlSales = result.highLvlSales;
@@ -91,8 +93,8 @@ export class SalesOverviewComponent implements AfterViewInit {
         let change = changes[propName];
 
         switch (propName) {
-          case 'startDate': {
-            this.saleService.getHighLvlSalesData(this.startDate, this.endDate).toPromise()
+          case 'startDateStr': {
+            this.saleService.getHighLvlSalesData(this.startDateStr, this.endDateStr).toPromise()
             .then((result : any) => {
               if (result){
                 this.setMenuItems();
@@ -100,8 +102,8 @@ export class SalesOverviewComponent implements AfterViewInit {
             })
           }
           break;
-          case 'endDate': {
-            this.saleService.getHighLvlSalesData(this.startDate, this.endDate).toPromise()
+          case 'endDateStr': {
+            this.saleService.getHighLvlSalesData(this.startDateStr, this.endDateStr).toPromise()
             .then((result : any) => {
               if (result){
                 this.highLvlSales = result.highLvlSales;

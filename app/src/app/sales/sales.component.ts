@@ -29,8 +29,8 @@ export class SalesComponent implements OnInit {
   startDate: Date = new Date(date.getFullYear(), date.getMonth(), 1);
   endDate: Date = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
-  startDateStr: string = this.startDate.toISOString().slice(0, 19).replace('T', ' ');
-  endDateStr: string = this.endDate.toISOString().slice(0, 19).replace('T', ' ');
+  startDateStr: string = this.startDate.toISOString().substr(0, this.startDate.toISOString().indexOf('T'));
+  endDateStr: string = this.endDate.toISOString().substr(0, this.endDate.toISOString().indexOf('T'));
 
   constructor(private saleService: SaleService, 
     private menuService: MenuService,
@@ -46,12 +46,13 @@ export class SalesComponent implements OnInit {
 
   updateSaleDate(event: any, isStartDate: boolean){
     if (this.startDate){
-      this.startDateStr = this.startDate.toISOString().slice(0, 19).replace('T', ' ');
+      this.startDateStr = this.startDate.toISOString().substr(0, this.startDate.toISOString().indexOf('T'));
     }
     if (this.endDate){
-      this.endDateStr = this.endDate.toISOString().slice(0, 19).replace('T', ' ');
+      this.endDateStr = this.endDate.toISOString().substr(0, this.endDate.toISOString().indexOf('T'));
     }
     this.sharedFunction();
+    
     this.saleService.getSales(this.startDateStr, this.endDateStr)
     .subscribe(
       result => {
@@ -63,7 +64,7 @@ export class SalesComponent implements OnInit {
   }
 
   sharedFunction() : void{
-    this.salesOverview.updateChartData();
+    this.salesOverview.updateChartData(this.startDateStr, this.endDateStr);
 
   }
 

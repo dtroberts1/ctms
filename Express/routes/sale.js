@@ -22,7 +22,7 @@ router.get('/getHighLvlSalesData/:fromDate?/:toDate?', ((req, res, next) => {
     },
   }
 
-  let fromDate =  req.params.fromDate;
+  let fromDate = req.params.fromDate;
   let toDate = req.params.toDate;
 
   let salesThisMonthQueryStr = `select COUNT(*) As salesForCurrMonth from sale
@@ -34,18 +34,18 @@ router.get('/getHighLvlSalesData/:fromDate?/:toDate?', ((req, res, next) => {
 
   let menuPopularity = `select COUNT(*) AS nbrItemsSoldMenuItem, SUM(salePrice) 
     AS salesForItem, menuItemId 
-    from sale where saleDate >= ? AND saleDate < ?
+    from sale where saleDate BETWEEN ? AND ?
     GROUP BY menuItemId
     ORDER BY COUNT(*) DESC`;
 
   let storePopularity = `select COUNT(*) AS nbrItemsSoldStore, SUM(salePrice) 
     AS salesForStore, storeId 
-    from sale where saleDate >= ? AND saleDate < ?
+    from sale where saleDate BETWEEN ? AND ?
     GROUP BY storeId
     ORDER BY COUNT(*) DESC`;
 
   let revenuePeriod = `select SUM(salePrice) AS periodRevenue, SUM(saleCost) AS periodCosts
-    from sale where saleDate >= ? AND saleDate < ?`;
+    from sale where saleDate BETWEEN ? AND ?`;
 
 
   new Promise((resolve, reject) => {
