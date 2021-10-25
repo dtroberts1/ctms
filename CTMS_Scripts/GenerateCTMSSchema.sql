@@ -56,6 +56,7 @@ DROP TABLE IF EXISTS `ctms`.`ingredient` ;
 CREATE TABLE IF NOT EXISTS `ctms`.`ingredient` (
   `ingredientId` INT NOT NULL AUTO_INCREMENT,
   `ingredientName` VARCHAR(200) NULL DEFAULT NULL,
+  `UPC` VARCHAR(13) NULL DEFAULT NULL,
   `isNut` TINYINT(1) NULL DEFAULT NULL,
   `ingredientTypeId` INT NULL DEFAULT NULL,
   PRIMARY KEY (`ingredientId`),
