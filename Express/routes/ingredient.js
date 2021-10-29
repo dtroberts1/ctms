@@ -141,6 +141,54 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
     });  
   }));
 
+  router.get('/getStoreIngredients/:storeId', ((req, res, next) => {
+    console.log("testing");
+
+    console.log("id is " + req.params.storeId);
+    if (!req.params.storeId){
+      throw new BadRequestError('Missing storeId')
+    }
+
+    let queryStr = `
+      SELECT 
+        ingredient.ingredientId, 
+        storeId, 
+        mL, 
+        ingredientName, 
+        UPC, 
+        isNut, 
+        ingredientTypeId, 
+        (SELECT name FROM ingredient_type 
+          WHERE ingredientTypeId = ingredient.ingredientTypeId AND ingredient.ingredientId = store_ingredient.ingredientId) AS ingredientTypeName,
+        ingredient.measurementUnitId,
+        ingredient.density,
+        measurement_unit.mlLitersConversionFactor AS mlLitersConversionFactor,
+        measurement_unit.name AS muName,
+        (mL * ingredient.density * measurement_unit.mlLitersConversionFactor) AS muQty
+      FROM store_ingredient
+      INNER JOIN ingredient
+      ON ingredient.ingredientId = store_ingredient.ingredientId
+      INNER JOIN measurement_unit
+      ON measurement_unit.measurementUnitId = ingredient.measurementUnitId
+      WHERE storeId = ?`;
+    new Promise((resolve, reject) => {
+      req.service.database().query(queryStr, req.params.storeId, ((err, results) => {
+        if (err) {
+          reject(err);
+        }
+    
+        resolve(results);
+      }))
+    })
+    .then((result) => {
+
+      res.send(JSON.stringify(result))
+    })
+    .catch ((err) =>{
+      next(err)
+    });  
+  }));
+
   router.get('/getIngredientTypes', ((req, res, next) => {
 
     let queryStr = `SELECT * from ingredient_type ORDER BY name`;
