@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
-import { Store } from '../interfaces/store';
+import { Store, StoreIngredient } from '../interfaces/store';
+import { IngredientService } from '../services/ingredient-service.service';
 import { StoreService } from '../services/store-service.service';
+
+const pal = ["#001464", "#26377B", "#404F8B", "#59709A"]
 
 @Component({
   selector: 'app-stores',
@@ -11,8 +14,11 @@ import { StoreService } from '../services/store-service.service';
 export class StoresComponent implements OnInit {
   store!: Store;
   stores!: Array<Store>;
+  storeIngredients!: Array<StoreIngredient> | any;
+
   constructor(
     private storeService: StoreService,
+    private ingredientService: IngredientService,
   ) { 
 
   }
@@ -23,7 +29,6 @@ export class StoresComponent implements OnInit {
     this.storeService.getStores()
     .subscribe(
       res => {
-        console.log({"res":res})
         if (Array.isArray(res)){
           this.stores = res;
         }
@@ -37,6 +42,31 @@ export class StoresComponent implements OnInit {
     );
   }
   storeChanged(event : any, store: Store){
+    if (store){
+      this.ingredientService.getStoreIngredients(store.storeId)
+        .subscribe(
+          res => {
+            this.storeIngredients = res;
+            let i = 0;
+            this.storeIngredients.forEach((item : any) => {
+              item.backgroundColor = this.getColors(this.storeIngredients.length, pal)[i];
+              i++;
+            });
+          },
+          err => {
 
+          }
+        )
+    }
+  }
+
+  getColors(length: number, pallet: string[]){
+    let colors = [];
+
+    for(let i = 0; i < length; i++) {
+      colors.push(pallet[i % pallet.length]);
+    }
+
+    return colors;
   }
 }

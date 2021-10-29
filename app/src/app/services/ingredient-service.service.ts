@@ -6,6 +6,7 @@ import { finalize, map } from 'rxjs/operators';
 import { Ingredient, IngredientType, MeasurementUnit, MenuItemIngredient } from '../interfaces/ingredient';
 import { HighLvlSaleData } from '../interfaces/sale';
 import { catchError } from 'rxjs/operators';
+import { StoreIngredient } from '../interfaces/store';
 
 @Injectable({
   providedIn: 'root'
@@ -102,6 +103,24 @@ export class IngredientService {
 
       return new Observable();
     }
+  }
+
+  
+  getStoreIngredients(storeId : number) : Observable<StoreIngredient[]>{
+    return this.http.get<any[]>(`${this.serviceUrl}/getStoreIngredients/${storeId}`)
+      .pipe(
+        map((storeIngredients : any[]) => {
+          return storeIngredients.map(storeIngredient => <StoreIngredient>{
+            ingredientId: storeIngredient.ingredientId,
+            storeId: storeIngredient.storeId,
+            mL: storeIngredient.mL,
+            ingredientName: storeIngredient.ingredientName,
+            density: storeIngredient.density, /* g/ml */
+            muName: storeIngredient.muName,
+            muQty: storeIngredient.muQty.toFixed(2),
+          });
+        })
+      );
   }
 
   putMenuItemIngredient(menuIngredient: MenuItemIngredient) : Observable<Object>{
