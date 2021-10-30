@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as $ from 'jquery';
 import { Store, StoreIngredient } from '../interfaces/store';
 import { IngredientService } from '../services/ingredient-service.service';
 import { StoreService } from '../services/store-service.service';
+import { SimulatorComponent } from './simulator/simulator.component';
 
 const pal = ["#001464", "#26377B", "#404F8B", "#59709A"]
 
@@ -12,6 +14,9 @@ const pal = ["#001464", "#26377B", "#404F8B", "#59709A"]
   styleUrls: ['./stores.component.less']
 })
 export class StoresComponent implements OnInit {
+  @ViewChild('forecastChartCanvas') 
+  private forecastChartCanvas!: ElementRef;
+
   store!: Store;
   stores!: Array<Store>;
   storeIngredients!: Array<StoreIngredient> | any;
@@ -19,11 +24,36 @@ export class StoresComponent implements OnInit {
   constructor(
     private storeService: StoreService,
     private ingredientService: IngredientService,
+    public dialog: MatDialog
   ) { 
 
   }
 
   item = this;
+
+  setupForecastChart(){
+
+  }
+
+
+
+  openSimModal(){
+    console.log({"storeId_before":this.store.storeId});
+    console.log({"ingred_before":this.storeIngredients})
+
+    const dialogRef = this.dialog.open(SimulatorComponent, {
+      width: '550px',
+      height: '640px',
+      data: {
+        storeId: this.store.storeId,
+        storeIngredients: JSON.parse(JSON.stringify(this.storeIngredients)),
+      },
+      panelClass: 'modal-class'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
+  }
 
   ngOnInit(): void {
     this.storeService.getStores()

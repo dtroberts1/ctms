@@ -38,6 +38,8 @@ import { SalesOverviewComponent } from './sales/sales-overview/sales-overview.co
 import { SalesTableComponent } from './sales/sales-table/sales-table.component';
 import { DatePipe } from '@angular/common';
 import { StoresComponent } from './stores/stores.component';
+import { SimulatorComponent } from './stores/simulator/simulator.component';
+import { SimulatorPipePipe } from './stores/simulator/simulator-pipe.pipe';
 
 @NgModule({
   declarations: [
@@ -58,6 +60,8 @@ import { StoresComponent } from './stores/stores.component';
     SalesOverviewComponent,
     SalesTableComponent,
     StoresComponent,
+    SimulatorComponent,
+    SimulatorPipePipe,
   ],
   imports: [
     CommonModule,

@@ -87,7 +87,13 @@ export class SalesTableComponent implements OnInit {
   origSales!: Sale[];
   dataSource!: MatTableDataSource<Sale>;
 
-  constructor(private datePipe: DatePipe, private menuService: MenuService, private saleService: SaleService, private toastr: ToastrService, public dialog: MatDialog) { }
+  constructor(
+    private datePipe: DatePipe, 
+    private menuService: MenuService, 
+    private saleService: SaleService, 
+    private toastr: ToastrService, 
+    public dialog: MatDialog
+    ) { }
 
   ngOnInit(): void {
     this.tableBtnColor = 'primary';
