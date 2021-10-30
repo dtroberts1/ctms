@@ -20,10 +20,16 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
       SELECT ingredient.ingredientId, 
         ingredient.ingredientName, 
         menu_item_ingredient.menuItemId, 
-        (SELECT name from measurement_unit where measurementUnitId = menu_item_ingredient.measurementUnitId) AS measurementType,
+        (SELECT name FROM measurement_unit 
+          WHERE measurementUnitId = menu_item_ingredient.measurementUnitId) AS measurementType,
         menu_item_ingredient.measurementUnitId,
-        menu_item_ingredient.ingredientQty  
-      from ingredient
+        menu_item_ingredient.ingredientQty,
+        (((Select (1 / mlLitersConversionFactor) 
+          FROM measurement_unit 
+          WHERE measurement_unit.measurementUnitId = 
+          menu_item_ingredient.measurementUnitId) * menu_item_ingredient.ingredientQty) * ingredient.density / 28.349523)
+          AS weightInOz
+      FROM ingredient
       INNER JOIN menu_item_ingredient
       ON menu_item_ingredient.ingredientId = ingredient.ingredientId
       WHERE ingredient.ingredientId IN (SELECT ingredientId FROM menu_item_ingredient WHERE menuItemId = ?) 

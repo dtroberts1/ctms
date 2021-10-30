@@ -1,15 +1,18 @@
 import { Component, Inject, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { map } from 'rxjs/operators';
 import { MenuService } from 'src/app/business-menu/menu-service.service';
 import { MenuItem } from 'src/app/interfaces/menu-item';
 import { StoreIngredient } from 'src/app/interfaces/store';
+import { IngredientService } from 'src/app/services/ingredient-service.service';
 type Selectable = {
   selected: boolean,
 }
-type SelectableMenuItem = MenuItem & Selectable & {count: number};
+type SelectableMenuItem = MenuItem & Selectable & {count: number, };
 
 type SelectableStoreIngredient = StoreIngredient & Selectable;
 type ModalInput = {storeId: number, storeIngredients: Array<StoreIngredient>};
+type UsedIngredient = {usedOz: number, ingredientName: string, ingredientId: number}
 
 @Component({
   selector: 'app-simulator',
@@ -25,19 +28,21 @@ export class SimulatorComponent implements OnInit {
   menuItem!: SelectableMenuItem;
   selectedMenuItem!: SelectableMenuItem;
   isUpdateMode: boolean = false;
+  usedIngredients!: Array<UsedIngredient>;
 
   editMenuItemMode: boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: ModalInput,
     private menuService: MenuService,
+    private ingredientService: IngredientService,
   ) { 
 
   }
 
   ngOnInit(): void {
     this.simulatedMenuItems = [];
-    console.log({"data":this.data});
+    this.usedIngredients = [];
     if (Array.isArray(this.data.storeIngredients)){
       this.storeIngredients = this.data.storeIngredients;
     }
@@ -46,7 +51,19 @@ export class SimulatorComponent implements OnInit {
       .subscribe(
         res => {
           this.menuItems = res;
-          console.log({"menuItems":this.menuItems})
+          this.menuItems.forEach((item) => {
+            this.ingredientService.getMenuItemIngredients(item.id)
+              .subscribe(
+                res => {
+                  item.ingredients = res;
+                  
+                },
+                err => {
+
+                }
+              );
+          });
+
         },
         err => {
 
@@ -54,30 +71,58 @@ export class SimulatorComponent implements OnInit {
       );
   }
 
+  
+
+  updateSimulation(){
+    //this.ingredientService.getMenuItemIngredients()
+    // LEFT OFF - need to multiply by the number of menu items*** 
+
+    this.usedIngredients = [];
+    let simMenuItems = JSON.parse(JSON.stringify(this.simulatedMenuItems));
+    simMenuItems.forEach((item : SelectableMenuItem) => {
+      item.ingredients.forEach((ingred: any) => {
+        ingred.multiplier = item.count;
+      });
+    });
+
+    let tmp = simMenuItems.map((item : any) => item.ingredients).reduce((a: any, b : any) => a.concat(b));
+    tmp.forEach((usedItem : any) => {
+      let beforeReduced = tmp.filter((usedIngred: any) => usedIngred.ingredientId == usedItem.ingredientId)
+      .map((ingred: any) => ingred.weightInOz * ingred.multiplier); // Need to multiply by number of times sold
+      let aggregatedUsedOz = beforeReduced.reduce((a: any, b: any) => a + b);
+
+      if (!this.usedIngredients.some(ingred => ingred.ingredientId == usedItem.ingredientId)){
+        if (aggregatedUsedOz > 0){
+          this.usedIngredients.push({
+            usedOz: aggregatedUsedOz,
+            ingredientName: usedItem.ingredientName,
+            ingredientId: usedItem.ingredientId,
+          });
+        }
+      }
+    });
+    this.usedIngredients.sort((a,b) => a.ingredientName.localeCompare(b.ingredientName));
+  }
+
   removeMenuItem(){
     // Remove Menu item from simulation list
-    console.log({"this.simulatedMenuItems_b4Rmv":JSON.parse(JSON.stringify(this.simulatedMenuItems))})
     this.simulatedMenuItems.forEach(mi => mi.selected = false);
 
     let delCount = this.simulatedMenuItems.splice((this.simulatedMenuItems as Array<SelectableMenuItem>)
     .findIndex(mi => mi.id === this.selectedMenuItem.id), 1);
     this.simulatedMenuItems.sort((a,b) => a.name.localeCompare(b.name));
 
-    //this.menuItem = null as any;
-    //this.selectedMenuItem = null as any;
-    console.log({"this.simulatedMenuItems_after":JSON.parse(JSON.stringify(this.simulatedMenuItems))})
-    console.log({"delCount":delCount});
     this.selectedMenuItem = null as any;
     this.menuItem = null as any;
     this.isUpdateMode = false;
     this.editMenuItemMode = false;
+    this.updateSimulation();
   }
 
   selectMenuItem(menuItem: SelectableMenuItem){
     let isSelected = menuItem.selected;
     this.menuItems.forEach(mi => mi.selected = false);
     this.simulatedMenuItems.forEach(mi => mi.selected = false);
-    console.log({"initial":JSON.parse(JSON.stringify(this.simulatedMenuItems))})
     
     if (!isSelected){
         this.isUpdateMode = true;
@@ -97,8 +142,6 @@ export class SimulatorComponent implements OnInit {
         this.menuItem.selected = false;
         this.selectedMenuItem = null as any;
     }
-    console.log({"this.simulatedMenuItems":this.simulatedMenuItems})
-    //this.closeIngredientModifyMenu(false);
 }
 
 
@@ -106,7 +149,6 @@ export class SimulatorComponent implements OnInit {
     if (this.editMenuItemMode){
       this.menuItem.count = this.selectedMIQty;
       this.simulatedMenuItems.push(this.menuItem);
-      console.log({"this.simulatedMenuItems":this.simulatedMenuItems});
       this.menuItem = null as any;
       this.selectedMenuItem = null as any;
     }
@@ -115,7 +157,7 @@ export class SimulatorComponent implements OnInit {
     }
     this.simulatedMenuItems.forEach(mi => mi.selected = false);
     this.simulatedMenuItems.sort((a,b) => a.name.localeCompare(b.name));
-
+    this.updateSimulation();
   }
 
   addMenuItem(){
@@ -133,7 +175,6 @@ export class SimulatorComponent implements OnInit {
   }
 
   plusMinusClicked(isPlus: boolean, qtyType: string){
-    console.log("string is " + qtyType);
     if (qtyType == 'menuItem'){
       if (isNaN(this.selectedMIQty) || this.selectedMIQty < 0){
         this.selectedMIQty = 0;
@@ -165,6 +206,7 @@ export class SimulatorComponent implements OnInit {
           }
       }
     }
+    this.updateSimulation();
 
 }
 

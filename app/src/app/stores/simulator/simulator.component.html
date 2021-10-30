@@ -102,20 +102,16 @@
     </div>
     <div class="instructions">
         <div class="instructions-header">
-            Instructions
+            Ingredients
         </div>
-        <div class="instructions-body"             
-            >
-            <textarea matInput 
-            placeholder="Instructions.." 
-            [readonly]="false"
-            [ngClass]="{'edit-text-mode':false}"
-            >
-         </textarea>
-        </div>
-        <div class="instruction-submit">
-            <img *ngIf="true" width="28" height="28" src="../../../assets/icons/EditIcon/outline_edit_blue_white_48dp.png" />
-            <img *ngIf="false" width="28" height="28" src="../../../assets/icons/CheckIcon/outline_done_blue_white_48dp.png" />
+        <div class="instructions-body">
+            <div class="instructions-body-container">
+                <ul>
+                    <li *ngFor="let ingred of usedIngredients; let ingredIndex=index;">
+                        {{ingred.ingredientName}} - {{ingred.usedOz.toFixed(1)}} (oz) Used
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
