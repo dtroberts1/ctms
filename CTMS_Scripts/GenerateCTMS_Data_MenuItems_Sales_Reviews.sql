@@ -288,7 +288,7 @@ CREATE PROCEDURE `insertIngredientWithType`(ingredientName varchar(200), isNut b
 BEGIN
 	DECLARE refId int DEFAULT 0;
     SET refId = (SELECT ingredientTypeId FROM ingredient_type ORDER BY ingredientTypeId DESC LIMIT 1);
-		insert into ingredient(ingredientName, isNut, ingredientTypeId) values(ingredientName, isNut, refId);
+		insert into ingredient(ingredientName, isNut, ingredientTypeId, estCostPerOz) values(ingredientName, isNut, refId, RAND()*(0.20-0.01)+0.01);
 
     END$$    
 DELIMITER ;

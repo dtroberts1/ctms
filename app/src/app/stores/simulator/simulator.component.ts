@@ -12,7 +12,7 @@ type Selectable = {
 type SelectableMenuItem = MenuItem & Selectable & {count: number, };
 
 type ModalInput = {storeId: number, storeIngredients: Array<StoreIngredient>};
-type UsedIngredient = {usedOz: number, ingredientName: string, ingredientId: number}
+type UsedIngredient = {usedOz: number, ingredientName: string, ingredientId: number, estCostPerOz: number,}
 type StoreIngredientDiff = {ingredientId: number, ingredientName: string, diffOz: number}
 
 @Component({
@@ -31,6 +31,7 @@ export class SimulatorComponent implements OnInit {
   isUpdateMode: boolean = false;
   usedIngredients!: Array<UsedIngredient>;
   diffIngredients!: Array<StoreIngredientDiff>;
+  totalCost : number = 0;
 
   editMenuItemMode: boolean = false;
   constructor(
@@ -48,7 +49,6 @@ export class SimulatorComponent implements OnInit {
     this.usedIngredients = [];
     if (Array.isArray(this.data.storeIngredients)){
       this.storeIngredients = this.data.storeIngredients;
-      console.log({"storeIngredients":this.storeIngredients});
     }
 
     this.menuService.getMenuItems()
@@ -100,6 +100,7 @@ export class SimulatorComponent implements OnInit {
               usedOz: aggregatedUsedOz,
               ingredientName: usedItem.ingredientName,
               ingredientId: usedItem.ingredientId,
+              estCostPerOz: usedItem.estCostPerOz,
             });
           }
         }
@@ -122,11 +123,12 @@ export class SimulatorComponent implements OnInit {
           ingredientName: usedIngred.ingredientName, 
           diffOz: storeIngredient && storeIngredient.weightInOz ? storeIngredient.weightInOz - usedIngred.usedOz : -1 * usedIngred.usedOz,
         });
-  
-        console.log({"this.diffIngredients":this.diffIngredients})
       });
       this.diffIngredients.sort((a,b) => a.ingredientName.localeCompare(b.ingredientName));
 
+      this.totalCost = this.usedIngredients.map(item => item.estCostPerOz).reduce((a : number, b: number, index: number) => {
+        return Math.abs(a) + Math.abs(b * (this.diffIngredients[index].diffOz));
+      }, 0);
     }
   }
 

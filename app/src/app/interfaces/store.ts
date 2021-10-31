@@ -15,4 +15,5 @@ export interface StoreIngredient{
     density: number, /* g/ml */
     muName: string,
     muQty: number,
+    estCostPerOz: number,
 }

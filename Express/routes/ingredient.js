@@ -23,6 +23,7 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
         (SELECT name FROM measurement_unit 
           WHERE measurementUnitId = menu_item_ingredient.measurementUnitId) AS measurementType,
         menu_item_ingredient.measurementUnitId,
+        ingredient.estCostPerOz,
         menu_item_ingredient.ingredientQty,
         (((Select (1 / mlLitersConversionFactor) 
           FROM measurement_unit 
@@ -162,6 +163,7 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
         mL, 
         ingredientName, 
         UPC, 
+        ingredient.estCostPerOz,
         isNut, 
         ingredientTypeId, 
         (SELECT name FROM ingredient_type 

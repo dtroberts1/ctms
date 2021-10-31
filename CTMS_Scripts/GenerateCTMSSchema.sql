@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`ingredient` (
   `ingredientTypeId` INT NULL DEFAULT NULL,
   `measurementUnitId` INT NULL DEFAULT NULL,
   `density` DOUBLE NULL DEFAULT NULL,
+  `estCostPerOz` DOUBLE NULL DEFAULT NULL,
   PRIMARY KEY (`ingredientId`),
   INDEX `ingredientTypeId` (`ingredientTypeId` ASC) VISIBLE,
   INDEX `measurementUnitId` (`measurementUnitId` ASC) VISIBLE,

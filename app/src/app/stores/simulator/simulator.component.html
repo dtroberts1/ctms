@@ -117,7 +117,9 @@
                                 *ngFor="let diffIngred of diffIngredients"
                                 
                                 >
-                                {{diffIngred.ingredientName}} {{diffIngred.diffOz.toFixed(2)}} oz
+                                {{diffIngred.ingredientName}} {{(diffIngred.diffOz >= 0 ? diffIngred.diffOz.toFixed(2) : (-1 *diffIngred.diffOz).toFixed(2) )}}
+                                oz {{diffIngred.diffOz >= 0 ? 'over' : 'under'}}
+
                             </div> 
 
                         </div>
@@ -132,9 +134,16 @@
         </div>
         <div class="instructions-body">
             <div class="instructions-body-container">
-                <ul style="list-style-type: none; max-height: 85%; overflow: auto;">
+                <div style="color: #26377b;">
+                    Total Est Cost: ${{totalCost.toFixed(2)}}
+                </div>
+                <ul style="list-style-type: none; max-height: 70%; overflow: auto;">
                     <li style="line-height: 24px; color: #26377b;" *ngFor="let ingred of usedIngredients; let ingredIndex=index;">
-                        {{ingred.ingredientName}} - {{ingred.usedOz.toFixed(2)}} oz / {{(diffIngredients[ingredIndex].diffOz + ingred.usedOz).toFixed(2)}} oz
+                        {{ingred.ingredientName}} - {{ingred.usedOz.toFixed(2)}} oz / {{(diffIngredients[ingredIndex].diffOz + ingred.usedOz).toFixed(2)}} oz.
+                        <span *ngIf="diffIngredients[ingredIndex].diffOz < 0">
+                            Est cost: ${{(ingred.estCostPerOz * (-1 * diffIngredients[ingredIndex].diffOz)).toFixed(2)}}
+                        </span>
+                        
                     </li>
                 </ul>
             </div>

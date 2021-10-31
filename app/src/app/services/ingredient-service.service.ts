@@ -119,6 +119,7 @@ export class IngredientService {
             muName: storeIngredient.muName,
             muQty: storeIngredient.muQty.toFixed(2),
             weightInOz: storeIngredient.weightInOz,
+            estCostPerOz: storeIngredient.estCostPerOz,
           });
         })
       );

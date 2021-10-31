@@ -5,12 +5,14 @@ export interface MenuItemIngredient {
     ingredientName: string,
     measurementType: string,
     ingredientQty: number,
+    estCostPerOz: number,
 }
 
 export interface Ingredient {
     ingredientId: number,
     ingredientName: string,
     ingredientTypeId: number,
+    estCostPerOz: number,
 }
 
 export interface IngredientType {
