@@ -118,6 +118,7 @@ export class IngredientService {
             density: storeIngredient.density, /* g/ml */
             muName: storeIngredient.muName,
             muQty: storeIngredient.muQty.toFixed(2),
+            weightInOz: storeIngredient.weightInOz,
           });
         })
       );

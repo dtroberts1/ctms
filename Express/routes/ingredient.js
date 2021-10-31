@@ -170,7 +170,8 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
         ingredient.density,
         measurement_unit.mlLitersConversionFactor AS mlLitersConversionFactor,
         measurement_unit.name AS muName,
-        (mL * ingredient.density * measurement_unit.mlLitersConversionFactor) AS muQty
+        (mL * ingredient.density * measurement_unit.mlLitersConversionFactor) AS muQty,
+        (mL * ingredient.density / 28.349523) AS weightInOz
       FROM store_ingredient
       INNER JOIN ingredient
       ON ingredient.ingredientId = store_ingredient.ingredientId

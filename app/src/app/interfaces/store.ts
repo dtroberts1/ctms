@@ -7,6 +7,7 @@ export interface Store {
 }
 
 export interface StoreIngredient{
+    weightInOz: number;
     ingredientId: number,
     storeId: number,
     mL: number, /*milliliters*/ 

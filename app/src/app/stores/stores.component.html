@@ -25,7 +25,9 @@
       <div class="card-header">Inventory</div>
         <div class="store-inventory-table">
           <ul class="inventory-row">
-            <li [ngStyle]="{'border-bottom': ingredIndex === (storeIngredients.length - 1) ? '0px' : '8px'}" [style.background-color]="ingredient.backgroundColor" *ngFor="let ingredient of storeIngredients; let ingredIndex=index;">
+            <li [ngStyle]="{'border-bottom': ingredIndex === (storeIngredients.length - 1) ? '0px' : '8px'}" 
+            [style.background-color]="ingredient.backgroundColor" 
+            *ngFor="let ingredient of storeIngredients; let ingredIndex=index;">
               {{ingredient.ingredientName}} - {{ingredient.muQty}}{{ingredient.muName}}
             </li>
           </ul>

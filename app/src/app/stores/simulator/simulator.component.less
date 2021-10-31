@@ -12,7 +12,7 @@
         display: flex; 
         align-items: center; 
         position: absolute; 
-        margin-left: 500px;
+        margin-left: 520px;
     }
 
     .close-icon > img:hover{
@@ -22,7 +22,6 @@
 
 .modal-body{
     .menu-items{
-        margin-top:20px;
         max-height: 340px;
         min-height: 150px;
 
@@ -36,6 +35,7 @@
         .new-modify-menu-item{
             flex: 2;
             padding-right: 8px;
+            height: 141px;
 
             .new-modify-menu-item-header{
                 text-align: center;
@@ -243,78 +243,81 @@
             }
         }
 
-        .menu-item-container{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-            max-height: 220px;
-    
-            .menu-item-list-container{
-                flex: 2.5;
+    }
+
+    .menu-item-container{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        max-height: 220px;
+
+        .menu-item-list-container{
+            flex: 2.5;
+            padding: 15px;
+
+            .menu-item-list-parent.is-update-mode{
+                -webkit-box-shadow: 0px 0px 33px 6px rgb(66 183 255 / 96%);
+                -moz-box-shadow: 0px 0px 33px 6px rgba(66 183 255,0.96);
+                box-shadow: 0px 0px 33px 6px rgb(66 183 255 / 96%);
+            }
+
+            .menu-item-list-parent{
+                -webkit-box-shadow: inset 0px 0px 0px 2px rgba(66 183 255 / 96%);
+                -moz-box-shadow: inset 0px 0px 0px 2px rgba(66 183 255,0.96);
+                box-shadow: inset 0px 0px 0px 2px rgba(66 183 255 / 96%);
                 padding: 15px;
+                border-radius: 8px;
 
-                .menu-item-list-parent.is-update-mode{
-                    -webkit-box-shadow: 0px 0px 33px 6px rgb(66 183 255 / 96%);
-                    -moz-box-shadow: 0px 0px 33px 6px rgba(66 183 255,0.96);
-                    box-shadow: 0px 0px 33px 6px rgb(66 183 255 / 96%);
-                }
+                .menu-item-list{
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    grid-gap: 5px;
+                    gap: 5px;
+                    font-size: 14px;
+                    overflow-y: auto;
+                    align-items: start;
+                    max-height: 120px;
+                    box-sizing: border-box;
+                    
 
-                .menu-item-list-parent{
-                    -webkit-box-shadow: inset 0px 0px 0px 2px rgba(66 183 255 / 96%);
-                    -moz-box-shadow: inset 0px 0px 0px 2px rgba(66 183 255,0.96);
-                    box-shadow: inset 0px 0px 0px 2px rgba(66 183 255 / 96%);
-                    padding: 15px;
-                    border-radius: 8px;
+                    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+                    scrollbar-width: none;  /* Firefox */
 
-                    .menu-item-list{
-                        display: flex;
-                        flex-direction: row;
-                        flex-wrap: wrap;
-                        grid-gap: 5px;
-                        gap: 5px;
-                        font-size: 14px;
-                        overflow-y: auto;
-                        align-items: start;
-                        max-height: 120px;
-                        box-sizing: border-box;
-    
-                        -ms-overflow-style: none;  /* Internet Explorer 10+ */
-                        scrollbar-width: none;  /* Firefox */
-    
-                        -webkit-scrollbar { /* WebKit */
-                            width: 0;
-                            height: 0;
-                        }
-    
-                        .selected-menu-item{
-                            background-color: orange;
-                        }
-    
-                        div{
-                            display: inline-block;
-                            background: #26377b;
-                            border-radius: 10px;
-                            color: white;
-                            padding: 6px 10px;
-                            font-family: 'Lato', Arial, sans-serif;
-                            font-weight: normal;
-                            font-style: normal;
-                          }
-                        div:hover{
-                            border-color: rgba(229, 103, 23, 0.8);
-                            box-shadow: 0 2px 2px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
-                            outline: 0 none;
-                            cursor: pointer;
-                        }
+                    -webkit-scrollbar { /* WebKit */
+                        width: 0;
+                        height: 0;
+                    }
+
+                    .selected-menu-item{
+                        background-color: orange;
+                    }
+
+                    div{
+                        display: inline-block;
+                        background: #26377b;
+                        border-radius: 10px;
+                        color: white;
+                        padding: 6px 10px;
+                        font-family: 'Lato', Arial, sans-serif;
+                        font-weight: normal;
+                        font-style: normal;
+                      }
+                    div:hover{
+                        cursor: pointer;
+                        filter: brightness(120%);
+                        border-color: rgba(229, 103, 23, 0.8);
+                        box-shadow: 0 2px 2px rgb(229 103 23 / 8%) inset, 0 0 8px rgb(229 103 23 / 60%);
+                        outline: 0 none;
                     }
                 }
             }
-            ::ng-deep mat-form-field.invalid{
-                .mat-form-field-wrapper{
-                    .mat-form-field-flex{
-                        outline: 3px red solid !important;
-                    
-                    }
+        }
+        ::ng-deep mat-form-field.invalid{
+            .mat-form-field-wrapper{
+                .mat-form-field-flex{
+                    outline: 3px red solid !important;
+                
                 }
             }
         }
@@ -331,6 +334,7 @@
             font-weight: normal;
             font-style: normal;
             font-size: 19px;
+            margin-top: 20px;
         }
 
         .instructions-body{
@@ -410,7 +414,9 @@
 .modal-footer{
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: start;
+    gap: 12px;
+    padding-left: 20px;
 
     button:hover{
         border-color: rgba(229, 103, 23, 0.8);
