@@ -4,6 +4,7 @@ import * as $ from 'jquery';
 import { Store, StoreIngredient } from '../interfaces/store';
 import { IngredientService } from '../services/ingredient-service.service';
 import { StoreService } from '../services/store-service.service';
+import { AddInventoryModalComponent } from './add-inventory-modal/add-inventory-modal.component';
 import { SimulatorComponent } from './simulator/simulator.component';
 
 const pal = ["#001464", "#26377B", "#404F8B", "#59709A"]
@@ -35,11 +36,19 @@ export class StoresComponent implements OnInit {
 
   }
 
-
+  openAddInventoryModal(){
+    const dialogRef = this.dialog.open(AddInventoryModalComponent, {
+      width: '550px',
+      height: '640px',
+      data: {
+        storeId: this.store.storeId,
+        storeIngredients: JSON.parse(JSON.stringify(this.storeIngredients)),
+      },
+      panelClass: 'modal-class'
+    });
+  }
 
   openSimModal(){
-    console.log({"storeId_before":this.store.storeId});
-    console.log({"ingred_before":this.storeIngredients})
 
     const dialogRef = this.dialog.open(SimulatorComponent, {
       width: '550px',

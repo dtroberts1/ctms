@@ -1,0 +1,34 @@
+<div class="modal-header">
+    <div style="align-items: center; justify-content: center;">
+        Add Inventory
+    </div>
+    <div tabindex="1" (click)="close()" class="close-icon">
+        <img width="28" height="28" src="../../../assets/icons/CloseIcon/outline_cancel_blue_48dp.png" />
+    </div>
+</div>
+<div class="modal-body" style="height: 500px;">
+    <div class="inventory-ctrls">
+        <div class="new-modify-ingredient-header">
+            <button (click)="enableAddInventoryMode()" mat-raised-button color="accent">
+                Add Inventory
+            </button>
+        </div>
+    </div>
+    <div class="inv-container">
+        <div class="store-inventory-table">
+            <ul class="inventory-row">
+              <li [ngStyle]="{'border-bottom': ingredIndex === (storeIngredients.length - 1) ? '0px' : '8px'}" 
+              [style.background-color]="ingredient.backgroundColor" 
+              *ngFor="let ingredient of storeIngredients; let ingredIndex=index;">
+                {{ingredient.ingredientName}} - {{ingredient.muQty}}{{ingredient.muName}}
+              </li>
+            </ul>
+          </div>
+    </div>
+</div>
+<div class="footer-border">
+    <hr>
+</div>
+<div class="modal-footer">
+    <button (click)="close()" mat-raised-button color="accent">Close</button>
+</div>

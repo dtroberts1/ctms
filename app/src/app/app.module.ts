@@ -40,6 +40,7 @@ import { DatePipe } from '@angular/common';
 import { StoresComponent } from './stores/stores.component';
 import { SimulatorComponent } from './stores/simulator/simulator.component';
 import { SimulatorPipePipe } from './stores/simulator/simulator-pipe.pipe';
+import { AddInventoryModalComponent } from './stores/add-inventory-modal/add-inventory-modal.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { SimulatorPipePipe } from './stores/simulator/simulator-pipe.pipe';
     StoresComponent,
     SimulatorComponent,
     SimulatorPipePipe,
+    AddInventoryModalComponent,
   ],
   imports: [
     CommonModule,
