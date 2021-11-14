@@ -49,6 +49,23 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
+-- Table `ctms`.`measurement_unit`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ctms`.`measurement_unit` ;
+
+CREATE TABLE IF NOT EXISTS `ctms`.`measurement_unit` (
+  `measurementUnitId` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL DEFAULT NULL,
+  `measurementUnitType` VARCHAR(30) NULL DEFAULT NULL,
+  `mlLitersConversionFactor` DOUBLE NULL DEFAULT NULL,
+  PRIMARY KEY (`measurementUnitId`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 0
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
 -- Table `ctms`.`ingredient`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `ctms`.`ingredient` ;
@@ -56,13 +73,21 @@ DROP TABLE IF EXISTS `ctms`.`ingredient` ;
 CREATE TABLE IF NOT EXISTS `ctms`.`ingredient` (
   `ingredientId` INT NOT NULL AUTO_INCREMENT,
   `ingredientName` VARCHAR(200) NULL DEFAULT NULL,
+  `UPC` VARCHAR(13) NULL DEFAULT NULL,
   `isNut` TINYINT(1) NULL DEFAULT NULL,
   `ingredientTypeId` INT NULL DEFAULT NULL,
+  `measurementUnitId` INT NULL DEFAULT NULL,
+  `density` DOUBLE NULL DEFAULT NULL,
+  `estCostPerOz` DOUBLE NULL DEFAULT NULL,
   PRIMARY KEY (`ingredientId`),
   INDEX `ingredientTypeId` (`ingredientTypeId` ASC) VISIBLE,
+  INDEX `measurementUnitId` (`measurementUnitId` ASC) VISIBLE,
   CONSTRAINT `ingredient_ibfk_1`
     FOREIGN KEY (`ingredientTypeId`)
-    REFERENCES `ctms`.`ingredient_type` (`ingredientTypeId`))
+    REFERENCES `ctms`.`ingredient_type` (`ingredientTypeId`),
+  CONSTRAINT `ingredient_ibfk_2`
+    FOREIGN KEY (`measurementUnitId`)
+    REFERENCES `ctms`.`measurement_unit` (`measurementUnitId`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 0
 DEFAULT CHARACTER SET = utf8mb4
@@ -103,21 +128,6 @@ CREATE TABLE IF NOT EXISTS `ctms`.`ingredient_partner` (
     REFERENCES `ctms`.`ingredient` (`ingredientId`)
     ON DELETE CASCADE)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `ctms`.`measurement_unit`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `ctms`.`measurement_unit` ;
-
-CREATE TABLE IF NOT EXISTS `ctms`.`measurement_unit` (
-  `measurementUnitId` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`measurementUnitId`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 0
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -171,6 +181,19 @@ CREATE TABLE IF NOT EXISTS `ctms`.`menu_item_ingredient` (
     FOREIGN KEY (`measurementUnitId`)
     REFERENCES `ctms`.`measurement_unit` (`measurementUnitId`)
     ON DELETE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `ctms`.`ml_conversion`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ctms`.`ml_conversion` ;
+
+CREATE TABLE IF NOT EXISTS `ctms`.`ml_conversion` (
+  `measurementUnitId` INT NULL DEFAULT NULL,
+  `conversionFactor` DOUBLE NULL DEFAULT NULL)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -232,7 +255,7 @@ CREATE TABLE IF NOT EXISTS `ctms`.`sale` (
   `storeId` INT NULL DEFAULT NULL,
   `salePrice` DECIMAL(5,2) NULL DEFAULT NULL,
   `saleCost` DECIMAL(5,2) NULL DEFAULT NULL,
-  `transactionId` BigInt NULL,
+  `transactionId` BIGINT NULL DEFAULT NULL,
   PRIMARY KEY (`saleId`),
   INDEX `storeId` (`storeId` ASC) VISIBLE,
   INDEX `menuItemId` (`menuItemId` ASC) VISIBLE,
@@ -246,6 +269,29 @@ CREATE TABLE IF NOT EXISTS `ctms`.`sale` (
     ON DELETE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 0
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `ctms`.`store_ingredient`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ctms`.`store_ingredient` ;
+
+CREATE TABLE IF NOT EXISTS `ctms`.`store_ingredient` (
+  `ingredientId` INT NULL DEFAULT NULL,
+  `storeId` INT NULL DEFAULT NULL,
+  `mL` INT NULL DEFAULT NULL,
+  `ingredientQty` INT NULL DEFAULT NULL,
+  UNIQUE INDEX `ingredientId` (`ingredientId` ASC, `storeId` ASC) VISIBLE,
+  INDEX `storeId` (`storeId` ASC) VISIBLE,
+  CONSTRAINT `store_ingredient_ibfk_1`
+    FOREIGN KEY (`ingredientId`)
+    REFERENCES `ctms`.`ingredient` (`ingredientId`),
+  CONSTRAINT `store_ingredient_ibfk_2`
+    FOREIGN KEY (`storeId`)
+    REFERENCES `ctms`.`store` (`storeId`))
+ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -321,7 +367,9 @@ BEGIN
 					LEAVE myloop;
 			END IF;
             insert into review(reviewDate, campaignEventId, menuItemId, rating)
-				values('2021-10-03', 1, menu_item_id, RAND()*(9.9-8.0)+8.0);
+				values(FROM_UNIXTIME(
+        UNIX_TIMESTAMP(CONCAT(CONCAT(DATE_SUB(curdate(), INTERVAL 1 YEAR), ' '), curtime())) + FLOOR(0 + (RAND() * 63072000))
+    ), 1, menu_item_id, RAND()*(9.9-8.0)+8.0);
              SET i=i+1;
 		END LOOP myloop;
 
@@ -366,8 +414,10 @@ BEGIN
 			IF i=COUNTER then
 					LEAVE myloop;
 			END IF;
-            insert into sale(saleDate, menuItemId, storeId, salePrice, saleCost)
-				values('2021-10-03', menu_item_id, 1, menu_item_price, menu_item_cost);
+            insert into sale(saleDate, menuItemId, storeId, salePrice, saleCost, transactionId)
+				values(FROM_UNIXTIME(
+        UNIX_TIMESTAMP(CONCAT(CONCAT(DATE_SUB(curdate(), INTERVAL 1 YEAR), ' '), curtime())) + FLOOR(0 + (RAND() * 63072000))
+    ), menu_item_id, RAND()*(3-1)+1, menu_item_price, menu_item_cost, RAND()*(99999999-1000)+1000);
              SET i=i+1;
 		END LOOP myloop;
 

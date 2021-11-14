@@ -1,0 +1,155 @@
+<div class="modal-header">
+    <div style="align-items: center; justify-content: center;">
+        Store Inventory
+    </div>
+    <div tabindex="1" (click)="close()" class="close-icon">
+        <img width="28" height="28" src="../../../assets/icons/CloseIcon/outline_cancel_blue_48dp.png" />
+    </div>
+</div>
+<div class="modal-body">
+    <div style="width: 100%; justify-content: center; display: flex;">
+        <div class="inventory-ctrls">
+            <div [ngStyle]="{'visibility': isAddOrEditMode ? 'hidden' : 'visible'}" class="new-modify-ingredient-header">
+                <button (click)="isAddOrEditMode = true" mat-raised-button color="accent">
+                    Add Inventory
+                </button>
+            </div>
+            <div *ngIf="isAddOrEditMode" style="display: flex; gap: 20px;">
+                <mat-form-field *ngIf="ingredientTypes && ingredientTypes.length"  style="width:150px;" appearance="fill">
+                    <mat-label>Category</mat-label>
+                    <mat-select (selectionChange)="ingredientCategorySelected()" [(ngModel)]="selectedIngredientType">
+                        <mat-option *ngFor="let ingredientType of ingredientTypes" [value]="ingredientType">{{ingredientType.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field> 
+                <mat-form-field *ngIf="displayableIngredients && displayableIngredients.length"  style="width:150px;" appearance="fill">
+                    <mat-label>Ingredient</mat-label>
+                    <mat-select (selectionChange)="selectedIngredientChanged()"  [(ngModel)]="selectedIngredient">
+                        <mat-option *ngFor="let ingredient of displayableIngredients" [value]="ingredient">{{ingredient.ingredientName}}</mat-option>
+                    </mat-select>
+                </mat-form-field>   
+            </div>
+            <div *ngIf="isAddOrEditMode" class="btn-ctrls" style="display: inline-flex; gap: 5px;">
+                <div tabindex="1" class="plus-minus-btn"
+                    (click)="plusMinusClicked(true)"
+                    matTooltip="Increment Quantity"
+                    aria-label="Increment Quantity"
+                    [matTooltipShowDelay]="500"
+                >
+                    <img width="25" height="25" src="../../../assets/icons/PlusIcon/outline_add_blue_white_48dp.png" />
+                </div>
+                <div tabindex="2" class="ingredient-qty">
+                    <input style="height: 20px;width: 50px;" 
+                        type="number" 
+                        [(ngModel)]="selectedIngredientQty" 
+                        step="0.01" 
+                        value="0.00" 
+                        width="5"
+                    />
+                </div>
+                <div tabindex="3" class="plus-minus-btn"
+                    (click)="plusMinusClicked(false)"
+                    matTooltip="Decrement Quantity"
+                    aria-label="Decrement Quantity"
+                    [matTooltipShowDelay]="500"
+                >
+                    <img width="25" height="25" src="../../../assets/icons/MinusIcon/outline_remove_blue_white_48dp.png" />
+                </div>
+                <div id="saveIngredBtn" 
+                    *ngIf="displayableIngredients && displayableIngredients.length"
+                    (click)="addStoreIngredient()"
+                    tabindex="4"
+                    matTooltip="Add Ingredient"
+                    aria-label="Add Ingredient"
+                    [matTooltipShowDelay]="500"
+                >
+                    <img width="28" height="28" src="../../../assets/icons/CheckIcon/outline_done_blue_white_48dp.png" />
+                </div>
+                <div
+                    (click)="isAddOrEditMode = false"
+                    id="cancelIngredBtn" tabindex="5"
+                    matTooltip="Cancel Changes"
+                    aria-label="Cancel Changes"
+                    [matTooltipShowDelay]="500"
+                >
+                    <img width="28" height="28" src="../../../assets/icons/XIcon/outline_close_red_48dp.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="inv-container">
+        <div class="store-inventory-table">
+            <ul class="inventory-row">
+              <li [ngStyle]="{'border-bottom': ingredIndex === (storeIngredients.length - 1) ? '0px' : '8px'}" 
+              (click)="selectRow(ingredient)"
+              [style.background-color]="ingredient.isSelected ? 'orange' : ingredient.backgroundColor" 
+              *ngFor="let ingredient of storeIngredients; let ingredIndex=index;">
+                {{ingredient.ingredientName}} - {{ingredient.weightInOz.toFixed(2)}} oz
+              </li>
+            </ul>
+          </div>
+          <div class="store-inventory-table-btns">
+            <div class="btn-ctrls" [ngStyle]="{'visibility':selectedExistingIngredient ? 'visible' : 'hidden' }" 
+                style="display: inline-flex; gap: 5px;">
+                <div tabindex="1" class="plus-minus-btn"
+                    (click)="plusMinusExistingClicked(true)"
+                    matTooltip="Increment Quantity"
+                    aria-label="Increment Quantity"
+                    [matTooltipShowDelay]="500"
+                >
+                    <img width="25" height="25" src="../../../assets/icons/PlusIcon/outline_add_blue_white_48dp.png" />
+                </div>
+                <div tabindex="2" class="ingredient-qty">
+                    <input style="height: 20px;width: 55px;" 
+                    type="number"  
+                    [(ngModel)]="selectedExistIngredientQty" 
+                    (change)="ingredientQtChanged()"
+                    step="0.01"
+                    width="5"
+                    />
+                </div>
+                <div tabindex="3" 
+                    class="plus-minus-btn"
+                    (click)="plusMinusExistingClicked(false)"
+                    matTooltip="Decrement Quantity"
+                    aria-label="Decrement Quantity"
+                    [matTooltipShowDelay]="500"
+                >
+                    <img width="25" height="25" src="../../../assets/icons/MinusIcon/outline_remove_blue_white_48dp.png" />
+                </div>
+                <div id="saveIngredBtn" 
+                    (click)="updateIngredient()"
+                    tabindex="4"
+                    matTooltip="Save Ingredient"
+                    aria-label="Save Ingredient"
+                    [matTooltipShowDelay]="500"
+                >
+                    <img width="28" height="28" src="../../../assets/icons/CheckIcon/outline_done_blue_white_48dp.png" />
+                </div>
+                <div
+                    (click)="cancelExistingChanges()"
+                    id="cancelIngredBtn" tabindex="5"
+                    matTooltip="Cancel Changes"
+                    aria-label="Cancel Changes"
+                    [matTooltipShowDelay]="500"
+                >
+                    <img width="28" height="28" src="../../../assets/icons/XIcon/outline_close_red_48dp.png" />
+                </div>
+                <div
+                    (click)="removeIngredient()"
+                    id="cancelIngredBtn" tabindex="5"
+                    matTooltip="Remove Ingredient"
+                    aria-label="Remove Ingredient"
+                    [matTooltipShowDelay]="500"
+                >
+                    <img width="28" height="28" src="../../../assets/icons/TrashcanIcon/outline_delete_red_48dp.png" />
+                </div>
+            </div>
+          </div>
+    </div>
+</div>
+<div class="footer-border">
+    <hr>
+</div>
+<div class="modal-footer">
+    <button (click)="close()" mat-raised-button color="accent">Close</button>
+</div>

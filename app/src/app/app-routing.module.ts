@@ -8,6 +8,7 @@ import { LocationsComponent } from './locations/locations.component';
 import { PartnersComponent } from './partners/partners.component';
 import { ReportsComponent } from './reports/reports.component';
 import { SalesComponent } from './sales/sales.component';
+import { StoresComponent } from './stores/stores.component';
 
 const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent},
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path: 'partners', component: PartnersComponent},
   {path: 'reports', component: ReportsComponent},
   {path: 'locations', component: LocationsComponent},
+  {path: 'stores', component: StoresComponent},
 
 ];
 

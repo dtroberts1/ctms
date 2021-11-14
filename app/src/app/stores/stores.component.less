@@ -1,0 +1,114 @@
+.header-icon{
+    background-image: url(../../assets/icons/DashboardIcon/2x/outline_dashboard_gray_24dp.png);
+}
+.icon-item{
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: 50% 8px;
+    padding:36px 5px 0;
+    text-align: center;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    display: block;
+    cursor:pointer;
+    color:#ccc;
+    font-size:12px;
+}
+.store-header{
+    height: 60px; 
+    display: flex; 
+    flex-direction: row; 
+    align-items: center;
+    border-bottom: 1px; 
+    border-style: solid; 
+    border-color: rgb(224, 224, 224);
+    position: sticky;
+    background-color: white;
+    top: 50px;
+    z-index: 5;
+
+}
+.store-header-container{
+    color:#36c0ff; 
+    padding-left: 35px; 
+    height: 100%; 
+    display: flex; 
+    width: 250px; 
+    align-items: center;
+
+}
+.store-header-text{
+    font-size: 24px; 
+    margin-left: 10px;
+}
+
+.store-overview{
+    display:flex; 
+    justify-content:space-around; 
+    padding: 10px 10px 0 10px; 
+    max-height: 350px; 
+    gap:20px;
+
+    .store-forecast-card{
+        border: 1px solid #dcdce2;
+        padding: 20px 15px 0 15px;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 0 10px #dcdce2;
+        flex: 3;
+    }
+
+    .store-ingred-card{
+        border: 1px solid #dcdce2;
+        padding: 20px 15px 0 15px;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 0 10px #dcdce2;
+        flex: 1;
+
+        .card-header{
+            font-family: 'Lato', Arial, sans-serif;
+            font-weight: normal;
+            font-style: normal;
+            text-transform: uppercase;
+            font-size: 23px;
+            color: #42b7ff;
+        }
+        .store-inventory-table{
+            color: white;
+            width: 100%;
+            max-height: 78%;
+            overflow-y: auto;
+            border-color: #404F8B;
+
+            ul{
+                list-style-type: none;
+                width: 100%;
+                position: relative;
+                display: inline;
+
+                li&not:nth-child(1){
+                    margin-top: 8px;
+                }
+
+                li{
+                    margin-bottom: 8px;
+                    /*background: #404F8B;*/
+                    padding: 6px;
+                    border-radius: 4px;
+                }
+
+                li:hover{
+                    cursor: pointer;
+                    filter: brightness(120%);
+                    border-color: rgba(229, 103, 23, 0.8);
+                    box-shadow: 0 2px 2px rgb(229 103 23 / 8%) inset, 0 0 8px rgb(229 103 23 / 60%);
+                    outline: 0 none;
+                }
+            }
+            .store-ingredients-btns{
+                
+            }
+        }
+    }
+}

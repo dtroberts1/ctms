@@ -148,6 +148,42 @@ router.get('/getSales/:fromDate?/:toDate?', ((req, res, next) => {
   });
 }));
 
+router.get('/getSalesByStoreAndDateRange/:storeId/:fromDate?/:toDate?', ((req, res, next) => {
+
+  let storeId = req.params.storeId;  
+  let fromDate = req.params.fromDate;
+  let toDate = req.params.toDate;  
+
+  let query = `
+    SELECT 
+      SUBSTRING(saleDate, 1, 10) AS saleDate, 
+      SUM(salePrice) AS total 
+    FROM sale 
+    WHERE storeId = ? 
+    AND saleDate >= ?
+    AND saleDate < ?
+    GROUP BY SUBSTRING(saleDate, 1, 10)
+    ORDER BY saleDate;
+  `;
+
+  new Promise((resolve, reject) => {
+    if (fromDate && toDate){
+      req.service.database().query(query, [storeId, fromDate, toDate], ((err, results) => {
+        if (err){
+          reject(err);
+        }
+        resolve(JSON.stringify(results));
+      }));
+    }
+  })
+  .then((result) => {
+    res.send(result)
+  })
+  .catch ((err) =>{
+    next(err)
+  });
+}));
+
 router.post('/addSale/', ((req, res, next) => {
 
   if (!Object.keys(req.body).length){

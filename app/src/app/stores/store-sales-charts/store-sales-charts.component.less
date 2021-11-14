@@ -1,0 +1,56 @@
+.date-header-container{
+    color:#36c0ff; 
+    padding-left: 35px; 
+    height: 100%; 
+    display: flex; 
+    width: 250px; 
+    align-items: center;
+
+    .date-header{
+        margin-left: 15px;
+        /*font-size: 18px;*/
+
+        ::ng-deep mat-form-field
+        .mat-form-field-wrapper{
+            padding: 0;
+        }
+        ::ng-deep .mat-form-field-underline{
+            display: none;
+        }
+        ::ng-deep  .mat-form-field-flex {
+            padding: 0;
+            background: transparent;
+
+            .mat-form-field-infix{
+                .mat-date-range-input-separator{
+                    color:#36c0ff; 
+                }
+            }
+        }
+    }
+}
+::ng-deep  .mat-form-field-flex {
+    padding: 0;
+    background: transparent;
+
+    .mat-form-field-infix{
+        color:#36c0ff; 
+        
+        span{
+            color:#36c0ff; 
+
+        }
+
+        .mat-date-range-input-separator{
+            color:#36c0ff; 
+            
+            ::ng-deep .mat-form-field-label{
+                color:#36c0ff !important; 
+            }
+        }
+    }
+}
+
+.chart-container{
+    height: 300px;
+}

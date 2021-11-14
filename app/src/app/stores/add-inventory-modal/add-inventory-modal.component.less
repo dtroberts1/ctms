@@ -1,0 +1,182 @@
+.modal-header{
+    height: 42px;
+    background: #42B7FF;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+    padding: 6px;
+
+    .close-icon{
+        display: flex; 
+        align-items: center; 
+        position: absolute; 
+        margin-left: 520px;
+    }
+
+    .close-icon > img:hover{
+        cursor: pointer;
+    }
+}
+
+.modal-body{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 20px;
+    height: calc(100% - 140px);
+    .btn-ctrls{
+        #saveIngredBtn{
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            img{
+                border-radius: 8px;
+            }
+        }
+
+        #cancelIngredBtn{
+            border-radius: 8px;  
+            display: flex;
+            justify-content: center;
+            align-items: center;  
+        }
+
+        #cancelIngredBtn:hover{
+            border-color: rgba(229, 103, 23, 0.8);
+            box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+            outline: 0 none;
+            cursor: pointer;
+        }
+
+        #saveIngredBtn:hover{
+            border-color: rgba(229, 103, 23, 0.8);
+            box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+            outline: 0 none;
+            cursor: pointer;
+        }
+        .plus-minus-btn{
+            height: 28px;
+            width: 28px;
+            background-color: #42B7FF;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            img{
+                border-radius: 8px;
+            }
+        }
+
+        .plus-minus-btn:hover{
+            border-color: rgba(229, 103, 23, 0.8);
+            box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+            outline: 0 none;;
+            cursor: pointer;
+        }
+    }
+
+    .inventory-ctrls{
+        height: 200px;
+
+        .new-modify-ingredient-header{
+            text-align: center;
+            padding-top: 15px;
+    
+            button:hover{
+                border-color: rgba(229, 103, 23, 0.8);
+                box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+                outline: 0 none;
+            }
+        }
+    }
+
+    .inv-container{
+        width: 100%;
+        height: calc(100% - 200px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 10px;
+
+        .store-inventory-table{
+            color: white;
+            width: 500px;
+            overflow-y: auto;
+            border-color: #404F8B;
+            max-height: 60%;
+    
+            ul{
+                list-style-type: none;
+                width: 100%;
+                position: relative;
+                display: inline;
+    
+                li&not:nth-child(1){
+                    margin-top: 8px;
+                }
+    
+                li{
+                    margin-bottom: 8px;
+                    /*background: #404F8B;*/
+                    padding: 6px;
+                    border-radius: 4px;
+                }
+    
+                li:hover{
+                    cursor: pointer;
+                    filter: brightness(120%);
+                    border-color: rgba(229, 103, 23, 0.8);
+                    box-shadow: 0 2px 2px rgb(229 103 23 / 8%) inset, 0 0 8px rgb(229 103 23 / 60%);
+                    outline: 0 none;
+                }
+            }
+        }
+        .store-inventory-table-btns{
+            align-self: end;
+            padding-right: 25px;
+        }
+    }
+}
+
+.footer-border{
+    hr{
+      border-bottom: 1px dotted #BEBEBF;
+      border-top: none;
+      border-right: none;
+      border-left: none;
+    }
+}
+
+.modal-footer{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 12px;
+  padding-left: 20px;
+
+  button:hover{
+      border-color: rgba(229, 103, 23, 0.8);
+      box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+      outline: 0 none;
+  }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

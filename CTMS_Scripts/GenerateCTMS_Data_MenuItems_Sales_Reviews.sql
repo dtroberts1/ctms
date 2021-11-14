@@ -158,7 +158,6 @@ BEGIN
 	END LOOP menu_sale_mapping_loop;
 	CLOSE menu_sale_mapping_cursor;
     
-    SET SQL_SAFE_UPDATES = 1;
 END$$
 
 DELIMITER ;
@@ -256,30 +255,31 @@ BEGIN
 	END LOOP menu_review_mapping_loop;
 	CLOSE menu_review_mapping_cursor;
     
-    SET SQL_SAFE_UPDATES = 1;
 END$$
 
 DELIMITER ;
+SET SQL_SAFE_UPDATES = 0;
 
 CALL seed_reviews_with_menu_item();
 
-SET SQL_SAFE_UPDATES = 1;
 
 insert into review(reviewDate, campaignEventId, menuItemId, rating)
 	values(FROM_UNIXTIME(
         UNIX_TIMESTAMP(CONCAT(CONCAT(DATE_SUB(curdate(), INTERVAL 1 YEAR), ' '), curtime())) + FLOOR(0 + (RAND() * 63072000))
     ), 1, 8, 9.4);
                 
-insert into measurement_unit(name) values('Pinch');
-insert into measurement_unit(name) values('Dash');
-insert into measurement_unit(name) values('Teaspoon');
-insert into measurement_unit(name) values('Tablespoon');
-insert into measurement_unit(name) values('Fluid Oz');
-insert into measurement_unit(name) values('Cup');
-insert into measurement_unit(name) values('Pint');
-insert into measurement_unit(name) values('Quart');
-insert into measurement_unit(name) values('Gallon');
-insert into measurement_unit(name) values('Shot');       
+insert into measurement_unit(name, measurementUnitType) values('Pinch', 'Volume');
+insert into measurement_unit(name, measurementUnitType) values('Dash', 'Volume');
+insert into measurement_unit(name, measurementUnitType) values('Teaspoon', 'Volume');
+insert into measurement_unit(name, measurementUnitType) values('Tablespoon', 'Volume');
+insert into measurement_unit(name, measurementUnitType) values('Fluid Oz', 'Volume');
+insert into measurement_unit(name, measurementUnitType) values('Cup', 'Volume');
+insert into measurement_unit(name, measurementUnitType) values('Pint', 'Volume');
+insert into measurement_unit(name, measurementUnitType) values('Quart', 'Volume');
+insert into measurement_unit(name, measurementUnitType) values('Gallon', 'Volume');
+insert into measurement_unit(name, measurementUnitType) values('Shot', 'Volume');   
+insert into measurement_unit(name, measurementUnitType) values('lb.', 'Weight');   
+insert into measurement_unit(name, measurementUnitType) values('oz', 'Weight');   
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS insertIngredientWithType $$
@@ -288,7 +288,7 @@ CREATE PROCEDURE `insertIngredientWithType`(ingredientName varchar(200), isNut b
 BEGIN
 	DECLARE refId int DEFAULT 0;
     SET refId = (SELECT ingredientTypeId FROM ingredient_type ORDER BY ingredientTypeId DESC LIMIT 1);
-		insert into ingredient(ingredientName, isNut, ingredientTypeId) values(ingredientName, isNut, refId);
+		insert into ingredient(ingredientName, isNut, ingredientTypeId, estCostPerOz) values(ingredientName, isNut, refId, RAND()*(0.20-0.01)+0.01);
 
     END$$    
 DELIMITER ;
@@ -362,4 +362,193 @@ insert into ingredient_type(name) values('Chocolate');
 CALL insertIngredientWithType('Cocoa', false);
 CALL insertIngredientWithType('Semisweet Chocolate Chips', false);
 
+    UPDATE ingredient SET density = 1.202 where ingredientId = 1;
+
+    UPDATE ingredient SET density = 0.49 where ingredientId = 2;
+    
+    UPDATE ingredient SET density = 0.36 where ingredientId = 3;
+    
+    
+    UPDATE ingredient SET density = 0.36 where ingredientId = 4;
+    
+    
+    UPDATE ingredient SET density = 0.57 where ingredientId = 5;
+    
+    
+    UPDATE ingredient SET density = 0.38345114 where ingredientId = 6;
+    
+    
+    UPDATE ingredient SET density = 0.56 where ingredientId = 7;
+    
+    
+    UPDATE ingredient SET density = 0.56 where ingredientId = 8;
+    
+    
+    UPDATE ingredient SET density = 0.44 where ingredientId = 9;
+    
+    
+    UPDATE ingredient SET density = 1.04 where ingredientId = 10;
+    
+    
+    UPDATE ingredient SET density = 1.029 where ingredientId = 11;
+    
+
+    UPDATE ingredient SET density = 1.02 where ingredientId = 12;
+    
+    
+    UPDATE ingredient SET density = 0.61 where ingredientId = 13;
+    
+ 
+     UPDATE ingredient SET density = 0.77 where ingredientId = 14;
+    
+   
+     UPDATE ingredient SET density = 1.07 where ingredientId = 15;
+    
+    
+      UPDATE ingredient SET density = 0.25 where ingredientId = 16;
+       
+    
+	UPDATE ingredient SET density = 0.92 where ingredientId = 17;
+       
+    
+	UPDATE ingredient SET density = 0.92 where ingredientId = 18;
+       
+    
+    UPDATE ingredient SET density = 0.93 where ingredientId = 19;
+       
+    
+    UPDATE ingredient SET density = 0.81 where ingredientId = 20;
+          
+    
+    UPDATE ingredient SET density = 0.85 where ingredientId = 21;
+          
+    
+    UPDATE ingredient SET density = 0.41 where ingredientId = 22;
+          
+    
+    UPDATE ingredient SET density = 0.22 where ingredientId = 23;
+          
+    
+    UPDATE ingredient SET density = 0.88 where ingredientId = 24;
+         
+    
+    UPDATE ingredient SET density = 0.36 where ingredientId = 25;
+        
+    
+    UPDATE ingredient SET density = 0.36 where ingredientId = 26;
+       
+    
+    UPDATE ingredient SET density = 0.36 where ingredientId = 27;
+         
+    
+    UPDATE ingredient SET density = 0.41 where ingredientId = 28;
+          
+    
+    UPDATE ingredient SET density = 1.43 where ingredientId = 29;
+       
+ 
+     UPDATE ingredient SET density = 1.15 where ingredientId = 30;
+       
+   
+    UPDATE ingredient SET density = 1.15 where ingredientId = 31;
+       
+    
+    UPDATE ingredient SET density = 1.15 where ingredientId = 32;
+       
+    
+    UPDATE ingredient SET density = 1.15 where ingredientId = 33;
+       
+    
+    UPDATE ingredient SET density = 1.42 where ingredientId = 34;
+       
+    
+    UPDATE ingredient SET density = 0.95 where ingredientId = 35;
+       
+
+    UPDATE ingredient SET density = 0.62 where ingredientId = 36;
+       
+
+    UPDATE ingredient SET density = 0.62 where ingredientId = 37;
+       
+
+    UPDATE ingredient SET density = 0.47 where ingredientId = 38;
+       
+
+    UPDATE ingredient SET density = 0.52 where ingredientId = 39;
+    
+    
+    UPDATE ingredient SET density = 0.36 where ingredientId = 40;
+	
+	UPDATE measurement_unit
+		SET mlLitersConversionFactor = 0.31
+		WHERE measurementUnitId = 1;
+	
+	UPDATE measurement_unit
+		SET mlLitersConversionFactor = 1.62
+		WHERE measurementUnitId = 2;
+	
+	
+	UPDATE measurement_unit
+		SET mlLitersConversionFactor = 0.202884
+		WHERE measurementUnitId = 3;	
+
+	UPDATE measurement_unit
+		SET mlLitersConversionFactor = 0.067628
+		WHERE measurementUnitId = 4;	
+
+	UPDATE measurement_unit
+		SET mlLitersConversionFactor = 0.033814
+		WHERE measurementUnitId = 5;	
+
+	UPDATE measurement_unit
+		SET mlLitersConversionFactor = 0.00422675
+		WHERE measurementUnitId = 6;	
+
+	UPDATE measurement_unit
+		SET mlLitersConversionFactor = 0.00211338
+		WHERE measurementUnitId = 7;	
+
+	UPDATE measurement_unit
+		SET mlLitersConversionFactor = 0.00105669
+		WHERE measurementUnitId = 8;	
+
+	UPDATE measurement_unit
+		SET mlLitersConversionFactor = 0.000264172
+		WHERE measurementUnitId = 9;	
+
+	UPDATE measurement_unit
+		SET mlLitersConversionFactor = 0.0225427
+		WHERE measurementUnitId = 10;	
+		
+	UPDATE measurement_unit
+		SET mlLitersConversionFactor = 0.002204622622
+		WHERE measurementUnitId = 11;	
+
+	UPDATE measurement_unit
+		SET mlLitersConversionFactor = 0.035273961952
+		WHERE measurementUnitId = 12;	
+
+/* Set 'oz' as default for all ingredients */
+UPDATE ingredient SET measurementUnitId = 12;
+/* Set measurement to "gallon" where name is like milk*/
+UPDATE ingredient SET measurementUnitId = 9 WHERE ingredientName like '%milk%';
+	
+INSERT INTO store_ingredient(ingredientId, storeId, ml)
+values(7, 1, 222);
+INSERT INTO store_ingredient(ingredientId, storeId, ml)
+values(8, 1, 333);
+INSERT INTO store_ingredient(ingredientId, storeId, ml)
+values(3, 1, 2534);
+INSERT INTO store_ingredient(ingredientId, storeId, ml)
+values(1, 1, 1453);
+INSERT INTO store_ingredient(ingredientId, storeId, ml)
+values(2, 1, 2021);
+INSERT INTO store_ingredient(ingredientId, storeId, ml)
+values(4, 1, 4000);
+INSERT INTO store_ingredient(ingredientId, storeId, ml)
+values(1, 2, 400);
+     
+    
+	
+SET SQL_SAFE_UPDATES = 1;
 

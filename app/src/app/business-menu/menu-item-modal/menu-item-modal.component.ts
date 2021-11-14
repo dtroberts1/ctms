@@ -221,6 +221,7 @@ type ModalInput = {title: string; menuItem: MenuItem}
                     measurementUnitId: this.selectedMU.measurementUnitId,
                     measurementType: this.selectedMU.name,
                     ingredientQty: this.selectedIngredientQty,
+                    estCostPerOz: this.selectedIngredient.estCostPerOz,
                 })
                     .subscribe(
                         result => {
@@ -254,6 +255,7 @@ type ModalInput = {title: string; menuItem: MenuItem}
                     measurementUnitId: this.selectedMU.measurementUnitId,
                     measurementType: this.selectedMU.name,
                     ingredientQty: this.selectedIngredientQty,
+                    estCostPerOz: this.selectedIngredient.estCostPerOz,
                 })
                     .subscribe(
                         result => {

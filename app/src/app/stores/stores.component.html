@@ -1,0 +1,47 @@
+<div class="store-header">
+    <div class="store-header-container">
+        <img style="display: block;" width="35" height="35" src="../../assets/icons/StoreIcon/baseline_store_blue_white_inverted_48dp.png">
+        <div class="store-header-text">
+            Stores
+        </div>
+        <div style="margin-left: 18px; color: #36c0ff">
+          <mat-form-field *ngIf="stores && stores.length" appearance="fill">
+            <mat-label>Store</mat-label>
+            <mat-select (selectionChange)="storeChanged($event, store)" [(ngModel)]="store">
+                <mat-option *ngFor="let store of stores" [value]="store">{{store.storeName}}</mat-option>
+            </mat-select>
+        </mat-form-field> 
+        </div>
+    </div>
+</div>
+
+<div style="background-color: #F5F6F7; padding-bottom:300px; height: 800px;">
+  <div *ngIf="storeIngredients && storeIngredients.length" style="display: flex; justify-content: start;" class="store-overview">
+    <div class="store-forecast-card">
+      <app-store-sales-charts
+        *ngIf="store"
+        [storeId]="store.storeId"
+      >
+
+      </app-store-sales-charts>
+    </div>
+    <div class="store-ingred-card">
+      <div class="card-header">Inventory</div>
+        <div class="store-inventory-table">
+          <ul class="inventory-row">
+            <li [ngStyle]="{'border-bottom': ingredIndex === (storeIngredients.length - 1) ? '0px' : '8px'}" 
+            [style.background-color]="ingredient.backgroundColor" 
+            *ngFor="let ingredient of storeIngredients; let ingredIndex=index;">
+              {{ingredient.ingredientName}} - {{ingredient.muQty}}{{ingredient.muName}}
+            </li>
+          </ul>
+        </div>
+        <div class="store-ingredients-btns" style="padding: 4px 0 8px 0 !important; display: flex; gap: 8px;">
+          <button (click)="openAddInventoryModal()" mat-raised-button color="primary">Manage</button>
+          <button (click)="openSimModal()" mat-raised-button style="background:#36c0ff; color: white;">Simulator</button>
+          <button mat-raised-button color="primary">Purchase</button>
+
+        </div>
+    </div>
+  </div>
+</div>

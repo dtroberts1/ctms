@@ -1,0 +1,165 @@
+<div class="modal-header">
+    <div style="align-items: center; justify-content: center;">
+        Simulator
+    </div>
+    <div tabindex="1" (click)="close()" class="close-icon">
+        <img width="28" height="28" src="../../../assets/icons/CloseIcon/outline_cancel_blue_48dp.png" />
+    </div>
+</div>
+<div class="modal-body" style="height: 500px;">
+    <div style="width: 100%; height: 300px;">
+        <div style="width: 50%; float: left;">
+            <div class="menu-items" style="width:100%; margin-top: none;">
+                <div class="new-modify-menu-item">
+                    <div *ngIf="!editMenuItemMode" class="new-modify-menu-item-header">
+                        <button (click)="addMenuItem()" *ngIf="true" mat-raised-button color="accent">
+                            {{isUpdateMode ? 'Update' : 'Add'}} Menu Item
+                        </button>
+                    </div>
+                    <div class="new-modify-menu-item-select" 
+                        [ngClass]="{'justify-center':!storeIngredients || !storeIngredients.length}" 
+                        style="display: flex; flex-direction: column; height: 121px;"
+                        *ngIf="editMenuItemMode">      
+                        <div [ngStyle]="{'visibility': isUpdateMode ? 'hidden' : 'visible'}">
+                            <mat-form-field [ngClass]="{'invalid': false}" style="width:183px;" appearance="fill">
+                                <mat-label>Menu Item</mat-label>
+                                <mat-select [(ngModel)]="menuItem">
+                                <mat-option *ngFor="let menuItem of menuItems | simulatorPipe:simulatedMenuItems" [value]="menuItem">{{menuItem.name}}</mat-option>
+                             </mat-select>
+                            </mat-form-field>
+                        </div>             
+                        <div style="height: 30px;">
+                            <div *ngIf="menuItem || selectedMenuItem" class="increment-area">
+                                <div (click)="plusMinusClicked(true, 'menuItem')" tabindex="1" class="plus-minus-btn"
+                                    matTooltip="Increment Quantity"
+                                    aria-label="Increment Quantity"
+                                    [matTooltipShowDelay]="500"
+                                >
+                                    <img width="25" height="25" src="../../../assets/icons/PlusIcon/outline_add_blue_white_48dp.png" />
+                                </div>
+                                <div tabindex="2" class="ingredient-qty">
+                                    <input [(ngModel)]="selectedMIQty" type="number" value="0" width="5"
+                                    />
+                                    
+                                </div>
+                                <div (click)="plusMinusClicked(false, 'menuItem')" tabindex="3" class="plus-minus-btn"
+                                    matTooltip="Decrement Quantity"
+                                    aria-label="Decrement Quantity"
+                                    [matTooltipShowDelay]="500"
+                                >
+                                    <img width="25" height="25" src="../../../assets/icons/MinusIcon/outline_remove_blue_white_48dp.png" />
+                                </div>
+                                <div
+                                    *ngIf="menuItem && !selectedMenuItem"
+                                    (click)="addOrUpdateMenuItem()"
+                                    id="saveIngredBtn" tabindex="4"
+                                    matTooltip="{{false ? 'Add Ingredient' : 'Update Ingredient'}}"
+                                    aria-label="Add Ingredient"
+                                    [matTooltipShowDelay]="500"
+                                >
+                                <img width="28" height="28" src="../../../assets/icons/CheckIcon/outline_done_blue_white_48dp.png" />
+                            </div>
+                            
+                            <div
+                                *ngIf="selectedMenuItem"
+                                id="cancelIngredBtn" tabindex="5"
+                                matTooltip="Cancel Changes"
+                                aria-label="Cancel Changes"
+                                (click)="cancelChanges()"
+                                [matTooltipShowDelay]="500"
+                            >
+                                <img width="28" height="28" src="../../../assets/icons/XIcon/outline_close_red_48dp.png" />
+                            </div>
+                            <div
+                                (click)="removeMenuItem()"
+                                *ngIf="selectedMenuItem"
+                                id="rmIngredBtn" tabindex="5"
+                                matTooltip="Remove Menu Item"
+                                aria-label="Remove Menu Item"
+                                [matTooltipShowDelay]="500"
+                            >
+                                <img width="28" height="28" src="../../../assets/icons/TrashcanIcon/outline_delete_red_48dp.png" />
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item-container">
+                    <div *ngIf="simulatedMenuItems && simulatedMenuItems.length" class="menu-item-list-container">
+                        <div class="menu-item-list-parent" [ngClass]="{'is-update-mode':false}">
+                            <div class="menu-item-list">
+                                <div
+                                    (click)="selectMenuItem(mi)" 
+                                    tabindex="4" 
+                                    [ngClass]="{'selected-menu-item':mi.selected}"
+                                    *ngFor="let mi of simulatedMenuItems"
+                                    
+                                    >
+                                    {{mi.name}} - Qty {{mi.count}}
+                                </div>                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="width: 50%; float:right;">
+            <div style="width: 100%; height: 141px;">
+
+            </div>
+            <div class="menu-item-container">
+                <div *ngIf="diffIngredients && diffIngredients.length" class="menu-item-list-container">
+                    <div class="menu-item-list-parent" [ngClass]="{'is-update-mode':false}">
+                        <div class="menu-item-list">
+                            <div
+                                tabindex="4" 
+                                [ngStyle]="{'background': diffIngred.diffOz >= 0 ? 'green' : '#EE4B2B'}"
+                                *ngFor="let diffIngred of diffIngredients"
+                                
+                                >
+                                {{diffIngred.ingredientName}} {{(diffIngred.diffOz >= 0 ? diffIngred.diffOz.toFixed(2) : (-1 *diffIngred.diffOz).toFixed(2) )}}
+                                oz {{diffIngred.diffOz >= 0 ? 'over' : 'under'}}
+
+                            </div> 
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="instructions" *ngIf="usedIngredients && usedIngredients.length">
+        <div class="instructions-header">
+            Results
+        </div>
+        <div class="instructions-body">
+            <div class="instructions-body-container">
+                <div style="color: #26377b; cursor: normal;"
+                matTooltip="Estimated cost of purchasing the items needed to satisfy the simulated menu list. 
+                This value is based on the difference in stock between the inventory that is currently available in the 
+                store and the ingredients used by the menu items selected."
+                aria-label="Decrement Quantity"
+                [matTooltipShowDelay]="500">
+                    Total Est Cost: ${{totalCost.toFixed(2)}}
+                    
+                </div>
+                <ul style="list-style-type: none; max-height: 70%; overflow: auto;">
+                    <li style="line-height: 24px; color: #26377b;" *ngFor="let ingred of usedIngredients; let ingredIndex=index;">
+                        {{ingred.ingredientName}} - {{ingred.usedOz.toFixed(2)}} oz / {{(diffIngredients[ingredIndex].diffOz + ingred.usedOz).toFixed(2)}} oz. (used/avail)
+                        <span *ngIf="diffIngredients[ingredIndex].diffOz < 0">
+                            Est cost: ${{(ingred.estCostPerOz * (-1 * diffIngredients[ingredIndex].diffOz)).toFixed(2)}}
+                        </span>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer-border">
+    <hr>
+</div>
+<div class="modal-footer">
+    <button (click)="close()" mat-raised-button color="accent">Generate Report</button>
+    <button (click)="close()" mat-raised-button color="accent">Close</button>
+</div>
