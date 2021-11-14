@@ -1,6 +1,5 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import * as $ from 'jquery';
 import { Store, StoreIngredient } from '../interfaces/store';
 import { IngredientService } from '../services/ingredient-service.service';
 import { StoreService } from '../services/store-service.service';

@@ -1,13 +1,17 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ArcElement, Chart, CategoryScale, PointElement, LineElement, LinearScale, PieController, LineController, DoughnutController, Tooltip, Legend } from 'chart.js';
+import { ArcElement, Chart, CategoryScale, TimeScale, PointElement, LineElement, LinearScale, PieController, LineController, DoughnutController, Tooltip, Legend, Tick } from 'chart.js';
+import { registerables } from 'chart.js';
+import 'chartjs-adapter-moment'; // or another adapter to avoid moment
 
 Chart.register(LineController);
 Chart.register(Tooltip);
 Chart.register(Legend);
 Chart.register(CategoryScale);
 Chart.register(LinearScale);
+Chart.register(TimeScale);
 Chart.register(PointElement);
 Chart.register(LineElement);
+Chart.register(...registerables);
 
 const NBR_CHART_ITEMS : number = 5;
 
@@ -24,10 +28,23 @@ export class StoreSalesChartsComponent implements AfterViewInit{
   
   chartInstance!: Chart;
 
-  barFields: string[] = ['July', 'August', 'September', 'October', 'November'];
-  currYear : any = [33,10,22,50,22,11];
-  prevYear : any = [23,100,202,150,122,118];
+  currYear : any = [
+    {x: '2020-01-25', y: 20},
+    {x: '2020-02-25', y: 21},
+    {x: '2020-02-28', y: 23},
+    {x: '2020-03-15', y: 100},
+    {x: '2020-03-16', y: 19},
+    {x: '2020-03-20', y: 20},
+  ]
 
+  prevYear : any = [
+    {x: '2020-01-25', y: 200},
+    {x: '2020-02-25', y: 11},
+    {x: '2020-02-28', y: 123},
+    {x: '2020-03-15', y: 8},
+    {x: '2020-03-16', y: 47},
+    {x: '2020-03-20', y: 12},
+  ]
   constructor() { }
   ngAfterViewInit(): void {
     this.setupBarChart();
@@ -46,7 +63,6 @@ export class StoreSalesChartsComponent implements AfterViewInit{
       this.chartInstance = new Chart(this.storeSalesBarChart.nativeElement, {
         type: 'line',
         data: {
-          labels: this.barFields,
           datasets: [{
             borderColor: '#36c0ff',
             data: this.currYear, /* this.barData.slice(0, displayCount),*/
@@ -54,7 +70,7 @@ export class StoreSalesChartsComponent implements AfterViewInit{
             fill: false,
             hoverBorderColor: '#42b7ff',
             tension: 0.1,
-            label: '2021',
+            label: 'Current',
 
             /*hoverOffset: 15,*/
           },
@@ -74,6 +90,30 @@ export class StoreSalesChartsComponent implements AfterViewInit{
         options: {
           maintainAspectRatio: false,
           responsive: true,
+          scales: {
+            x: {
+                type: 'time',
+                position: 'bottom',
+                time: {
+                    displayFormats: {
+                    },
+                    tooltipFormat: 'MM/DD/YYYY',
+                    unit: 'month',
+                },
+                // leave only one label per month
+                afterTickToLabelConversion: function (data) {
+                    var xLabels = data.ticks;
+                    let oldLabel !: Tick;
+                    xLabels.forEach(function (labels, i) {
+                        if(xLabels[i] == oldLabel){
+                            xLabels[i] = null as any;
+                        } else {
+                            oldLabel = xLabels[i];
+                        }
+                    });
+                }
+            }
+        },
           /*
           layout: {
             padding: {
