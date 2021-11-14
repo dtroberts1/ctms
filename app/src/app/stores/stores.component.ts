@@ -15,8 +15,6 @@ const pal = ["#001464", "#26377B", "#404F8B", "#59709A"]
   styleUrls: ['./stores.component.less']
 })
 export class StoresComponent implements OnInit {
-  @ViewChild('forecastChartCanvas') 
-  private forecastChartCanvas!: ElementRef;
 
   store!: Store;
   stores!: Array<Store>;

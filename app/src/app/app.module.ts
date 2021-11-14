@@ -41,6 +41,7 @@ import { StoresComponent } from './stores/stores.component';
 import { SimulatorComponent } from './stores/simulator/simulator.component';
 import { SimulatorPipePipe } from './stores/simulator/simulator-pipe.pipe';
 import { AddInventoryModalComponent } from './stores/add-inventory-modal/add-inventory-modal.component';
+import { StoreSalesChartsComponent } from './stores/store-sales-charts/store-sales-charts.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { AddInventoryModalComponent } from './stores/add-inventory-modal/add-inv
     SimulatorComponent,
     SimulatorPipePipe,
     AddInventoryModalComponent,
+    StoreSalesChartsComponent,
   ],
   imports: [
     CommonModule,
