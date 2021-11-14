@@ -1,6 +1,11 @@
-<div [style.visibility]="currYear && currYear.length ? 'visible' : 'visible'">
+<div [style.visibility]="sales && sales.length && sales[0].length ? 'visible' : 'visible'">
     <div class="chart-label">
-        Stores - Revenue
+        <div class="date-header-container">
+            <div style="display: flex; justify-content: center;" class="date-header">
+                <div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="chart-container">
         <canvas #storeSalesBarChart></canvas>

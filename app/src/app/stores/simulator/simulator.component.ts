@@ -125,12 +125,7 @@ export class SimulatorComponent implements OnInit {
         });
       });
       this.diffIngredients.sort((a,b) => a.ingredientName.localeCompare(b.ingredientName));
-      console.log({"this.usedIngredients":this.usedIngredients});
-      console.log({"diffIngredients":this.diffIngredients})
       this.totalCost = this.usedIngredients.map(item => item.estCostPerOz).reduce((a : number, b: number, index: number) => {
-        console.log("diffOz is " + this.diffIngredients[index].diffOz);
-        console.log("a is " + a);
-        console.log("b is " + b);
         if (this.diffIngredients[index].diffOz > 0){
           return a;
         }

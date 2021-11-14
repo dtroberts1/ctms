@@ -26,6 +26,11 @@ type storePopularitySale = {
     storeName: string | null,
 }
 
+export interface DateSale{
+    saleDate: Date | string,
+    total: number,
+}
+
 export interface HighLvlSaleData {
     salesForCurrYear: number,
     salesForCurrMonth: number,

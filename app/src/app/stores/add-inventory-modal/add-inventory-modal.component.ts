@@ -36,7 +36,6 @@ export class AddInventoryModalComponent implements OnInit {
     this.ingredientService.getIngredientTypes()
       .subscribe(
         res => {
-          console.log({"res":res});
           this.ingredientTypes = res;
         },
         err => {
@@ -57,7 +56,6 @@ export class AddInventoryModalComponent implements OnInit {
           }
       );
 
-      console.log({"data":this.data});
       this.storeIngredients = this.data.storeIngredients;
       this.origStoreIngredients = JSON.parse(JSON.stringify(this.storeIngredients));
       let i = 0;
@@ -121,7 +119,6 @@ export class AddInventoryModalComponent implements OnInit {
         storeIngredRes => {
           this.storeIngredients = Array.isArray(storeIngredRes) ? storeIngredRes : [];
           this.origStoreIngredients = JSON.parse(JSON.stringify(this.storeIngredients));
-          console.log({"data":this.data});
           let i = 0;
           this.storeIngredients.forEach((item : any) => {
             item.backgroundColor = this.getColors(this.storeIngredients.length, pal)[i];
@@ -165,15 +162,12 @@ export class AddInventoryModalComponent implements OnInit {
     let index = this.storeIngredients.findIndex((item: StoreIngredient) => item.ingredientId === storeIngredient.ingredientId);
 
     if (!isSelected){
-      console.log(" in a")
       // If not selected
       if (origSelected && origSelected.ingredientId != storeIngredient.ingredientId){
-        console.log(" in b")
 
         // If selecting a different one from the originally selected row, and changes exist, save the original
         let origIngred = this.origStoreIngredients.find((ingred: Ingredient) => ingred.ingredientId);
         if (origIngred && (origSelected as StoreIngredient).weightInOz != (origIngred as StoreIngredient).weightInOz){
-          console.log(" in c")
 
           this.ingredientService.putStoreIngredient({
             weightInOz: this.selectedExistIngredientQty,
