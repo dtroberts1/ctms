@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="!isLoginPage">
   <div class="navbar">
     <div style="display:inline-block">
       <div>
@@ -140,8 +140,13 @@
     </div>
   </div>
 </div>
-<app-sidebar>
+<app-sidebar *ngIf="!isLoginPage">
 </app-sidebar>
-<div id="router-outlet-container">
+<div 
+  [ngStyle]="{
+    'margin-top':isLoginPage ? 0 : '50px', 
+    'width': isLoginPage ? '100%' : 'calc(100% - 283px)',
+    'height': isLoginPage? '100%' : 'initial'}" 
+    id="router-outlet-container">
   <router-outlet></router-outlet>
 </div>

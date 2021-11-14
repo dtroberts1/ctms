@@ -5,12 +5,14 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { EventsComponent } from './events/events.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { LocationsComponent } from './locations/locations.component';
+import { LoginComponent } from './login/login.component';
 import { PartnersComponent } from './partners/partners.component';
 import { ReportsComponent } from './reports/reports.component';
 import { SalesComponent } from './sales/sales.component';
 import { StoresComponent } from './stores/stores.component';
 
 const routes: Routes = [
+  {path: 'login', component: LoginComponent},
   {path: 'dashboard', component: DashboardComponent},
   {path: 'menu', component: BusinessMenuComponent},
   {path: 'inventory', component: InventoryComponent},
@@ -20,6 +22,7 @@ const routes: Routes = [
   {path: 'reports', component: ReportsComponent},
   {path: 'locations', component: LocationsComponent},
   {path: 'stores', component: StoresComponent},
+  {path: '', component: LoginComponent},
 
 ];
 

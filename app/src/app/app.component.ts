@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import {Router} from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import {NavigationEnd, Router} from '@angular/router';
+
+
 
 @Component({
   selector: 'app-root',
@@ -12,13 +13,28 @@ export class AppComponent {
   selectedNavItem = 'dashboard';
   selectedToolbarItem = '';
   selectedFooterItem = '';
+  name = 'Get Current Url Route Demo';
+  currentRoute!: string;
+  isLoginPage: boolean = false;
 
   constructor(private router: Router){
-
+    
+    router.events.subscribe(
+      (event: any) => {
+        if(event instanceof NavigationEnd) {
+          this.currentRoute = event.url;          
+          if (event.url.includes('login')){
+            this.isLoginPage = true;
+          }
+          else{
+            this.isLoginPage = false;
+          }
+        }
+      });
   }
 
   ngOnInit(){
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['login']);
   }
 
   navigateNavBar(item: string){
