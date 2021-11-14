@@ -46,6 +46,28 @@ export class StoresComponent implements OnInit {
       },
       panelClass: 'modal-class'
     });
+
+    dialogRef.afterClosed().subscribe(
+      res => {
+        this.ingredientService.getStoreIngredients(this.store.storeId)
+        .subscribe(
+          res => {
+            this.storeIngredients = res;
+            let i = 0;
+            this.storeIngredients.forEach((item : any) => {
+              item.backgroundColor = this.getColors(this.storeIngredients.length, pal)[i];
+              i++;
+            });
+          },
+          err => {
+
+          }
+        );
+      },
+      err => {
+
+      }
+    )
   }
 
   openSimModal(){
@@ -95,7 +117,7 @@ export class StoresComponent implements OnInit {
           err => {
 
           }
-        )
+        );
     }
   }
 

@@ -108,7 +108,7 @@
 
             </div>
             <div class="menu-item-container">
-                <div *ngIf="simulatedMenuItems && simulatedMenuItems.length" class="menu-item-list-container">
+                <div *ngIf="diffIngredients && diffIngredients.length" class="menu-item-list-container">
                     <div class="menu-item-list-parent" [ngClass]="{'is-update-mode':false}">
                         <div class="menu-item-list">
                             <div
@@ -134,12 +134,18 @@
         </div>
         <div class="instructions-body">
             <div class="instructions-body-container">
-                <div style="color: #26377b;">
+                <div style="color: #26377b; cursor: normal;"
+                matTooltip="Estimated cost of purchasing the items needed to satisfy the simulated menu list. 
+                This value is based on the difference in stock between the inventory that is currently available in the 
+                store and the ingredients used by the menu items selected."
+                aria-label="Decrement Quantity"
+                [matTooltipShowDelay]="500">
                     Total Est Cost: ${{totalCost.toFixed(2)}}
+                    
                 </div>
                 <ul style="list-style-type: none; max-height: 70%; overflow: auto;">
                     <li style="line-height: 24px; color: #26377b;" *ngFor="let ingred of usedIngredients; let ingredIndex=index;">
-                        {{ingred.ingredientName}} - {{ingred.usedOz.toFixed(2)}} oz / {{(diffIngredients[ingredIndex].diffOz + ingred.usedOz).toFixed(2)}} oz.
+                        {{ingred.ingredientName}} - {{ingred.usedOz.toFixed(2)}} oz / {{(diffIngredients[ingredIndex].diffOz + ingred.usedOz).toFixed(2)}} oz. (used/avail)
                         <span *ngIf="diffIngredients[ingredIndex].diffOz < 0">
                             Est cost: ${{(ingred.estCostPerOz * (-1 * diffIngredients[ingredIndex].diffOz)).toFixed(2)}}
                         </span>
