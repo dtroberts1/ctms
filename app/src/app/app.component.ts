@@ -16,6 +16,7 @@ export class AppComponent {
   name = 'Get Current Url Route Demo';
   currentRoute!: string;
   isLoginPage: boolean = false;
+  profCardLocked: boolean = false;
 
   constructor(private router: Router){
     
@@ -47,5 +48,38 @@ export class AppComponent {
   }
   footerBtnClicked(item: string){
     this.selectedFooterItem = item;
+
+  }
+
+  logout(event: any){
+    this.selectedFooterItem = null as any;
+
+    this.router.navigate(['login']);
+  }
+
+  blurLoginContext(event : any){
+
+    if (event.relatedTarget){
+      
+      if (!(event.relatedTarget.id === 'prof-card') && !(event.relatedTarget.id === 'logout-btn')){
+        this.selectedFooterItem = null as any;
+
+      }
+    }
+    else{
+      this.selectedFooterItem = null as any;
+    }
+  }
+
+  blurCard(event : any){
+
+    this.selectedFooterItem = null as any;
+    this.profCardLocked = false;
+
+  }
+
+  lockProfileCard(event : any){
+
+    this.profCardLocked = true;
   }
 }

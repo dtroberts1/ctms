@@ -128,7 +128,9 @@
             <a>Upload</a>
           </div>
         </div>    
-        <div [ngClass]="{'profile-footer-btn-selected': selectedFooterItem == 'profile'}" class="footer-item profile-footer-btn" style="display:flex;" (click)="footerBtnClicked('profile')">
+        <div [ngClass]="{'profile-footer-btn-selected': selectedFooterItem == 'profile'}" class="footer-item profile-footer-btn" style="display:flex;" 
+        (focusout)="blurLoginContext($event)" tabindex="1"
+        (click)="footerBtnClicked('profile')">
           <div style="margin-top:3px">
             <img style="max-height:20px; vertical-align:center"/>
           </div>
@@ -149,4 +151,21 @@
     'height': isLoginPage? '100%' : 'initial'}" 
     id="router-outlet-container">
   <router-outlet></router-outlet>
+</div>
+<div id="prof-card" *ngIf="!isLoginPage && selectedFooterItem == 'profile'" class="profile-menu-card" tabindex="1"
+(mousedown)="lockProfileCard($event)"
+(blur)="blurCard($event)"
+  >
+  <div id="logout-btn" tabindex="1" (click)="logout($event)" class="prof-btn">
+    Logout
+  </div>
+  <div class="prof-btn">
+    Settings
+  </div>
+  <div style="text-align: right; padding: 0 10px 0 10px;">
+    User
+  </div>
+  <div style="text-align: right; padding: 0 10px 0 10px;">
+    droberts481@gmail.com
+  </div>
 </div>
