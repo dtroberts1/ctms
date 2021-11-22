@@ -13,10 +13,10 @@ var storeRouter = require('./routes/store');
 let mysql = require('mysql');
 
 const db = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'sky551er',
-  database : 'ctms'
+  host     : process.env.RDS_HOSTNAME || 'localhost',
+  user     : process.env.RDS_USERNAME || 'root',
+  password : process.env.RDS_PASSWORD || 'sky551er',
+  database : process.env.RDS_PORT || 'ctms'
 });
 
 db.connect((err) => {
