@@ -11,6 +11,11 @@ var storeRouter = require('./routes/store');
 
 let mysql = require('mysql');
 
+console.log("RDS_HOSTNAME is " + process.env.RDS_HOSTNAME);
+console.log("RDS_USERNAME is " + process.env.RDS_USERNAME)
+console.log("RDS_PASSWORD is " + process.env.RDS_PASSWORD)
+console.log("RDS_PORT is " + process.env.RDS_PORT)
+
 const db = mysql.createConnection({
   host     : process.env.RDS_HOSTNAME || 'localhost',
   user     : process.env.RDS_USERNAME || 'root',
