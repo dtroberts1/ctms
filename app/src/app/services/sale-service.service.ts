@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { DateSale, HighLvlSaleData, Sale } from '../interfaces/sale';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SaleService {
-  private serviceUrl = 'http://localhost:3000/api/sales';  // URL to web api
+  private serviceUrl = `${environment.baseUrl}/sales`;  // URL to web api
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

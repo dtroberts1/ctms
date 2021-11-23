@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { HighLvlSaleData, Sale } from '../interfaces/sale';
 import { Store, StoreIngredient } from '../interfaces/store';
 
@@ -10,7 +11,7 @@ import { Store, StoreIngredient } from '../interfaces/store';
   providedIn: 'root'
 })
 export class StoreService {
-  private serviceUrl = 'http://localhost:3000/api/stores';  // URL to web api
+  private serviceUrl = `${environment.baseUrl}/stores`;  // URL to web api
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

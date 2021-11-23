@@ -54,7 +54,7 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
     if (!Object.keys(req.body).length){
       throw new BadRequestError('Missing Fields')
     }
-    let queryStr = 'insert into ctms.menu_item SET ?';
+    let queryStr = 'insert into menu_item SET ?';
       
     new Promise((resolve, reject) => {
       req.service.database().query(queryStr, req.body, ((err, result) => {
@@ -83,7 +83,7 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
         if (err){
           reject(err);
         }
-        let command = 'update ctms.menu_item SET name = ?, type = ?, description = ?, price = ?, cost = ?, popularity = ?, reviewRank = ?, recipeInstructions = ? where id = ?';
+        let command = 'update menu_item SET name = ?, type = ?, description = ?, price = ?, cost = ?, popularity = ?, reviewRank = ?, recipeInstructions = ? where id = ?';
         req.service.database().query(command, [req.body.name, req.body.type, req.body.description, req.body.price, req.body.cost, req.body.popularity, req.body.reviewRank, req.body.recipeInstructions, req.body.id], ((err, result) => {
           if (err){
             reject(err);
