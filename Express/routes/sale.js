@@ -109,13 +109,13 @@ router.get('/getSales/:fromDate?/:toDate?', ((req, res, next) => {
   let toDate = req.params.toDate;  
 
   let queryWithoutParamsStr = `SELECT saleId, saleDate, transactionId, menuItemId, menu_item.name AS itemSold, storeId, salePrice, saleCost
-  FROM ctms.sale
+  FROM sale
   INNER JOIN menu_item
   ON menu_item.id = sale.menuItemId ORDER BY saleDate
   `;
 
   let queryWithParamsStr = `SELECT saleId, saleDate, transactionId, menuItemId, menu_item.name AS itemSold, storeId, salePrice, saleCost
-  FROM ctms.sale
+  FROM sale
   INNER JOIN menu_item
   ON menu_item.id = sale.menuItemId
   where saleDate >= ? AND saleDate < ?
@@ -212,7 +212,7 @@ router.post('/addSale/', ((req, res, next) => {
     promise.then((result) => {
       queryData.menuItemId = result.id;
       new Promise((resolve, reject) => {
-        let queryStr = 'insert into ctms.sale SET ?';
+        let queryStr = 'insert into sale SET ?';
 
         // Get Id of first menu Item (for default) if menuItemId is null
         req.service.database().query(queryStr, queryData, ((err, result) => {
@@ -243,7 +243,7 @@ router.put('/updateSale', ((req, res, next) => {
       if (err){
         reject(err);
       }
-      let command = `update ctms.sale SET saleDate = ?, menuItemId = ?, storeId = ?, salePrice = ?, saleCost = ? where saleId = ?`;
+      let command = `update sale SET saleDate = ?, menuItemId = ?, storeId = ?, salePrice = ?, saleCost = ? where saleId = ?`;
       req.service.database().query(command, 
         [req.body.saleDate, 
           req.body.menuItemId, 

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import {Router} from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import {NavigationEnd, Router} from '@angular/router';
+
+
 
 @Component({
   selector: 'app-root',
@@ -12,13 +13,29 @@ export class AppComponent {
   selectedNavItem = 'dashboard';
   selectedToolbarItem = '';
   selectedFooterItem = '';
+  name = 'Get Current Url Route Demo';
+  currentRoute!: string;
+  isLoginPage: boolean = false;
+  profCardLocked: boolean = false;
 
   constructor(private router: Router){
-
+    
+    router.events.subscribe(
+      (event: any) => {
+        if(event instanceof NavigationEnd) {
+          this.currentRoute = event.url;          
+          if (event.url.includes('login')){
+            this.isLoginPage = true;
+          }
+          else{
+            this.isLoginPage = false;
+          }
+        }
+      });
   }
 
   ngOnInit(){
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['login']);
   }
 
   navigateNavBar(item: string){
@@ -31,5 +48,38 @@ export class AppComponent {
   }
   footerBtnClicked(item: string){
     this.selectedFooterItem = item;
+
+  }
+
+  logout(event: any){
+    this.selectedFooterItem = null as any;
+
+    this.router.navigate(['login']);
+  }
+
+  blurLoginContext(event : any){
+
+    if (event.relatedTarget){
+      
+      if (!(event.relatedTarget.id === 'prof-card') && !(event.relatedTarget.id === 'logout-btn')){
+        this.selectedFooterItem = null as any;
+
+      }
+    }
+    else{
+      this.selectedFooterItem = null as any;
+    }
+  }
+
+  blurCard(event : any){
+
+    this.selectedFooterItem = null as any;
+    this.profCardLocked = false;
+
+  }
+
+  lockProfileCard(event : any){
+
+    this.profCardLocked = true;
   }
 }

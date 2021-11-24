@@ -7,12 +7,13 @@ import { Ingredient, IngredientType, MeasurementUnit, MenuItemIngredient } from 
 import { HighLvlSaleData } from '../interfaces/sale';
 import { catchError } from 'rxjs/operators';
 import { Store, StoreIngredient } from '../interfaces/store';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IngredientService {
-  private serviceUrl = 'http://localhost:3000/api/ingredients';  // URL to web api
+  private serviceUrl = `${environment.baseUrl}/ingredients`;  // URL to web api
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

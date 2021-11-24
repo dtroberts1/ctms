@@ -4,12 +4,13 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, take, tap } from 'rxjs/operators';
 import { MenuItem } from '../interfaces/menu-item';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuService {
-  private serviceUrl = 'http://localhost:3000/api/menuItems';  // URL to web api
+  private serviceUrl = `${environment.baseUrl}/menuItems`;  // URL to web api
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

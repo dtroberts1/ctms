@@ -1,0 +1,84 @@
+<div
+    style="
+    background-image:url('../../assets/images/nyc4k.jpg');   
+    background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center center;   
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    "
+>
+<div style="
+    background: rgba(225, 255, 255, .45);
+    border-radius: 5px;
+    filter: brightness(195%);
+    position: absolute;
+    top: 30px;
+    padding: 40px;
+    padding-bottom: 55px;
+    "
+    >
+    <div style="    
+        height: 100px;
+        text-align: center;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+    ">
+        <div style="color: white; opacity: 1; font-size: 40px;">
+            Welcome
+        </div>
+    </div>
+    <div class="login-fields">
+        <div style="
+            display: flex;
+            justify-content: space-around;">
+            <div>
+                <div style="float: left;" class="footer-item email-container">
+                    <div style="margin-top:3px">
+                      <img style="height: 32px; vertical-align:center"/>
+                    </div>
+                </div> 
+                <div style="float: right; margin-left: 3px;">
+                    <input  />
+                </div>
+            </div>
+        </div>
+        <div style="
+            display: flex;
+            justify-content: space-around;
+            margin-top: 8px;
+            ">
+            <div>
+                <div style="float: left;" class="footer-item password-container">
+                    <div style="margin-top:3px">
+                      <img style="height: 32px; vertical-align:center"/>
+                    </div>
+                </div> 
+                <div style="float: right; margin-left: 3px;">
+                    <input type="password"  />
+                </div>
+            </div>
+        </div>
+        <div style="
+            margin-top:18px;
+            text-align:center;
+        ">
+            <button mat-raised-button style="
+                background: rgba(54, 192, 255, .85); 
+                color: white; 
+                font-size: 21px;
+                width: 200px; 
+            "
+            (click)="attemptLogin()"
+            >Login
+            </button>
+
+        </div>
+    </div>
+</div>
+
+</div>

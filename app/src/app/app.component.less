@@ -183,14 +183,7 @@
     background-image: url(../assets/icons/CoffeeIcon/2x/outline_coffee_white_24dp.png);
     cursor:auto;
 }
-/*
-.help-icon{
-    background-image: url(../assets/icons/HelpIcon/2x/outline_help_outline_gray_24dp.png);
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
-    background-position: 50% 8px;
-}
-*/
+
 .navbar-item:hover{
     color:#f6f7f8;
     /*background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_white_24dp.png);*/
@@ -300,8 +293,33 @@
     margin-top:50px;
 }
 
-:host /deep/ router-outlet + *:not(nav) {
+:host router-outlet + *:not(nav) {
     width:calc(100% - 283px);
     margin-top:50px;
     left: 0;
+ }
+
+ .profile-menu-card{
+    height: 140px;
+    background: #282E33;
+    width: 200px;
+    bottom: 35px;
+    position: absolute;
+    right: 290px;
+    border-radius: 8px;
+    color: white;
+
+    .prof-btn{
+        text-align: right;
+        padding: 10px;
+        font-size: 17px;
+        filter: brightness(150%);
+        background: #282E33;
+        border-bottom: 1px solid black;
+
+        &:hover{
+            cursor: pointer;
+            filter: brightness(200%);
+        }
+    }
  }

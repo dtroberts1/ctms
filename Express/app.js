@@ -13,10 +13,10 @@ var storeRouter = require('./routes/store');
 let mysql = require('mysql');
 
 const db = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'sky551er',
-  database : 'ctms'
+  host     : process.env.RDS_HOSTNAME || 'localhost',
+  user     : process.env.RDS_USERNAME || 'root',
+  password : process.env.RDS_PASSWORD || 'sky551er',
+  database : process.env.RDS_DB_NAME || 'ctms',
 });
 
 db.connect((err) => {
@@ -41,7 +41,8 @@ const exposeService = async (req, res, next) => {
 const app = express()
 app.use(cors());
 
-const port = 3000
+
+const port = process.env.PORT || 3000;
 // login page
 app.use('/api/menuItems/', exposeService, menuItemRouter);
 app.use('/api/sales/', exposeService, saleRouter);
@@ -69,6 +70,6 @@ app.use(function(err, req, res, next) {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Server is running on port: ${port}`)
 })
 module.exports = app;
