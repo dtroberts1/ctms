@@ -25,6 +25,8 @@ db.connect((err) => {
   }
 })
 
+
+
 function database(){
   return db;
 }
@@ -42,7 +44,7 @@ const app = express()
 app.use(cors());
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 // login page
 app.use('/api/menuItems/', exposeService, menuItemRouter);
 app.use('/api/sales/', exposeService, saleRouter);

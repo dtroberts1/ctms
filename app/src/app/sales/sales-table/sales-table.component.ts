@@ -14,6 +14,8 @@ import { Sale } from 'src/app/interfaces/sale';
 import { SaleService } from 'src/app/services/sale-service.service';
 import { DatePipe } from '@angular/common'
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { StoreService } from 'src/app/services/store-service.service';
+import { Store } from 'src/app/interfaces/store';
 
 interface IDictionary {
   [index: string]: number;
@@ -65,8 +67,8 @@ export class SalesTableComponent implements OnInit {
     'salePrice': 7,
     'saleCost': 7,
   }
-  columns: string[] = ['checkbox', 'saleDate', 'menuItem', 'salePrice', 'saleCost', 'expicn'];
-  mainColumns: string[] = ['saleDate', 'menuItem', 'salePrice', 'saleCost'];
+  columns: string[] = ['checkbox', 'saleDate', 'menuItem', 'store', 'salePrice', 'saleCost', 'expicn'];
+  mainColumns: string[] = ['saleDate', 'menuItem', 'store', 'salePrice', 'saleCost'];
 
   @ViewChild('paginator')
   paginator!: MatPaginator;
@@ -80,8 +82,9 @@ export class SalesTableComponent implements OnInit {
   saleTextInput!: QueryList<any>;
   @ViewChild(MatSort)
   sort!: MatSort;
-  freezeSave : boolean = false;
+  //freezeSave : boolean = false;
   availMenuItems!: MenuItem[];
+  availStores !: Store[];
 
   tableReady: boolean = false;
   origSales!: Sale[];
@@ -90,6 +93,7 @@ export class SalesTableComponent implements OnInit {
   constructor(
     private datePipe: DatePipe, 
     private menuService: MenuService, 
+    private storeService: StoreService,
     private saleService: SaleService, 
     private toastr: ToastrService, 
     public dialog: MatDialog
@@ -122,6 +126,10 @@ export class SalesTableComponent implements OnInit {
     }, 0);
   }
 
+  expandRow(event :any, expandedElement :any, element : any){
+
+  }
+
   menuItemSelectionChanged(event: any, element: any){
     let updatedElement = JSON.parse(JSON.stringify(element));
     updatedElement.menuItemId = element.menuItem.id;
@@ -129,7 +137,16 @@ export class SalesTableComponent implements OnInit {
     this.updateItem(updatedElement);
   }
 
+  storeSelectionChanged(event: any, element: any){
+    let updatedElement = JSON.parse(JSON.stringify(element));
+    updatedElement.storeId = element.store.storeId;
+    updatedElement.saleDate = element.saleDate.toISOString().slice(0, 19).replace('T', ' ');
+    this.updateItem(updatedElement);
+  }
+
   onKeyDown(event: any, element: Sale){
+    event.stopPropagation();
+
     if (event.key === "Enter") {
       this.updateItem(element);
     }
@@ -200,10 +217,12 @@ export class SalesTableComponent implements OnInit {
 
   deleteIconClicked(event : any, sale: Sale, col: any){
     event.stopPropagation();
-    this.freezeSave = true;
+    //this.freezeSave = true;
+
+    sale.isReadOnly = true;
+    sale.editableColumn = null;
 
     let origSale = this.origSales.find(item => item.saleId === sale.saleId);
-    let origData = this.dataSource.data.find(item => item.saleId == sale.saleId);
 
     if (origSale){
       sale[col] = origSale[col];
@@ -229,21 +248,17 @@ export class SalesTableComponent implements OnInit {
     element.isReadOnly = true;
     element.editableColumn = null;
     
-      if (!this.freezeSave){
-        this.saleService.updateSale(<Sale>element)
-        .pipe(
-          map((str: string) => {
-            return {data: 'heres data'}
-          })
-        )
-        .subscribe(
-          val => {
-            this.origSales = JSON.parse(JSON.stringify(this.sales));
-          }
-        )
-      }
-      this.freezeSave = false;
-
+    this.saleService.updateSale(<Sale>element)
+      .pipe(
+        map((str: string) => {
+          return {data: 'heres data'}
+        })
+      )
+      .subscribe(
+        val => {
+          this.origSales = JSON.parse(JSON.stringify(this.sales));
+        }
+      );
   }
 
   updateSaleDate(event: MatDatepickerInputEvent<any,any>, element : any){
@@ -264,7 +279,10 @@ export class SalesTableComponent implements OnInit {
     )
   }
 
-  disableEditMode(event : Event, element : any, column : string, val: any){
+  saveSale(event: Event, element : any, column : string, val: any){
+
+    event.stopPropagation();
+
     let item = this.origSales.find(item => item.saleId == element.saleId);
     if (item){
       if (item[column] != element[column]){
@@ -275,7 +293,31 @@ export class SalesTableComponent implements OnInit {
       else{
         element.isReadOnly = true;
         element.editableColumn = null;
+
       }
+    }
+    else{
+    }
+  }
+
+  disableEditMode(event : Event, element : any, column : string, val: any){
+
+    let item = this.origSales.find(item => item.saleId == element.saleId);
+    if (item){
+      if (item[column] != element[column]){
+        let updatedElement = JSON.parse(JSON.stringify(element))
+        updatedElement.saleDate = element.saleDate.toISOString().slice(0, 19).replace('T', ' ');
+        this.updateItem(updatedElement);
+        element.isReadOnly = true;
+        element.editableColumn = null;
+      }
+      else{
+        element.isReadOnly = true;
+        element.editableColumn = null;
+
+      }
+    }
+    else{
     }
   }
 
@@ -309,6 +351,8 @@ export class SalesTableComponent implements OnInit {
   }
 
   editIconClicked(event : any, row: any, col: any){
+    event.stopPropagation();
+
     //event.stopPropagation()
     let evt = JSON.parse(JSON.stringify(event))
     row.isReadOnly = false;
@@ -342,12 +386,27 @@ export class SalesTableComponent implements OnInit {
           if (Array.isArray(this.availMenuItems) && this.availMenuItems.length){
             sale.menuItem = this.availMenuItems.find(item => item.id === sale.menuItemId);
           }
-        })
+        });
       },
       err => {
 
       }
     )
+
+    this.storeService.getStores()
+      .subscribe(
+        res => {
+          this.availStores = res;
+          this.sales.forEach((sale) => {
+            if (Array.isArray(this.availStores) && this.availStores.length){
+              sale.store = this.availStores.find(item => item.storeId === sale.storeId);
+            }
+          });        },
+        err => {
+
+        }
+      )
+
     this.tableReady = false;
     this.dataSource = new MatTableDataSource<Sale>(sales);
     this.dataSource.paginator = this.paginator;

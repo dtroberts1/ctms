@@ -1,0 +1,49 @@
+.modal-header{
+    height: 42px;
+    background: #42B7FF;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+    padding: 6px;
+
+    .close-icon{
+        display: flex; 
+        align-items: center; 
+        position: absolute; 
+        margin-left: 520px;
+    }
+
+    .close-icon > img:hover{
+        cursor: pointer;
+    }
+}
+
+.modal-footer{
+    display: flex;
+    flex-direction: row;
+    /*
+    justify-content: start;
+    gap: 12px;
+    padding-left: 20px;
+    */
+    justify-content: center;
+    button:hover{
+        border-color: rgba(229, 103, 23, 0.8);
+        box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset, 0 0 8px rgba(229, 103, 23, 0.6);
+        outline: 0 none;
+    }
+}
+.footer-border{
+    hr{
+      border-bottom: 1px dotted #BEBEBF;
+      border-top: none;
+      border-right: none;
+      border-left: none;
+    }
+}
+
+::ng-deep .mat-tooltip {
+    font-size: 14px;
+}

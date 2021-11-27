@@ -4,6 +4,7 @@ import { Store, StoreIngredient } from '../interfaces/store';
 import { IngredientService } from '../services/ingredient-service.service';
 import { StoreService } from '../services/store-service.service';
 import { AddInventoryModalComponent } from './add-inventory-modal/add-inventory-modal.component';
+import { AddStoreModalComponent } from './add-store-modal/add-store-modal.component';
 import { SimulatorComponent } from './simulator/simulator.component';
 
 const pal = ["#001464", "#26377B", "#404F8B", "#59709A"]
@@ -15,7 +16,7 @@ const pal = ["#001464", "#26377B", "#404F8B", "#59709A"]
 })
 export class StoresComponent implements OnInit {
 
-  store!: Store;
+  store!: Store | null;
   stores!: Array<Store>;
   storeIngredients!: Array<StoreIngredient> | any;
 
@@ -38,7 +39,7 @@ export class StoresComponent implements OnInit {
       width: '550px',
       height: '640px',
       data: {
-        storeId: this.store.storeId,
+        storeId: (this.store && this.store.storeId) ?? -1,
         storeIngredients: JSON.parse(JSON.stringify(this.storeIngredients)),
       },
       panelClass: 'modal-class'
@@ -46,7 +47,7 @@ export class StoresComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(
       res => {
-        this.ingredientService.getStoreIngredients(this.store.storeId)
+        this.ingredientService.getStoreIngredients((this.store && this.store.storeId) ?? -1)
         .subscribe(
           res => {
             this.storeIngredients = res;
@@ -73,7 +74,7 @@ export class StoresComponent implements OnInit {
       width: '550px',
       height: '640px',
       data: {
-        storeId: this.store.storeId,
+        storeId: (this.store && this.store.storeId) ?? -1,
         storeIngredients: JSON.parse(JSON.stringify(this.storeIngredients)),
       },
       panelClass: 'modal-class'
@@ -89,6 +90,9 @@ export class StoresComponent implements OnInit {
       res => {
         if (Array.isArray(res)){
           this.stores = res;
+
+          this.store = this.stores[0];
+          this.storeChanged(null, this.store);
         }
         else{
           this.stores = [];
@@ -99,9 +103,63 @@ export class StoresComponent implements OnInit {
       }
     );
   }
-  storeChanged(event : any, store: Store){
+
+  deleteStore(){
+    this.storeService.deleteStore((this.store && this.store.storeId) ?? -1)
+      .subscribe((res) => {
+        this.getStores();
+      },
+      err => {
+        this.getStores();
+      }
+      
+      );
+  }
+
+  getStores(){
+    this.storeService.getStores()
+    .subscribe(
+      res => {
+        console.log({"stores":res})
+        if (Array.isArray(res)){
+          let prevStoreId = (this.store && this.store.storeId) ?? -1;
+          this.stores = res;
+          let store = this.stores.find(store => store.storeId === prevStoreId);
+          if (store){
+            this.store = store;
+          }
+          else{
+            this.store = null;
+          }
+          this.storeChanged(null, this.store);
+        }
+        else{
+          this.stores = [];
+        }
+      },
+      err => {
+
+      }
+    );
+  }
+
+  addStore(){
+    const dialogRef = this.dialog.open(AddStoreModalComponent, {
+      width: '550px',
+      height: '640px',
+      panelClass: 'modal-class'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result){
+        this.getStores();
+      }
+    });
+  }
+
+  storeChanged(event : any, store: Store | null){
     if (store){
-      this.ingredientService.getStoreIngredients(store.storeId)
+      this.ingredientService.getStoreIngredients(store.storeId ?? -1)
         .subscribe(
           res => {
             this.storeIngredients = res;

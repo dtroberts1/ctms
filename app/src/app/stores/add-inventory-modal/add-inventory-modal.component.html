@@ -37,7 +37,11 @@
                 >
                     <img width="25" height="25" src="../../../assets/icons/PlusIcon/outline_add_blue_white_48dp.png" />
                 </div>
-                <div tabindex="2" class="ingredient-qty">
+                <div tabindex="2" class="ingredient-qty"
+                    matTooltip="Quantity in Oz"
+                    aria-label="Quantity in Oz"
+                    [matTooltipShowDelay]="500"
+                >
                     <input style="height: 20px;width: 50px;" 
                         type="number" 
                         [(ngModel)]="selectedIngredientQty" 
@@ -45,6 +49,7 @@
                         value="0.00" 
                         width="5"
                     />
+                    
                 </div>
                 <div tabindex="3" class="plus-minus-btn"
                     (click)="plusMinusClicked(false)"
@@ -98,7 +103,11 @@
                 >
                     <img width="25" height="25" src="../../../assets/icons/PlusIcon/outline_add_blue_white_48dp.png" />
                 </div>
-                <div tabindex="2" class="ingredient-qty">
+                <div tabindex="2" class="ingredient-qty"
+                    matTooltip="Quantity in Oz"
+                    aria-label="Quantity in Oz"
+                    [matTooltipShowDelay]="500"
+                >
                     <input style="height: 20px;width: 55px;" 
                     type="number"  
                     [(ngModel)]="selectedExistIngredientQty" 

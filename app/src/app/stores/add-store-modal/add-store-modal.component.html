@@ -1,0 +1,104 @@
+<div class="modal-header">
+    <div style="align-items: center; justify-content: center;">
+        Add Store
+    </div>
+    <div (click)="close()" tabindex="1" class="close-icon">
+        <img width="28" height="28" src="../../../assets/icons/CloseIcon/outline_cancel_blue_48dp.png" />
+    </div>
+</div>
+<div class="modal-body" style="height: 520px;">
+    <div>
+        <form style="display: flex; justify-content: center; flex-direction: column;">
+            <table style="text-align: left; padding-top: 10px; padding-left: 20px;">
+                <tr>
+                    <td style="width: 50%">
+                        <mat-form-field style="width: 244px;" class="example-full-width" appearance="fill">
+                            <mat-label>Store Name</mat-label>
+                            <input type="text" matInput [formControl]="storeNameFormControl" [errorStateMatcher]="matcher"
+                                   placeholder="SnowBean Cafe">
+                            <mat-hint>Give it a name!</mat-hint>
+                            <mat-error *ngIf="storeNameFormControl.hasError('storeName') && !storeNameFormControl.hasError('required')">
+                              Please enter a valid store name
+                            </mat-error>
+                            <mat-error *ngIf="storeNameFormControl.hasError('required')">
+                              Store Name is <strong>required</strong>
+                            </mat-error>
+                          </mat-form-field>
+                    </td>
+                    <td style="width: 50%">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 50%">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Launch Date</mat-label>
+                            <input [formControl]="launchDateFormControl" matInput [matDatepicker]="picker"
+                            >
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker startView="month" [startAt]="launchDate" ></mat-datepicker>
+                        </mat-form-field>
+                    </td>
+                    <td style="width: 50%">
+                    </td>
+                </tr>
+            </table>
+            <table style="padding-left: 20px; padding-right: 20px;">
+                <tr>
+                    <td style="width: 50%">
+                        <mat-form-field style="min-width: 260px;" appearance="standard">
+                            <mat-label>Street Address 1</mat-label>
+                            <input required matInput placeholder="42225 W Arizona St" 
+                            [formControl]="addressStreet1">
+                            <mat-icon *ngIf="addressStreet1.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                            <mat-error *ngIf="addressStreet1.invalid">{{getInputErrorMessage(addressStreet1)}}</mat-error>
+                        </mat-form-field>
+                    </td>
+                    <td style="width: 50%">
+                        <mat-form-field style="padding-left: 30px;" appearance="standard">
+                            <mat-label>Street Address 2</mat-label>
+                            <input matInput placeholder="Apt 10" 
+                            [formControl]="addressStreet2">
+                            <mat-icon *ngIf="addressStreet2.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                            <mat-error *ngIf="addressStreet2.invalid">{{getInputErrorMessage(addressStreet2)}}</mat-error>
+                        </mat-form-field>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div style="display: flex; justify-content: start; gap: 30px;">
+                            <mat-form-field style="min-width: 260px;" appearance="standard">
+                                <mat-label>City</mat-label>
+                                <input required matInput placeholder="Houston" 
+                                [formControl]="addressCity">
+                                <mat-icon *ngIf="addressCity.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                                <mat-error *ngIf="addressCity.invalid">{{getInputErrorMessage(addressCity)}}</mat-error>
+                            </mat-form-field>
+                            <mat-form-field appearance="standard" style="width: 70px;">
+                                <mat-label>State</mat-label>
+                                <input style="text-transform: uppercase;" width="2ch" maxlength="2" required matInput placeholder="T" 
+                                [formControl]="addressState">
+                                <mat-icon *ngIf="addressState.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                                <mat-error *ngIf="addressState.invalid">{{getInputErrorMessage(addressState)}}</mat-error>
+                            </mat-form-field>
+                            <mat-form-field appearance="standard" style="width: 80px;">
+                                <mat-label>Zipcode</mat-label>
+                                <input required matInput placeholder="97444" 
+                                [formControl]="addressZipCode">
+                                <mat-icon *ngIf="addressZipCode.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                                <mat-error *ngIf="addressZipCode.invalid">{{getInputErrorMessage(addressZipCode)}}</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </td>
+                </tr>
+            </table>  
+          </form>
+    </div>
+</div>
+<div class="footer-border">
+    <hr>
+</div>
+<div class="modal-footer">
+    <button [disabled]="storeNameFormControl.invalid || launchDateFormControl.invalid || 
+    addressStreet1.invalid || addressStreet2.invalid || addressCity.invalid || 
+    addressState.invalid || addressZipCode.invalid" (click)="add()" mat-raised-button color="accent">Add</button>
+</div>
