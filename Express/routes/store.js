@@ -44,13 +44,28 @@ router.delete('/deleteStore/:storeId?', ((req, res, next) => {
   }
   let queryStr = 'DELETE FROM store WHERE storeId = ?';
 
+  let deleteRelatedSalesQuery = 'DELETE FROM sale where storeId = ?';
+  let deleteRelatedIngredientsQuery = 'DELETE FROM store_ingredient WHERE storeId = ?';
+
   new Promise((resolve, reject) => {
-    req.service.database().query(queryStr, [req.params.storeId], ((err, results) => {
-      if (err) {
+    req.service.database().query(deleteRelatedSalesQuery, [req.params.storeId], ((err, results) => {
+      if (err){
         reject(err);
       }
-      resolve(results);
-    }))
+      req.service.database().query(deleteRelatedIngredientsQuery, [req.params.storeId], ((err, results) => {
+        if (err){
+          reject(err);
+        }
+        req.service.database().query(queryStr, [req.params.storeId], ((err, results) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(results);
+        }));
+
+      }));
+
+    }));
   })
   .then((result) => {
     res.send(result)
