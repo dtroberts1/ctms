@@ -1,9 +1,14 @@
 import { Type } from "@angular/core"
 
 export interface Store {
-    storeId: number,
+    storeId: number | null,
     storeName: string,
-    launchDate: Date,
+    launchDate: Date | string,
+    streetAddr1: string,
+    streetAddr2: string,
+    city: string,
+    state: string,
+    zipcode: string,
 }
 
 export interface StoreIngredient{

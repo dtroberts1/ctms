@@ -9,7 +9,7 @@ router.use(bodyParser.urlencoded({
   extended: true
 }));
   
-router.get('/getHighLData/:fromDate?/:toDate?', ((req, res, next) => {
+router.get('/getHighLvlSalesData/:fromDate?/:toDate?', ((req, res, next) => {
 
   let highLvlSales = {
     salesForCurrMonth: null,

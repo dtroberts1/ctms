@@ -73,15 +73,10 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
           reject(err);
         }
         if (Array.isArray(result)){
-          console.log("in a")
           density = result[0].density;
         }
 
-        console.log({"density":density});
         let mL = req.body.weightInOz * 28.349523 / density;
-        console.log({"mL":mL});
-
-        console.log({"body":req.body})
 
         req.service.database().query(queryStr, [req.body.storeId, req.body.ingredientId, 
           mL], ((err, result) => {
@@ -106,8 +101,6 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
     if (!Object.keys(req.body).length){
       throw new BadRequestError('Missing Fields')
     }
-    console.log({"req.body":req.body});
-    console.log("in action method");
 
     let queryStr = `UPDATE store_ingredient SET mL = ? * 28.349523 / (SELECT density FROM ingredient WHERE ingredientId = ?)
     WHERE storeId = ? AND ingredientId = ?`;
@@ -116,7 +109,6 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
       req.service.database().query(queryStr, [req.body.weightInOz, req.body.ingredientId, req.body.storeId, 
         req.body.ingredientId], ((err, result) => {
         if (err){
-          console.log("error: " + err)
           reject(err);
         }
         resolve();
@@ -126,7 +118,6 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
       res.send({"successResult":'DataSaved'})
     })
      .catch ((err) =>{
-      console.log("error: " + err)
 
       next(err)
     });
@@ -161,8 +152,6 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
 
   router.delete('/deleteStoreIngredient/:storeId/:ingredientId', ((req, res, next) => {
 
-    console.log("DELLL222222L")
-
     if (!req.params.storeId || !req.params.ingredientId){
       throw new BadRequestError('Missing storeId or ingredientId')
     }
@@ -171,7 +160,6 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
     new Promise((resolve, reject) => {
       req.service.database().query(queryStr, [req.params.storeId, req.params.ingredientId], ((err, result) => {
         if (err){
-          console.log({"err":err})
           reject(err);
         }
         resolve();
@@ -181,8 +169,6 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
       res.send({"successResult":'DataSaved'})
     })
      .catch ((err) =>{
-      console.log({"err":err})
-
       next(err)
     });
   }));
@@ -257,9 +243,6 @@ router.get('/getMenuItemIngredients/:id?', ((req, res, next) => {
   }));
 
   router.get('/getStoreIngredients/:storeId', ((req, res, next) => {
-    console.log("testing");
-
-    console.log("id is " + req.params.storeId);
     if (!req.params.storeId){
       throw new BadRequestError('Missing storeId');
     }

@@ -36,7 +36,7 @@ export class StoreSalesChartsComponent implements AfterViewInit{
     end: new FormControl(),
   });
   @Input()
-  public storeId!: number;
+  public storeId!: number | null;
   
   chartInstance!: Chart;
   startDate: Date = new Date(DATE.getFullYear(), DATE.getMonth(), 1);
@@ -54,7 +54,7 @@ export class StoreSalesChartsComponent implements AfterViewInit{
   ngAfterViewInit(): void {
 
     for (let i = 0; i < 1; i ++){
-      this.saleService.getSalesByStoreAndDateRange(this.storeId, `${DATE.getFullYear() - i}-01-01`, `${DATE.getFullYear() - i}-12-31`)
+      this.saleService.getSalesByStoreAndDateRange(this.storeId ?? -1, `${DATE.getFullYear() - i}-01-01`, `${DATE.getFullYear() - i}-12-31`)
       .subscribe(
         result => {
           this.sales = [];
@@ -99,7 +99,7 @@ export class StoreSalesChartsComponent implements AfterViewInit{
 
     for (let i = 0; i < 3; i++){
       this.sales.push([]);
-      this.saleService.getSalesByStoreAndDateRange(this.storeId, `${DATE.getFullYear() - i}-01-01`, `${DATE.getFullYear() - i}-12-31`)
+      this.saleService.getSalesByStoreAndDateRange(this.storeId ?? -1, `${DATE.getFullYear() - i}-01-01`, `${DATE.getFullYear() - i}-12-31`)
       .subscribe(
         result => {
           if (Array.isArray(result)){
