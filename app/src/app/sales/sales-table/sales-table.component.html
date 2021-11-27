@@ -44,7 +44,15 @@
                         </mat-select>
                     </mat-form-field> 
                 </div>
-                <div class="cell-data-div" *ngIf="!(column === 'saleDate' || column === 'menuItem')">
+                <div tabindex="7" (click)="menuOrDateSelectOpened($event)" class="menu-item-select" *ngIf="column === 'store'">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Store</mat-label>
+                        <mat-select (selectionChange)="storeSelectionChanged($event, element)" [(ngModel)]="element[column]">
+                            <mat-option *ngFor="let store of availStores" [value]="store">{{store.storeName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field> 
+                </div>
+                <div class="cell-data-div" *ngIf="!(column === 'saleDate' || column === 'menuItem' || column === 'store')">
                     <div class="cell-data-div-first-div" (click)="editIconClicked($event, element, column)">
                         <input tabindex="1"
                             style="border-color: #42b7ff; text-overflow: ellipsis" 
