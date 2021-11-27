@@ -82,7 +82,7 @@ export class SalesTableComponent implements OnInit {
   saleTextInput!: QueryList<any>;
   @ViewChild(MatSort)
   sort!: MatSort;
-  freezeSave : boolean = false;
+  //freezeSave : boolean = false;
   availMenuItems!: MenuItem[];
   availStores !: Store[];
 
@@ -126,6 +126,10 @@ export class SalesTableComponent implements OnInit {
     }, 0);
   }
 
+  expandRow(event :any, expandedElement :any, element : any){
+
+  }
+
   menuItemSelectionChanged(event: any, element: any){
     let updatedElement = JSON.parse(JSON.stringify(element));
     updatedElement.menuItemId = element.menuItem.id;
@@ -141,6 +145,8 @@ export class SalesTableComponent implements OnInit {
   }
 
   onKeyDown(event: any, element: Sale){
+    event.stopPropagation();
+
     if (event.key === "Enter") {
       this.updateItem(element);
     }
@@ -211,10 +217,12 @@ export class SalesTableComponent implements OnInit {
 
   deleteIconClicked(event : any, sale: Sale, col: any){
     event.stopPropagation();
-    this.freezeSave = true;
+    //this.freezeSave = true;
+
+    sale.isReadOnly = true;
+    sale.editableColumn = null;
 
     let origSale = this.origSales.find(item => item.saleId === sale.saleId);
-    let origData = this.dataSource.data.find(item => item.saleId == sale.saleId);
 
     if (origSale){
       sale[col] = origSale[col];
@@ -240,21 +248,17 @@ export class SalesTableComponent implements OnInit {
     element.isReadOnly = true;
     element.editableColumn = null;
     
-      if (!this.freezeSave){
-        this.saleService.updateSale(<Sale>element)
-        .pipe(
-          map((str: string) => {
-            return {data: 'heres data'}
-          })
-        )
-        .subscribe(
-          val => {
-            this.origSales = JSON.parse(JSON.stringify(this.sales));
-          }
-        )
-      }
-      this.freezeSave = false;
-
+    this.saleService.updateSale(<Sale>element)
+      .pipe(
+        map((str: string) => {
+          return {data: 'heres data'}
+        })
+      )
+      .subscribe(
+        val => {
+          this.origSales = JSON.parse(JSON.stringify(this.sales));
+        }
+      );
   }
 
   updateSaleDate(event: MatDatepickerInputEvent<any,any>, element : any){
@@ -275,7 +279,10 @@ export class SalesTableComponent implements OnInit {
     )
   }
 
-  disableEditMode(event : Event, element : any, column : string, val: any){
+  saveSale(event: Event, element : any, column : string, val: any){
+
+    event.stopPropagation();
+
     let item = this.origSales.find(item => item.saleId == element.saleId);
     if (item){
       if (item[column] != element[column]){
@@ -286,7 +293,31 @@ export class SalesTableComponent implements OnInit {
       else{
         element.isReadOnly = true;
         element.editableColumn = null;
+
       }
+    }
+    else{
+    }
+  }
+
+  disableEditMode(event : Event, element : any, column : string, val: any){
+
+    let item = this.origSales.find(item => item.saleId == element.saleId);
+    if (item){
+      if (item[column] != element[column]){
+        let updatedElement = JSON.parse(JSON.stringify(element))
+        updatedElement.saleDate = element.saleDate.toISOString().slice(0, 19).replace('T', ' ');
+        this.updateItem(updatedElement);
+        element.isReadOnly = true;
+        element.editableColumn = null;
+      }
+      else{
+        element.isReadOnly = true;
+        element.editableColumn = null;
+
+      }
+    }
+    else{
     }
   }
 
@@ -320,6 +351,8 @@ export class SalesTableComponent implements OnInit {
   }
 
   editIconClicked(event : any, row: any, col: any){
+    event.stopPropagation();
+
     //event.stopPropagation()
     let evt = JSON.parse(JSON.stringify(event))
     row.isReadOnly = false;

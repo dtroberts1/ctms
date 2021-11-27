@@ -26,31 +26,37 @@
             <ng-container matColumnDef="{{column}}" *ngFor="let column of mainColumns; let index=index;">
             <th mat-header-cell mat-sort-header *matHeaderCellDef class="column"> {{getColumnName(column)}} </th>
             <td #text_input mat-cell *matCellDef="let element" class="cell-data">
-                <div tabindex="6" (click)="menuOrDateSelectOpened($event)" class="datepicker" *ngIf="column === 'saleDate'">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Choose a date</mat-label>
-                        <input [ngModel]="element.saleDate" matInput [matDatepicker]="picker"
-                            (dateChange)="updateSaleDate($event, element)"
-                        >
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker startView="month" [startAt]="element.saleDate" ></mat-datepicker>
-                      </mat-form-field>
+                <div class="datepicker" *ngIf="column === 'saleDate'">
+                    <div tabindex="6" style="display: inline-block;" (click)="menuOrDateSelectOpened($event)" >
+                        <mat-form-field appearance="fill" style="width: 100%;">
+                            <mat-label>Choose a date</mat-label>
+                            <input [ngModel]="element.saleDate" matInput [matDatepicker]="picker"
+                                (dateChange)="updateSaleDate($event, element)"
+                            >
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker startView="month" [startAt]="element.saleDate" ></mat-datepicker>
+                          </mat-form-field>
+                    </div>
                 </div>
-                <div tabindex="7" (click)="menuOrDateSelectOpened($event)" class="menu-item-select" *ngIf="column === 'menuItem'">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Category</mat-label>
-                        <mat-select (selectionChange)="menuItemSelectionChanged($event, element)" [(ngModel)]="element[column]">
-                            <mat-option *ngFor="let menuItem of availMenuItems" [value]="menuItem">{{menuItem.name}}</mat-option>
-                        </mat-select>
-                    </mat-form-field> 
+                <div class="menu-item-select" *ngIf="column === 'menuItem'">
+                    <div tabindex="7" style="display: inline-block;" (click)="menuOrDateSelectOpened($event)">
+                        <mat-form-field appearance="fill" style="width: 100%;">
+                            <mat-label>Category</mat-label>
+                            <mat-select (selectionChange)="menuItemSelectionChanged($event, element)" [(ngModel)]="element[column]">
+                                <mat-option *ngFor="let menuItem of availMenuItems" [value]="menuItem">{{menuItem.name}}</mat-option>
+                            </mat-select>
+                        </mat-form-field> 
+                    </div>
                 </div>
-                <div tabindex="7" (click)="menuOrDateSelectOpened($event)" class="menu-item-select" *ngIf="column === 'store'">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Store</mat-label>
-                        <mat-select (selectionChange)="storeSelectionChanged($event, element)" [(ngModel)]="element[column]">
-                            <mat-option *ngFor="let store of availStores" [value]="store">{{store.storeName}}</mat-option>
-                        </mat-select>
-                    </mat-form-field> 
+                <div class="menu-item-select" *ngIf="column === 'store'">
+                    <div tabindex="7" style="display: inline-block;" (click)="menuOrDateSelectOpened($event)">
+                        <mat-form-field appearance="fill" style="width: 100%;">
+                            <mat-label>Store</mat-label>
+                            <mat-select  (selectionChange)="storeSelectionChanged($event, element)" [(ngModel)]="element[column]">
+                                <mat-option *ngFor="let store of availStores" [value]="store">{{store.storeName}}</mat-option>
+                            </mat-select>
+                        </mat-form-field> 
+                    </div>
                 </div>
                 <div class="cell-data-div" *ngIf="!(column === 'saleDate' || column === 'menuItem' || column === 'store')">
                     <div class="cell-data-div-first-div" (click)="editIconClicked($event, element, column)">
@@ -64,7 +70,7 @@
                             type="text"
                             (keyup.Tab)="onTabKey($event, element, column)"
                             (keyup.shift.tab)="onTabKey($event, element, column)"
-                            (keydown)="onKeyDown($event, element)"
+                            (mousedown)="onKeyDown($event, element)"
                         />         
                     </div>
                     <div style="display: flex; flex-direction: row; justify-content: space-around">
@@ -75,8 +81,8 @@
                             <div tabindex="1" (click)="editIconClicked($event, element, column)">
                             </div>
                         </div>
-                        <div *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-check" style="display: inline-flex;">
-                            <div tabindex="" (click)="editIconClicked($event, element, column)">
+                        <div *ngIf="!element.isReadOnly && element.editableColumn == column && element.editableColumn != null" class="cell-data-div-img-check" style="display: inline-flex;">
+                            <div tabindex="" (click)="saveSale($event, element, column, element[column])">
                             </div>
                         </div>
                         <div tabindex="5" (mousedown)="deleteIconClicked($event, element, column)"  *ngIf="!(element.isReadOnly || element.editableColumn != column)" class="cell-data-div-img-close" style="display: inline-flex;">
@@ -91,7 +97,8 @@
                 <th mat-header-cell *matHeaderCellDef>
                 </th>
                 <td mat-cell *matCellDef="let element">
-                    <mat-icon style="float:right;" class="expand-icon"  [@openClose]=" expandedElement !==element ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
+                    <!---->
+                    <mat-icon style="float:right;" class="expand-icon"  [@openClose]="expandedElement !==element ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
                 </td>
             </ng-container>
             <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
@@ -124,7 +131,7 @@
             <tr mat-row *matRowDef="let element; columns: columns;"
                 class="example-element-row"
                 [class.example-expanded-row]="expandedElement === element"
-                (click)="expandedElement = expandedElement === element ? null : element"
+                (click)="expandRow($event, expandedElement, element); expandedElement = expandedElement === element ? null : element"
             >
             </tr>
             <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
