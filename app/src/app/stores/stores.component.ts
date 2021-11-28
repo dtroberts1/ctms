@@ -10,6 +10,7 @@ import { SimulatorComponent } from './simulator/simulator.component';
 import {} from '@angular/google-maps';
 import { Observable } from 'rxjs';
 import { GeocodeService } from '../geocode.service';
+import { FormControl, Validators } from '@angular/forms';
 
 const pal = ["#001464", "#26377B", "#404F8B", "#59709A"]
 export interface Location {
@@ -35,6 +36,14 @@ export class StoresComponent implements OnInit {
   address : string = 'London';
   location!: Location;
   loading!: boolean;
+  launchDateFormControl = new FormControl('', [Validators.required]);
+  addressStreet1 = new FormControl('', [Validators.required, Validators.pattern(/\d+(\s+\w+\.?){1,}\s+(?:st(?:\.|reet)?|dr(?:\.|ive)?|pl(?:\.|ace)?|ave(?:\.|nue)?|rd(\.?)|road|lane|drive|way|court|plaza|square|run|parkway|point|pike|square|driveway|trace|park|terrace|blvd)+$/i)]);
+  addressStreet2 = new FormControl('', [Validators.pattern(/^(APT|APARTMENT|SUITE|STE|UNIT) *(NUMBER|NO|#)? *([0-9A-Z-]+)(.*)$/i)]);
+  addressCity = new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z\u0080-\u024F]+(?:. |-| |')*([1-9a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$")]);
+  addressState = new FormControl('', [Validators.required, Validators.pattern('^((A[LKZR])|(C[AOT])|(D[EC])|(FL)|(GA)|(HI)|(I[DLNA])|(K[SY])|(LA)|(M[EDAINSOT])|(N[EVHJMYCD])|(O[HKR])|(PA)|(RI)|(S[CD])|(T[NX])|(UT)|(V[TA])|(W[AVIY]))$')]);
+  addressZipCode = new FormControl('', [Validators.required, Validators.pattern('^[0-9]{5}(?:-[0-9]{4})?$')]);
+  launchDate !: Date;
+  addressEditMode !: boolean;
 
   constructor(
     private storeService: StoreService,
@@ -43,18 +52,25 @@ export class StoresComponent implements OnInit {
     private geocodeService: GeocodeService,
     private ref: ChangeDetectorRef,
       ) { 
-        /*
-    this.platform = new H.service.Platform({
-      "app_id": "API key 1",
-      "app_code": "AIzaSyDi1ThRy79APlO8SXvSHFnpRlphTFvgRTc"
-  });
-  this.geoCoder = this.platform.getGeocodingService();
-  */
+  }
+  setFormControlInputs(){
+    this.addressStreet1.setValue(this.store?.streetAddr1);
+    this.addressStreet2.setValue(this.store?.streetAddr2);
+    this.addressCity.setValue(this.store?.city);
+    this.addressState.setValue(this.store?.state);
+    this.addressZipCode.setValue(this.store?.zipcode);
   }
 
-
-
-  item = this;
+  getInputErrorMessage(inputField : any){
+    
+    if (inputField.hasError('required')) {
+      return 'You must enter a value';
+    }
+    if (inputField.hasError(inputField)){
+        return "Not a valid entry";
+    }
+    return "";
+  }
 
   setupForecastChart(){
 
@@ -137,6 +153,7 @@ export class StoresComponent implements OnInit {
 
           this.store = this.stores[0];
           this.storeChanged(null, this.store);
+          this.setFormControlInputs();
         }
         else{
           this.stores = [];
@@ -177,15 +194,19 @@ export class StoresComponent implements OnInit {
 
   }
 
-  ngAfterViewInit() {
+  updateMap(newAddress: string){
     this.loading = true;
-    this.geocodeService.geocodeAddress('47725 W 1st St, Oakridge, OR, 97463')
+    this.geocodeService.geocodeAddress(newAddress)
     .subscribe((location: Location) => {
         this.location = location;
         this.loading = false;
         this.ref.detectChanges();  
       }      
-    );  
+    );
+  }
+
+  ngAfterViewInit() {  
+    this.updateMap('47725 W 1st St, Oakridge, OR, 97463');
   }
 
 
@@ -214,8 +235,11 @@ export class StoresComponent implements OnInit {
           }
           else{
             this.store = null;
+
           }
           this.storeChanged(null, this.store);
+          this.setFormControlInputs();
+
         }
         else{
           this.stores = [];
@@ -243,6 +267,13 @@ export class StoresComponent implements OnInit {
 
   storeChanged(event : any, store: Store | null){
     if (store){
+      this.setFormControlInputs();
+      this.updateMap(`${store.streetAddr1}${(store.streetAddr1 ? ', ' : ' ')}
+        ${store.streetAddr2}${(store.streetAddr2 ? ', ' : ' ')}
+        ${store.city}${(store.city ? ', ' : ' ')}
+        ${store.state}${(store.state ? ', ' : ' ')}
+        ${store.zipcode}${(store.zipcode ? ', ' : ' ')}`);
+        
       this.ingredientService.getStoreIngredients(store.storeId ?? -1)
         .subscribe(
           res => {

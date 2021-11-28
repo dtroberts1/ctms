@@ -37,7 +37,99 @@
     </agm-map>
     </div>
     <div class="store-details">
-      Test
+      <div>
+        <div>
+          <label style="color: #26377B; font-family: 'Lato', Arial, sans-serif; font-weight: normal;">
+            Store Name
+          </label>
+          <div *ngIf="store" style="padding-left: 12px; padding-top: 8px;">
+              {{store.storeName}}
+          </div>
+        </div>
+        <div>
+          <div style="margin-top:10px;">
+            <div style="display: flex; align-items: center;">
+              <label *ngIf="!addressEditMode" style="color: #26377B; font-family: 'Lato', Arial, sans-serif; font-weight: normal;">
+                Street Address
+              </label>
+              <div *ngIf="!addressEditMode"
+                class="cell-data-div-img-edit" 
+                style="display: inline-flex; margin-left: 8px;"
+              >
+                <div tabindex="1" (click)="addressEditMode = true">
+                </div>
+              </div>
+            </div>
+            <div  *ngIf="store && !addressEditMode" style="padding-left: 12px; padding-top: 8px;">
+              <span>{{store.streetAddr1}}{{(store.streetAddr1 ? ', ': ' ')}}{{store.streetAddr2}}{{(store.streetAddr2 ? ', ': ' ')}}</span><br />
+              <span>{{store.city}}{{(store.city ? ', ': ' ')}}{{store.state}}{{(store.state ? ', ': ' ')}}{{store.zipcode}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="datepicker">
+        <mat-form-field appearance="fill" style="padding:0">
+          <mat-label>Launch Date</mat-label>
+          <input [formControl]="launchDateFormControl" matInput [matDatepicker]="picker"
+          >
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker startView="month" [startAt]="launchDate" ></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div>
+        <form *ngIf="addressEditMode" style="display: flex; justify-content: center; flex-direction: column;">
+          <table id="store-address-tbl" style="padding-left: 10px; padding-right: 20px;">
+              <tr>
+                  <td style="width: 50%">
+                      <mat-form-field style="min-width: 260px;" appearance="standard">
+                          <mat-label>Street Address 1</mat-label>
+                          <input required matInput placeholder="42225 W Arizona St" 
+                          [formControl]="addressStreet1">
+                          <mat-icon *ngIf="addressStreet1.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                          <mat-error *ngIf="addressStreet1.invalid">{{getInputErrorMessage(addressStreet1)}}</mat-error>
+                      </mat-form-field>
+                  </td>
+                  <td style="width: 50%">
+                      <mat-form-field style="padding-left: 30px;" appearance="standard">
+                          <mat-label>Street Address 2</mat-label>
+                          <input matInput placeholder="Apt 10" 
+                          [formControl]="addressStreet2">
+                          <mat-icon *ngIf="addressStreet2.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                          <mat-error *ngIf="addressStreet2.invalid">{{getInputErrorMessage(addressStreet2)}}</mat-error>
+                      </mat-form-field>
+                  </td>
+              </tr>
+              <tr>
+                  <td colspan="2">
+                      <div style="display: flex; justify-content: start; gap: 30px;">
+                          <mat-form-field style="min-width: 260px;" appearance="standard">
+                              <mat-label>City</mat-label>
+                              <input required matInput placeholder="Houston" 
+                              [formControl]="addressCity">
+                              <mat-icon *ngIf="addressCity.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                              <mat-error *ngIf="addressCity.invalid">{{getInputErrorMessage(addressCity)}}</mat-error>
+                          </mat-form-field>
+                          <mat-form-field appearance="standard" style="width: 70px;">
+                              <mat-label>State</mat-label>
+                              <input style="text-transform: uppercase;" width="2ch" maxlength="2" required matInput placeholder="T" 
+                              [formControl]="addressState">
+                              <mat-icon *ngIf="addressState.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                              <mat-error *ngIf="addressState.invalid">{{getInputErrorMessage(addressState)}}</mat-error>
+                          </mat-form-field>
+                          <mat-form-field appearance="standard" style="width: 80px;">
+                              <mat-label>Zipcode</mat-label>
+                              <input required matInput placeholder="97444" 
+                              [formControl]="addressZipCode">
+                              <mat-icon *ngIf="addressZipCode.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                              <mat-error *ngIf="addressZipCode.invalid">{{getInputErrorMessage(addressZipCode)}}</mat-error>
+                          </mat-form-field>
+                      </div>
+                  </td>
+              </tr>
+          </table>  
+        </form>
+      </div>
     </div>
     <div class="store-service">
       Test

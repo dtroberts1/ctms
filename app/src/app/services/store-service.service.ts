@@ -26,6 +26,11 @@ export class StoreService {
             storeId: store.storeId,
             storeName: store.storeName,
             launchDate: store.launchDate,
+            streetAddr1: store.streetAddr1,
+            streetAddr2: store.streetAddr2,
+            city: store.city,
+            state: store.state,
+            zipcode: store.zipcode,
           });
         })
       );
