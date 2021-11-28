@@ -24,6 +24,8 @@ export interface Location {
   styleUrls: ['./stores.component.less']
 })
 export class StoresComponent implements OnInit {
+  @ViewChild('storeNameInput') storeNameInput!: ElementRef;
+
   @ViewChild('map') mapElement: any;
   map!: google.maps.Map;
 
@@ -42,8 +44,11 @@ export class StoresComponent implements OnInit {
   addressCity = new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z\u0080-\u024F]+(?:. |-| |')*([1-9a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$")]);
   addressState = new FormControl('', [Validators.required, Validators.pattern('^((A[LKZR])|(C[AOT])|(D[EC])|(FL)|(GA)|(HI)|(I[DLNA])|(K[SY])|(LA)|(M[EDAINSOT])|(N[EVHJMYCD])|(O[HKR])|(PA)|(RI)|(S[CD])|(T[NX])|(UT)|(V[TA])|(W[AVIY]))$')]);
   addressZipCode = new FormControl('', [Validators.required, Validators.pattern('^[0-9]{5}(?:-[0-9]{4})?$')]);
+  storeNameFormControl = new FormControl('', [Validators.required]);
   launchDate !: Date;
   addressEditMode !: boolean;
+  detailChangesPending : boolean = false;
+  storeNameEditMode: boolean = false;
 
   constructor(
     private storeService: StoreService,
@@ -59,6 +64,7 @@ export class StoresComponent implements OnInit {
     this.addressCity.setValue(this.store?.city);
     this.addressState.setValue(this.store?.state);
     this.addressZipCode.setValue(this.store?.zipcode);
+    this.storeNameFormControl.setValue(this.store?.storeName);
   }
 
   getInputErrorMessage(inputField : any){
@@ -72,8 +78,23 @@ export class StoresComponent implements OnInit {
     return "";
   }
 
+  enableStoreNameEditMode(){
+    this.storeNameEditMode = true;
+    this.storeNameInput.nativeElement.focus();
+  }
+
   setupForecastChart(){
 
+  }
+
+  detailDataChanged(){
+    this.detailChangesPending = true;
+  }
+
+  cancelDetailChanges(){
+    this.detailChangesPending = false;
+    this.addressEditMode = false;
+    this.storeNameEditMode = false;
   }
 
   openAddInventoryModal(){
@@ -273,7 +294,7 @@ export class StoresComponent implements OnInit {
         ${store.city}${(store.city ? ', ' : ' ')}
         ${store.state}${(store.state ? ', ' : ' ')}
         ${store.zipcode}${(store.zipcode ? ', ' : ' ')}`);
-        
+
       this.ingredientService.getStoreIngredients(store.storeId ?? -1)
         .subscribe(
           res => {
