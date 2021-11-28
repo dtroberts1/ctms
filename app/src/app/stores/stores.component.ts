@@ -65,6 +65,7 @@ export class StoresComponent implements OnInit {
     this.addressState.setValue(this.store?.state);
     this.addressZipCode.setValue(this.store?.zipcode);
     this.storeNameFormControl.setValue(this.store?.storeName);
+    this.launchDateFormControl.setValue(this.store?.launchDate);
   }
 
   getInputErrorMessage(inputField : any){
@@ -95,6 +96,7 @@ export class StoresComponent implements OnInit {
     this.detailChangesPending = false;
     this.addressEditMode = false;
     this.storeNameEditMode = false;
+    this.getStores();
   }
 
   openAddInventoryModal(){
@@ -126,9 +128,34 @@ export class StoresComponent implements OnInit {
         );
       },
       err => {
-
       }
     )
+  }
+
+  saveStoreDetails(){
+    if (this.store){
+      this.storeService.putStoreDetails({
+        storeId: this.store.storeId,
+        storeName: this.storeNameFormControl.value,
+        launchDate: this.launchDateFormControl.value,
+        streetAddr1: this.addressStreet1.value,
+        streetAddr2: this.addressStreet2.value,
+        city: this.addressCity.value,
+        state: this.addressState.value,
+        zipcode: this.addressZipCode.value,
+      })
+      .subscribe(
+        res => {
+          this.getStores();
+          this.detailChangesPending = false;
+          this.addressEditMode = false;
+          this.storeNameEditMode = false;
+        },
+        err => {
+          this.cancelDetailChanges();
+        }
+      );
+    }
   }
 
   openSimModal(){

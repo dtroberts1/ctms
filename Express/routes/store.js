@@ -17,8 +17,6 @@ router.post('/addStore/', ((req, res, next) => {
   }
   let queryData = JSON.parse(JSON.stringify(req.body));
 
-  
-
   let queryStr = `INSERT INTO store(storeName, launchDate, streetAddr1, streetAddr2, city, state, zipcode)
   VALUES(?,?,?,?,?,?,?)`;
   new Promise((resolve, reject) => {
@@ -74,6 +72,32 @@ router.delete('/deleteStore/:storeId?', ((req, res, next) => {
     next(err)
   });  
 
+}));
+
+router.put('/putStoreDetails', ((req, res, next) => {
+
+  if (!Object.keys(req.body).length){
+    throw new BadRequestError('Missing Fields')
+  }
+
+  let queryData = JSON.parse(JSON.stringify(req.body));
+
+  let queryStr = `UPDATE store SET storeName = ?, launchDate = ?, streetAddr1 = ?, streetAddr2 = ?, city = ?, state = ?, zipcode = ? WHERE storeId = ?`;
+  new Promise((resolve, reject) => {
+    req.service.database().query(queryStr, [queryData.storeName, queryData.launchDate,
+      queryData.streetAddr1, queryData.streetAddr2, queryData.city, queryData.state, queryData.zipcode, queryData.storeId], ((err, results) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(results);
+    }))
+  })
+  .then((result) => {
+    res.send(result)
+  })
+  .catch ((err) =>{
+    next(err)
+  }); 
 }));
 
 router.get('/getStores', ((req, res, next) => {
