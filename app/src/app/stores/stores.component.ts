@@ -49,6 +49,14 @@ export class StoresComponent implements OnInit {
   addressEditMode !: boolean;
   detailChangesPending : boolean = false;
   storeNameEditMode: boolean = false;
+  overallServiceRating!: string;
+  likelihoodToRecommend!: string;
+  mostPopularItemSold!: string;
+  leastPopularItemSold!: string;
+  leadPerformer!: string;
+  worstPerformer!: string;
+  revenueYTD!: string;
+  productQtySold!: string;
 
   constructor(
     private storeService: StoreService,
@@ -211,35 +219,6 @@ export class StoresComponent implements OnInit {
 
       }
     );
-
-/*
-    this.mapsAPILoader.load().then(() => {
-      this.setCurrentLocation();
-      this.geoCoder = new google.maps.Geocoder;
-
-      let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
-      autocomplete.addListener("place_changed", () => {
-        this.ngZone.run(() => {
-          //get the place result
-
-          let place: google.maps.places.PlaceResult = autocomplete.getPlace();
-
-          //verify result
-          if (place.geometry === undefined || place.geometry === null) {
-            return;
-          }
-
-          //set latitude, longitude and zoom
-          if (place.geometry.location){
-            this.latitude = place.geometry.location.lat();
-            this.longitude = place.geometry.location.lng();
-          }
-          this.zoom = 12;
-        });
-      });
-    });
-    */
-
   }
 
   updateMap(newAddress: string){
@@ -313,6 +292,40 @@ export class StoresComponent implements OnInit {
     });
   }
 
+  setStoreMetrics(storeId: number){
+    this.storeService.getStoreMetrics(storeId ?? -1)
+    .subscribe(
+      (res : any) => {
+        if (res.averageServiceRating && Array.isArray(res.averageServiceRating) && res.averageServiceRating.length){
+          this.overallServiceRating = `${res.averageServiceRating[0].averageRating.toFixed(2)} of 10`;
+        }
+        if (res.likelyHoodToRecommendStore && Array.isArray(res.likelyHoodToRecommendStore) && res.likelyHoodToRecommendStore.length){
+          this.likelihoodToRecommend = `${res.likelyHoodToRecommendStore[0].likelyToRecommend.toFixed(2)} of 10`;
+        }
+
+        if (Array.isArray(res.mostLeastPopularStoreMenuItem) && res.mostLeastPopularStoreMenuItem.length){
+          let lastItem = res.mostLeastPopularStoreMenuItem[res.mostLeastPopularStoreMenuItem.length - 1];
+          this.mostPopularItemSold = `${res.mostLeastPopularStoreMenuItem[0].name} ${res.mostLeastPopularStoreMenuItem[0].qtySold}`;
+          this.leastPopularItemSold = `${lastItem.name} ${lastItem.qtySold}`;
+        }
+
+        if (Array.isArray(res.averageEmployeeRating) && res.averageEmployeeRating.length){
+          let lastItem = res.averageEmployeeRating[res.averageEmployeeRating.length - 1];
+          this.leadPerformer = `${res.averageEmployeeRating[0].employeeName}  ${res.averageEmployeeRating[0].averageRating.toFixed(2)} of 10`;
+          this.worstPerformer = `${lastItem.employeeName}  ${lastItem.averageRating.toFixed(2)} of 10`;
+        }
+
+        if (Array.isArray(res.productsSoldWithRevenueStoreYtd) && res.productsSoldWithRevenueStoreYtd.length){
+          this.revenueYTD = `$${res.productsSoldWithRevenueStoreYtd[0].revenueYTD}`;
+          this.productQtySold = res.productsSoldWithRevenueStoreYtd[0].qtySoldYTD;
+        }
+      },
+      err => {
+
+      }
+    );
+  }
+
   storeChanged(event : any, store: Store | null){
     if (store){
       this.setFormControlInputs();
@@ -321,6 +334,8 @@ export class StoresComponent implements OnInit {
         ${store.city}${(store.city ? ', ' : ' ')}
         ${store.state}${(store.state ? ', ' : ' ')}
         ${store.zipcode}${(store.zipcode ? ', ' : ' ')}`);
+
+      this.setStoreMetrics(store.storeId ?? -1);
 
       this.ingredientService.getStoreIngredients(store.storeId ?? -1)
         .subscribe(

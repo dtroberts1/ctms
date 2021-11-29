@@ -36,6 +36,10 @@ export class StoreService {
       );
   }
 
+  getStoreMetrics(storeId: number) : Observable<any[]>{
+    return this.http.get<any[]>(`${this.serviceUrl}/getStoreMetrics/${storeId}`);
+  }
+
   deleteStore(storeId: number){
     return this.http.delete(`${this.serviceUrl}/deleteStore/${storeId}`, {responseType: 'text'})
     .pipe(
