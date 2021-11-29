@@ -26,9 +26,18 @@ export class StoreService {
             storeId: store.storeId,
             storeName: store.storeName,
             launchDate: store.launchDate,
+            streetAddr1: store.streetAddr1,
+            streetAddr2: store.streetAddr2,
+            city: store.city,
+            state: store.state,
+            zipcode: store.zipcode,
           });
         })
       );
+  }
+
+  getStoreMetrics(storeId: number) : Observable<any[]>{
+    return this.http.get<any[]>(`${this.serviceUrl}/getStoreMetrics/${storeId}`);
   }
 
   deleteStore(storeId: number){
@@ -37,6 +46,32 @@ export class StoreService {
       map((item: string) => {
         this.toastr.success("Store Removed");
         return item;
+      })
+    );
+  }
+
+  putStoreDetails(store: Store){
+    if (store.launchDate && store.launchDate instanceof Date){
+      let launchDate = (<Date>store.launchDate).toISOString().substr(0, (<Date>store.launchDate).toISOString().indexOf('T'));
+      store.launchDate = launchDate;
+    }
+    else if (store.launchDate && (typeof store.launchDate === 'string')){
+      store.launchDate = store.launchDate.substr(0, (store.launchDate.indexOf('T')));
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        /*Authorization: 'my-auth-token'*/
+      })
+    };
+
+    return this.http.put<string>(`${this.serviceUrl}/putStoreDetails`,
+    store, httpOptions
+    )    
+    .pipe(
+      map((res: any) =>{
+        this.toastr.success("Store Saved");
+        return res;
       })
     );
   }

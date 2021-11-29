@@ -22,13 +22,222 @@
 </div>
 
 <div style="background-color: #F5F6F7; padding-bottom:300px; height: 800px;">
+  <div class="store-map-reviews">
+    <div class="store-map">
+      <agm-map *ngIf="location"
+      [latitude]="location.lat"
+      [longitude]="location.lng"
+      [zoom]="8"
+      [disableDefaultUI]="false"
+      [zoomControl]="false">
+      <agm-marker *ngIf="location"
+          [latitude]="location.lat"
+          [longitude]="location.lng">   
+      </agm-marker>
+    </agm-map>
+    </div>
+    <div class="store-details">
+      <div>
+        <div>
+          <div style="display: flex; align-items: center;">
+            <label style="color: #26377B; font-family: 'Lato', Arial, sans-serif; font-weight: normal;">
+              Store Name
+            </label>
+            <div [ngStyle]="{'visibility': !storeNameEditMode ? 'visible' : 'hidden'}"
+              class="cell-data-div-img-edit" 
+              style="display: inline-flex; margin-left: 8px;"
+            >
+              <div tabindex="1" (click)="enableStoreNameEditMode()" style="margin-top: -5px;">
+              </div>
+          </div>
+          </div>
+          <div  *ngIf="store" style="display: flex; align-items: center; padding-left: 12px; padding-top:4px;">
+            <div>
+              <input matInput placeholder="SnowBean Cafe" 
+              #storeNameInput
+              [readonly]="store && !storeNameEditMode"
+              (keydown)="detailDataChanged()"
+              [formControl]="storeNameFormControl">
+            </div>
+            <div [ngStyle]="{'visibility': storeNameEditMode ? 'visible': 'hidden'}">
+              <mat-icon *ngIf="storeNameFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+              <mat-error *ngIf="storeNameFormControl.invalid">{{getInputErrorMessage(storeNameFormControl)}}</mat-error>
+            </div>
+          </div>
+        </div>
+        <div>
+        </div>
+      </div>
+      
+      <div class="datepicker">
+        <mat-form-field appearance="fill" style="padding:0">
+          <mat-label>Launch Date</mat-label>
+          <input [formControl]="launchDateFormControl" matInput [matDatepicker]="picker"
+          (dateChange)="detailDataChanged()"
+          >
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker startView="month" [startAt]="launchDate" ></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div>
+        <div style="margin-top:10px;" *ngIf="!addressEditMode">
+          <div style="display: flex; align-items: center;">
+            <label *ngIf="!addressEditMode" style="color: #26377B; font-family: 'Lato', Arial, sans-serif; font-weight: normal;">
+              Street Address
+            </label>
+            <div *ngIf="!addressEditMode"
+              class="cell-data-div-img-edit" 
+              style="display: inline-flex; margin-left: 8px;"
+            >
+              <div tabindex="1" (click)="addressEditMode = true" style="margin-top: -5px;">
+              </div>
+            </div>
+          </div>
+          <div  *ngIf="store && !addressEditMode" style="padding-left: 12px; padding-top: 8px;">
+            <span>{{store.streetAddr1}}{{(store.streetAddr1 ? ', ': ' ')}}{{store.streetAddr2}}{{(store.streetAddr2 ? ', ': ' ')}}</span><br />
+            <span>{{store.city}}{{(store.city ? ', ': ' ')}}{{store.state}}{{(store.state ? ', ': ' ')}}{{store.zipcode}}</span>
+          </div>
+        </div>
+        <form *ngIf="addressEditMode" style="display: flex; justify-content: center; flex-direction: column;">
+          <table id="store-address-tbl" style="padding-left: 10px; padding-right: 20px;">
+              <tr>
+                  <td style="width: 50%">
+                      <mat-form-field style="min-width: 260px;" appearance="standard">
+                          <mat-label>Street Address 1</mat-label>
+                          <input required matInput placeholder="42225 W Arizona St" 
+                          autofocus
+                          (keydown)="detailDataChanged()"
+                          [formControl]="addressStreet1">
+                          <mat-icon *ngIf="addressStreet1.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                          <mat-error *ngIf="addressStreet1.invalid">{{getInputErrorMessage(addressStreet1)}}</mat-error>
+                      </mat-form-field>
+                  </td>
+                  <td style="width: 50%">
+                      <mat-form-field style="padding-left: 30px;" appearance="standard">
+                          <mat-label>Street Address 2</mat-label>
+                          <input matInput placeholder="Apt 10" 
+                          (keydown)="detailDataChanged()"
+                          [formControl]="addressStreet2">
+                          <mat-icon *ngIf="addressStreet2.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                          <mat-error *ngIf="addressStreet2.invalid">{{getInputErrorMessage(addressStreet2)}}</mat-error>
+                      </mat-form-field>
+                  </td>
+              </tr>
+              <tr>
+                  <td colspan="2">
+                      <div style="display: flex; justify-content: start; gap: 30px;">
+                          <mat-form-field style="min-width: 260px;" appearance="standard">
+                              <mat-label>City</mat-label>
+                              <input required matInput placeholder="Houston" 
+                              (keydown)="detailDataChanged()"
+                              [formControl]="addressCity">
+                              <mat-icon *ngIf="addressCity.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                              <mat-error *ngIf="addressCity.invalid">{{getInputErrorMessage(addressCity)}}</mat-error>
+                          </mat-form-field>
+                          <mat-form-field appearance="standard" style="width: 70px;">
+                              <mat-label>State</mat-label>
+                              <input style="text-transform: uppercase;" width="2ch" maxlength="2" required matInput placeholder="T" 
+                              (keydown)="detailDataChanged()"
+                              [formControl]="addressState">
+                              <mat-icon *ngIf="addressState.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                              <mat-error *ngIf="addressState.invalid">{{getInputErrorMessage(addressState)}}</mat-error>
+                          </mat-form-field>
+                          <mat-form-field appearance="standard" style="width: 80px;">
+                              <mat-label>Zipcode</mat-label>
+                              <input required matInput placeholder="97444" 
+                              (keydown)="detailDataChanged()"
+                              [formControl]="addressZipCode">
+                              <mat-icon *ngIf="addressZipCode.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                              <mat-error *ngIf="addressZipCode.invalid">{{getInputErrorMessage(addressZipCode)}}</mat-error>
+                          </mat-form-field>
+                      </div>
+                  </td>
+              </tr>
+          </table>  
+        </form>
+      </div>
+      <div style="grid-column-start: 1; grid-column-end: 3; display: flex; justify-content: end; align-items: end;">
+        <div>
+          <button *ngIf="detailChangesPending" (click)="saveStoreDetails()" class="pending-changes" mat-raised-button color="primary">Save Changes</button>
+        </div>
+        <div>
+          <button *ngIf="addressEditMode || storeNameEditMode || detailChangesPending" (click)="cancelDetailChanges()" mat-raised-button color="primary">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div class="store-service">
+      <div>
+        <label>
+            Overall Service Rating
+        </label>
+        <div>
+            {{overallServiceRating}}
+        </div>
+    </div>
+    <div>
+        <label>
+            Likelihood to Recommend
+        </label>
+        <div>
+          {{likelihoodToRecommend}}
+        </div>
+    </div>
+    <div>
+      <label>
+          Most Popular Item Sold
+      </label>
+      <div>
+        {{mostPopularItemSold}}
+      </div>
+  </div>
+  <div>
+      <label>
+        Least Popular Item Sold
+      </label>
+      <div>
+        {{leastPopularItemSold}}
+      </div>
+  </div>
+    <div>
+        <label>
+            Lead Performer
+        </label>
+        <div>
+          {{leadPerformer}}
+        </div>
+    </div>
+    <div>
+        <label>
+            Worst Performer
+        </label>
+        <div>
+          {{worstPerformer}}
+        </div>
+    </div>
+    <div>
+        <label>
+            Revenue YTD
+        </label>
+        <div>
+          {{revenueYTD}}
+        </div>
+    </div>
+    <div>
+        <label>
+            Products Sold YTD
+        </label>
+        <div>
+          {{productQtySold}}
+        </div>
+    </div>
+    </div>
+  </div>
   <div style="display: flex; justify-content: start;" class="store-overview">
     <div class="store-forecast-card">
       <app-store-sales-charts
         *ngIf="store"
         [storeId]="store.storeId"
       >
-
       </app-store-sales-charts>
     </div>
     <div class="store-ingred-card">
@@ -45,11 +254,10 @@
             </li>
           </ul>
         </div>
-        <div class="store-ingredients-btns" style="padding: 4px 0 8px 0 !important; display: flex; gap: 8px;">
+        <div class="store-ingredients-btns" style="padding: 4px 0 8px 0 !important; display: flex; gap: 8px; justify-content: end;">
           <button (click)="openAddInventoryModal()" mat-raised-button color="primary">Manage</button>
           <button (click)="openSimModal()" mat-raised-button style="background:#36c0ff; color: white;">Simulator</button>
           <button mat-raised-button color="primary">Purchase</button>
-
         </div>
     </div>
   </div>

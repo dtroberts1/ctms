@@ -44,6 +44,9 @@ import { AddInventoryModalComponent } from './stores/add-inventory-modal/add-inv
 import { StoreSalesChartsComponent } from './stores/store-sales-charts/store-sales-charts.component';
 import { LoginComponent } from './login/login.component';
 import { AddStoreModalComponent } from './stores/add-store-modal/add-store-modal.component';
+import { AgmCoreModule } from '@agm/core';
+import { GeocodeService } from './geocode.service';
+import { SidebarServiceSummaryComponent } from './sidebar/sidebar-service-summary/sidebar-service-summary.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +73,7 @@ import { AddStoreModalComponent } from './stores/add-store-modal/add-store-modal
     StoreSalesChartsComponent,
     LoginComponent,
     AddStoreModalComponent,
+    SidebarServiceSummaryComponent,
   ],
   imports: [
     CommonModule,
@@ -93,6 +97,9 @@ import { AddStoreModalComponent } from './stores/add-store-modal/add-store-modal
     MatNativeDateModule,
     MatTooltipModule,
     MatSortModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDi1ThRy79APlO8SXvSHFnpRlphTFvgRTc',
+    }),
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
@@ -100,6 +107,7 @@ import { AddStoreModalComponent } from './stores/add-store-modal/add-store-modal
   ],
   providers: [
     DatePipe,
+    GeocodeService,
   ],
   bootstrap: [AppComponent]
 })

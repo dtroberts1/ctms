@@ -547,8 +547,58 @@ INSERT INTO store_ingredient(ingredientId, storeId, ml)
 values(4, 1, 4000);
 INSERT INTO store_ingredient(ingredientId, storeId, ml)
 values(1, 2, 400);
-     
+
+INSERT INTO employee(firstName, lastName) VALUES('Dreda', 'Bernard');
+INSERT INTO employee(firstName, lastName) VALUES('Alysia', 'Allsopp');
+INSERT INTO employee(firstName, lastName) VALUES('Becca', 'Peyton');
+INSERT INTO employee(firstName, lastName) VALUES('Brigham', 'Strickland');
+INSERT INTO employee(firstName, lastName) VALUES('Roxana', 'Walterson');
+INSERT INTO employee(firstName, lastName) VALUES('Nolan', 'Park');
+INSERT INTO employee(firstName, lastName) VALUES('Genie', 'Marlowe');
+INSERT INTO employee(firstName, lastName) VALUES('Dorine', 'Martel');
+INSERT INTO employee(firstName, lastName) VALUES('Ross', 'Henderson');
+INSERT INTO employee(firstName, lastName) VALUES('Sylvia', 'Todd');
+INSERT INTO employee(firstName, lastName) VALUES('Troy', 'Grant');
+INSERT INTO employee(firstName, lastName) VALUES('Josefina', 'Sanders');
+INSERT INTO employee(firstName, lastName) VALUES('Rufus', 'Morgan');
+INSERT INTO employee(firstName, lastName) VALUES('Taylor', 'Walton');
+INSERT INTO employee(firstName, lastName) VALUES('Adam', 'Padilla');
+INSERT INTO employee(firstName, lastName) VALUES('Laurie', 'Watkins');
+INSERT INTO employee(firstName, lastName) VALUES('Stuart', 'Santos');
+INSERT INTO employee(firstName, lastName) VALUES('Lionel', 'Pope');
+INSERT INTO employee(firstName, lastName) VALUES('Sandy', 'Nichols');
+INSERT INTO employee(firstName, lastName) VALUES('Dora', 'Lewis');
+
+INSERT INTO store_employee(storeId, employeeId)
+SELECT 1 AS storeId, employeeId from employee WHERE employeeId BETWEEN 0 AND 7;
+
+INSERT INTO store_employee(storeId, employeeId)
+SELECT 2 AS storeId, employeeId from employee WHERE employeeId BETWEEN 8 AND 13;
+
+INSERT INTO store_employee(storeId, employeeId)
+SELECT 3 AS storeId, employeeId from employee WHERE employeeId BETWEEN 14 AND 20;
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS seed_service_survey $$
+CREATE PROCEDURE `seed_service_survey`()
+BEGIN
+	DECLARE COUNT INTEGER DEFAULT 0;
     
+	SET COUNT=0;
+		myloop: LOOP
+			IF COUNT=300 THEN LEAVE myloop;
+			END IF;	
+            
+			INSERT INTO service_survey(storeId, rating, likelyToRecommend, employeeId)
+				VALUES (RAND()*(3-1)+1, RAND()*(9.9-4.0)+4.0, ROUND(RAND()), RAND()*(20-1)+1);
+                
+			SET COUNT=COUNT+1;
+		END LOOP myloop;
+
+END$$
+
+CALL seed_service_survey();
+
 	
 SET SQL_SAFE_UPDATES = 1;
 

@@ -34,6 +34,22 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
+-- Table `ctms`.`employee`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ctms`.`employee` ;
+
+CREATE TABLE IF NOT EXISTS `ctms`.`employee` (
+  `firstName` VARCHAR(50) NULL DEFAULT NULL,
+  `lastName` VARCHAR(50) NULL DEFAULT NULL,
+  `employeeId` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`employeeId`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 0
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
 -- Table `ctms`.`ingredient_type`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `ctms`.`ingredient_type` ;
@@ -241,7 +257,6 @@ CREATE TABLE IF NOT EXISTS `ctms`.`store` (
   `city` VARCHAR(100) NULL DEFAULT NULL,
   `state` VARCHAR(2) NULL DEFAULT NULL,
   `zipcode` VARCHAR(5) NULL DEFAULT NULL,
-
   PRIMARY KEY (`storeId`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 0
@@ -275,6 +290,45 @@ CREATE TABLE IF NOT EXISTS `ctms`.`sale` (
     ON DELETE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 0
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `ctms`.`service_survey`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ctms`.`service_survey` ;
+
+CREATE TABLE IF NOT EXISTS `ctms`.`service_survey` (
+  `surveyId` INT NOT NULL AUTO_INCREMENT,
+  `storeId` INT NULL DEFAULT NULL,
+  `rating` FLOAT NULL DEFAULT NULL,
+  `likelyToRecommend` BIT(1) NULL DEFAULT NULL,
+  `employeeId` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`surveyId`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 0
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `ctms`.`store_employee`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ctms`.`store_employee` ;
+
+CREATE TABLE IF NOT EXISTS `ctms`.`store_employee` (
+  `employeeId` INT NULL DEFAULT NULL,
+  `storeId` INT NULL DEFAULT NULL,
+  INDEX `employeeId` (`employeeId` ASC) VISIBLE,
+  INDEX `storeId` (`storeId` ASC) VISIBLE,
+  CONSTRAINT `store_employee_ibfk_1`
+    FOREIGN KEY (`employeeId`)
+    REFERENCES `ctms`.`employee` (`employeeId`),
+  CONSTRAINT `store_employee_ibfk_2`
+    FOREIGN KEY (`storeId`)
+    REFERENCES `ctms`.`store` (`storeId`))
+ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
@@ -334,7 +388,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insertIngredientWithType`(ingredien
 BEGIN
 	DECLARE refId int DEFAULT 0;
     SET refId = (SELECT ingredientTypeId FROM ingredient_type ORDER BY ingredientTypeId DESC LIMIT 1);
-		insert into ingredient(ingredientName, isNut, ingredientTypeId) values(ingredientName, isNut, refId);
+		insert into ingredient(ingredientName, isNut, ingredientTypeId, estCostPerOz) values(ingredientName, isNut, refId, RAND()*(0.20-0.01)+0.01);
 
     END$$
 
@@ -484,7 +538,6 @@ BEGIN
 	END LOOP menu_sale_mapping_loop;
 	CLOSE menu_sale_mapping_cursor;
     
-    SET SQL_SAFE_UPDATES = 1;
 END$$
 
 DELIMITER ;
@@ -538,7 +591,6 @@ BEGIN
 	END LOOP menu_review_mapping_loop;
 	CLOSE menu_review_mapping_cursor;
     
-    SET SQL_SAFE_UPDATES = 1;
 END$$
 
 DELIMITER ;

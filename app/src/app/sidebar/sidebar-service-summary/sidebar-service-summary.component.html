@@ -1,0 +1,24 @@
+<div class="sidebar-container" style="padding-top:7px; border-bottom: none;">
+  <div class="sidebar-container-header" style="text-align: center; text-transform: uppercase">
+    Store Performance
+  </div>
+  <div class="sidebar-container-item" *ngFor="let storeItem of storeServiceList">
+    <div class="sidebar-container-item-lf">
+      {{storeItem.storeName}}
+    </div>
+    <div [ngStyle]="{'color': (storeItem.averageRating >= 9 ? '#66ff00' : (storeItem.averageRating < 7 ? '#EE4B2B' : 'inherit'))}" class="sidebar-container-item-rf">        
+      {{(storeItem.averageRating / 10 * 100).toFixed(2)}}%
+    </div> 
+  </div>
+  <div class="sidebar-container-header" style="text-align: center; text-transform: uppercase">
+    Employee Performance
+  </div>
+  <div class="sidebar-container-item" *ngFor="let employeeItem of employeeServiceList">
+    <div class="sidebar-container-item-lf">
+      {{employeeItem.employeeName}}
+    </div>
+    <div [ngStyle]="{'color': (employeeItem.averageRating >= 9 ? '#66ff00' : (employeeItem.averageRating < 7 ? '#EE4B2B' : 'inherit'))}" class="sidebar-container-item-rf">        
+      {{(employeeItem.averageRating / 10 * 100).toFixed(2)}}%
+    </div> 
+  </div>
+</div>

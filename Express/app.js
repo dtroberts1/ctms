@@ -9,6 +9,8 @@ var menuItemRouter = require('./routes/menuItem');
 var saleRouter = require('./routes/sale');
 var ingredientRouter = require('./routes/ingredient');
 var storeRouter = require('./routes/store');
+var serviceQualityRouter = require('./routes/serviceQuality');
+
 
 let mysql = require('mysql');
 
@@ -50,6 +52,7 @@ app.use('/api/menuItems/', exposeService, menuItemRouter);
 app.use('/api/sales/', exposeService, saleRouter);
 app.use('/api/ingredients/', exposeService, ingredientRouter);
 app.use('/api/stores/', exposeService, storeRouter);
+app.use('/api/serviceQuality/', exposeService, serviceQualityRouter);
 
 app.use(function (err, req, res, next) {
   if (err instanceof BadRequestError) {
