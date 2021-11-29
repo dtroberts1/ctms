@@ -46,6 +46,7 @@ import { LoginComponent } from './login/login.component';
 import { AddStoreModalComponent } from './stores/add-store-modal/add-store-modal.component';
 import { AgmCoreModule } from '@agm/core';
 import { GeocodeService } from './geocode.service';
+import { SidebarServiceSummaryComponent } from './sidebar/sidebar-service-summary/sidebar-service-summary.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { GeocodeService } from './geocode.service';
     StoreSalesChartsComponent,
     LoginComponent,
     AddStoreModalComponent,
+    SidebarServiceSummaryComponent,
   ],
   imports: [
     CommonModule,
