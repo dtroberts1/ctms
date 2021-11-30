@@ -233,7 +233,6 @@ export class StoresComponent implements OnInit {
   }
 
   ngAfterViewInit() {  
-    this.updateMap('47725 W 1st St, Oakridge, OR, 97463');
   }
 
 

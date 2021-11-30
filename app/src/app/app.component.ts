@@ -10,7 +10,7 @@ import {NavigationEnd, Router} from '@angular/router';
 })
 export class AppComponent {
   title = 'CTMS';
-  selectedNavItem = 'dashboard';
+  selectedNavItem = 'menu';
   selectedToolbarItem = '';
   selectedFooterItem = '';
   name = 'Get Current Url Route Demo';

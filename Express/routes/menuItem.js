@@ -84,6 +84,7 @@ router.get('/getMenuItem/:id?', ((req, res, next) => {
           reject(err);
         }
         let command = 'update menu_item SET name = ?, type = ?, description = ?, price = ?, cost = ?, popularity = ?, reviewRank = ?, recipeInstructions = ? where id = ?';
+
         req.service.database().query(command, [req.body.name, req.body.type, req.body.description, req.body.price, req.body.cost, req.body.popularity, req.body.reviewRank, req.body.recipeInstructions, req.body.id], ((err, result) => {
           if (err){
             reject(err);

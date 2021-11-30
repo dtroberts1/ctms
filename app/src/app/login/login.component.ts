@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
     
   }
   attemptLogin(){
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/menu']);
 
   }
 }
