@@ -63,14 +63,14 @@ values('Biscotti', 'Biscotti Description', 1.06, 0.10, 'Food Item', 'Here are so
 insert into menu_item(name, description, price, cost, type, recipeInstructions)
 values('Vanilla Scope', 'Vanilla Scope Description', 2.36, 0.30, 'Food Item', 'Here are some instructions for Vanilla Scope');
 
-insert into store(launchDate, storeName)
-values('2017-01-01', 'Riverwalk');
+insert into store(launchDate, storeName, streetAddr1, streetAddr2, city, state, zipcode)
+values('2017-01-01', 'Riverwalk', '625 Carson Street', '','Cincinnati', 'OH', '45202');
 
-insert into store(launchDate, storeName)
-values('2017-09-01', 'Marketplace');
+insert into store(launchDate, storeName, streetAddr1, streetAddr2, city, state, zipcode)
+values('2017-09-01', 'Marketplace', '3351 Park Avenue', '', 'Youngsville', 'NM', '87064');
 
-insert into store(launchDate, storeName)
-values('2018-04-11', 'Boardwalk');
+insert into store(launchDate, storeName, streetAddr1, streetAddr2, city, state, zipcode)
+values('2018-04-11', 'Boardwalk', '2527 Union Street', '', 'Seattle', 'WA', '98109');
 
 SET SQL_SAFE_UPDATES = 0;
 
